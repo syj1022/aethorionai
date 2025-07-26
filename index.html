@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <title>Aethorion AI </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <style>
+    :root {
+      --primary: #0C0E2C;
+      --accent: #6F9EFF;
+      --light: #F9FAFC;
+      --grey: #7A7F9A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: var(--light); color: var(--primary); line-height: 1.6; }
+
+    header { background: var(--light); position: fixed; top: 0; width: 100%; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,.05); z-index: 1000; }
+    header .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    nav ul { display: flex; gap: 1.5rem; list-style: none; }
+    nav a { color: var(--primary); text-decoration: none; font-weight: 600; transition: color .2s; }
+    nav a:hover { color: var(--accent); }
+    .btn { display: inline-block; padding: .75rem 1.5rem; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; transition: background .2s; }
+    .btn:hover { background: #547dff; }
+    .menu-toggle { display: none; background: transparent; border: none; font-size: 1.5rem; color: var(--primary); cursor: pointer; }
+
+    section { padding: 6rem 2rem 4rem; max-width: 1200px; margin: auto; }
+    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8rem; }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; }
+    .hero p { font-size: 1.25rem; color: var(--grey); max-width: 720px; margin-bottom: 2rem; }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .feature-card { background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); }
+    .feature-card h3 { margin-bottom: .5rem; font-size: 1.1rem; }
+    .feature-card p { color: var(--grey); }
+
+    .banner { background: var(--primary); color: #fff; border-radius: 16px; padding: 4rem; text-align: center; position: relative; overflow: hidden; }
+    .banner h2 { font-size: 2rem; margin-bottom: 1rem; }
+    .banner p { max-width: 600px; margin: auto; margin-bottom: 2rem; }
+
+    footer { background: var(--primary); color: #fff; padding: 2rem; }
+    footer .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; }
+    footer a { color: #fff; text-decoration: none; font-size: .95rem; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; position: absolute; right: 2rem; top: 70px; background: var(--light); padding: 1rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+      .menu-toggle { display: block; }
+    }
+  </style>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/ngl@latest/dist/ngl.js"></script>
+
+<style>
+  #gpt-response p,
+  #gpt-response li,
+  #gpt-response ul,
+  #gpt-response ol,
+  #gpt-response h1,
+  #gpt-response h2,
+  #gpt-response h3,
+  #gpt-response h4,
+  #gpt-response h5,
+  #gpt-response h6 {
+    margin: 0;
+    padding: 0;
+  }
+
+  #gpt-response li {
+    list-style-position: inside;
+  }
+</style>
+
+
+<style>
+  .miller-btn {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    margin: 4px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .miller-btn:hover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+
+  .miller-btn.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+
+  .cleavage-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<style>
+.molecule-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.molecule-btn {
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  margin: 4px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.molecule-btn:hover {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+.molecule-btn.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+</style>
+
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("contact-form");
+  const popup = document.getElementById("popup");
+  const messageBox = document.getElementById("popup-message");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const data = {
+      email: form.email.value,
+      other: form.other.value,
+      message: form.message.value
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbwhB0otb-RaeCp86_sQxaMk7nn8IeKmaTi_wAEFD0wVML9U-htaXl1690aQyGvc-QA/exec", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        messageBox.innerText = "Message successfully sent! We will get back to you in 24 hours!";
+        form.reset();
+      } else {
+        messageBox.innerText = "Error: Failed to send.";
+      }
+      popup.style.display = "block";
+      setTimeout(() => popup.style.display = "none", 3000);
+    })
+    .catch(error => {
+      console.error("Fetch error:", error);
+      messageBox.innerText = "Network error.";
+      popup.style.display = "block";
+      setTimeout(() => popup.style.display = "none", 3000);
+    });
+  });
+});
+</script>
+
+
+
+
+<body>
+
+<div id="home"></div>
+
+<header>
+  <div class="logo" style="display: flex; align-items: center; gap: 0.5rem;">
+    <img src="images/logo.png" alt="Logo" style="height: 28px;">
+    <span>Aethorion AI</span>
+  </div>
+  <nav>
+    <ul>
+      <a href="#" onclick="scrollToTop(event)">Home</a>
+      <li><a href="career.html">Career</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <button class="menu-toggle">☰</button>
+  <a href="#benefits" class="btn">See Our Demo</a>
+
+</header>
+
+<section class="hero">
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="images/background.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+  <div class="hero-content" style="color: white; text-shadow: 2px 2px 5px black; padding-top: 50px;">
+    <h1>At the Dawn of Digital Matter</h1>
+    <p style="color: #fafafa !important;">We digitalize the future of chemical and materials industries with cutting-edge generative AI, reducing go-to-market cycles from decades to months.</p>
+  </div>
+</section>
+
+
+<section id="technology" style="background:#f1f4ff">
+  <h2 style="text-align:center;margin-bottom:2rem;margin-top:-4rem;">Introducing Our Unique Value</h2>
+  <div class="features">
+    <div class="feature-card">
+      <div style="text-align: center;">
+      <img src="images/icon1.png" alt="icon" width="100" height="100"></div>
+      <h3>Pioneering Uncharted Frontiers</h3>
+      <p>Our AI-driven platform autonomously delivers breakthrough designs and uncovers chemical principles absent from existing knowledge.</p>
+
+    </div>
+    <div class="feature-card">
+      <div style="text-align: center; margin-top: 0.5rem; margin-bottom: -0.5rem;">
+      <img src="images/icon2.png" alt="icon" width="100" height="100"></div>
+      <h3>Ultra-Fast Predictive Analysis</h3>
+      <p>Our proprietary predictive simulations accelerate trial-test cycles 1000&times; faster than DFT, slashing development time and securing a critical time-to-market advantage. </p>
+    </div>
+    <div class="feature-card">
+      <div style="text-align: center;">
+      <img src="images/icon3.png" alt="icon" width="100" height="100"></div>
+      <h3>Seamless Workflow Integration</h3>
+      <p>Seamless integration, zero disruption—our customizable tools adapt to your infrastructure and scale with your growing research and production demands.</p>
+    </div>
+    <div class="feature-card">
+      <div style="text-align: center; margin-top: 0.5rem; margin-bottom: -0.5rem;">
+      <img src="images/icon4.png" alt="icon" width="100" height="100"></div>
+      <h3>End-to-End Innovation Partner</h3>
+      <p>From discovery to deployment, we offer holistic support across every stage of process to mitigate risk, improve performance, and assist commercialization.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="benefits">
+    <div class="banner">
+        <h2 style="text-align:center; margin-bottom:2rem;">Explore Your Benefits!</h2>
+        <p>Are your company's legacy approaches holding you back? Take 7 minutes to discover how Aethorion AI delivers smarter solutions, lightning-fast results, and the competitive edge you have been missing!</p>
+
+        <div style="margin: 2rem auto; padding: 2rem; background: white; color: black; border-radius: 12px; text-align: center; max-width: 700px;">
+            <h3>
+              Step&nbsp;1: Select atom types in your desired product:
+              <div class="tooltip" style="display: inline-block;">
+                <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em;">?</span>
+                <div class="tooltip-text">
+                  This defines the chemical system of your design. For example, choose Sr, Ti, O if you are interested in SrTiO<sub>3</sub>.
+                </div>
+              </div>
+            </h3>
+
+            <div id="periodic-table"
+                 style="display: grid; grid-template-columns: repeat(18, 1fr); gap: 6px; margin-top: 1rem;">
+            </div>
+
+            <p style="margin-top: 1rem; font-weight: 600;">
+                Selected atoms:
+                <span id="selected-output">None</span>
+            </p>
+        </div>
+
+        <div class="workflow-container">
+            <div class="workflow-header" style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <div class="list-column" style="flex: 1; text-align: center; background: none; box-shadow: none; padding: 0;">
+                    <h4 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700;">Traditional</h4>
+                </div>
+                <div class="list-column" style="flex: 1; text-align: center; background: none; box-shadow: none; padding: 0;">
+                    <h4 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700;">Aethorion&nbsp;AI</h4>
+                </div>
+            </div>
+
+            <div class="workflow-block">
+                <div class="list-column">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.25rem 0;">
+                      <h3 style="margin: 0; text-align: left;">Step 2: Get Scientific Insight</h3>
+                      <div class="tooltip" style="display: inline-block;">
+                        <span style="border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
+                        <div class="tooltip-text">
+                          Pinpointing knowledge gaps is crucial! Our AI tools streamline this process, saving you time and reducing labor demands.
+                        </div>
+                      </div>
+                    </div>
+                    <img src="images/literature.png" alt="Manual review icon"
+                       style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
+                    <h3 style="text-align: center; margin-bottom: 1rem;">Manual Literature Search</h3>
+                    <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
+                      <span class="tooltip">
+                        <span class="tag">Information Overload</span>
+                        <span class="tooltip-text">Scholarly output exceeds 3 million articles per year.</span>
+                      </span><br>
+
+                      <span class="tooltip">
+                        <span class="tag">Human Bias</span>
+                        <span class="tooltip-text">Positive-result papers are 1.6× more likely to be cited.</span>
+                      </span><br>
+
+                      <span class="tooltip">
+                        <span class="tag">Domain Expertise Intensive</span>
+                        <span class="tooltip-text">68% of researchers struggle to interpret literature outside their sub-field.</span>
+                      </span>
+                    </p>
+
+                </div>
+
+
+                <div class="list-column">
+                    <img src="images/ai-literature.png" alt="AI review icon"
+                       style="width: 200px; height: 170px; margin-top: 3.9rem; margin-bottom: 4rem;">
+                    <h3 style="text-align: center; margin-bottom: 0.5rem;">AI-Assisted Literature Search</h3>
+                    <button onclick="queryChatGPT([...selected])" class="read-more-btn" style="margin-bottom: 1rem;">One-Click&nbsp;Research</button> 
+                    <div id="loading-tooltip" style="display:none;color:#007bff;font-weight:bold">Reviewing… Only 10 seconds!</div>
+                    <div id="gpt-response" style="margin-top:1rem;font-size:.95rem;color:#333; text-align: left;"></div>
+                </div>
+            </div>
+
+
+
+            <div class="workflow-block">
+                <div class="list-column">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.75rem 0;">
+                      <h3 style="margin: 0; text-align: left;">Step 3: Design Target Materials</h3>
+                      <div class="tooltip" style="display: inline-block;">
+                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
+                        <div class="tooltip-text">
+                          Trial-and-error methods waste time and resources. Instead, define your desired outcome and let inverse design guide the way.
+                        </div>
+                      </div>
+                    </div>
+                <img src="images/tae.png" alt="Trial-and-error icon"
+                   style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">Trial-And-Error Experiment</h3>
+                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
+                  <span class="tooltip">
+                    <span class="tag">Time-Consuming Cycles</span>
+                    <span class="tooltip-text">It can take 5–10 years to discover and scale a new material from lab to market due to slow iteration loops.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">High Cost Burden</span>
+                    <span class="tooltip-text">Experimental trial-and-error can consume up to 70% of total R&D budgets.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Poor Reproducibility</span>
+                    <span class="tooltip-text">Over 85% of experimental efforts in materials R&D fail to produce viable results, often requiring hundreds of iterations to optimize a single formulation.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Limited Scalability</span>
+                    <span class="tooltip-text">Physical experiments lack the scalability and speed of data-driven approaches, making high-throughput exploration prohibitive.</span>
+                  </span>
+                </p>
+                </div>
+                <div class="list-column">
+                <img src="images/inverse.png" alt="Trial-and-error icon"
+                   style="margin-top: 0.7rem; width: 210px; height: 190px; margin-top: 3.6rem; margin-bottom: 3.62rem;">
+                <h3 style="text-align:center;">Property-Targeted Inverse Design</h3>
+                <div style="margin-top: 1rem;">
+                <label for="hull-slider">Energy Above Hull (eV): <span id="hull-value">0.05</span></label>
+                <div class="tooltip" style="display: inline-block;">
+                  <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em;">?</span>
+                  <div class="tooltip-text">
+                    The value of energy above hull reflects the thermodynamic stability of a material. Lower values indicate higher stability. In this example, you are customizing the relative stability of your target design.
+                  </div>
+                </div><br>
+                <input type="range" id="hull-slider" min="0.01" max="0.50" value="0.05" step="0.01" style="width: 300px;"></div>
+                <button id="gen-btn" class="read-more-btn" style="margin-bottom: 1rem;">Generate Design</button>
+                <div class="tooltip" style="display: inline-block;">
+                  <span style="border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help; font-weight: bold;">!</span>
+                  <div class="tooltip-text">
+                    If you don't see the crystal structure upon generation. This is most likely due to the GPU initialization issues. Please try and generate again!
+                  </div>
+                </div>
+                <div id="generating" style="display:none;color:#007bff;font-weight:bold">Generating… About 3 minutes!</div>
+                <div id="nglWrapper" style="display: none; margin-top: 1.5rem;">
+                  <div id="nglViewer" style="width: 100%; height: 200px;"></div></div>
+                </div>
+            </div>
+
+            <div class="workflow-block">
+                <div class="list-column">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.75rem 0;">
+                      <h3 style="margin: 0; text-align: left;">Step 4: Evaluate Performance</h3>
+                      <div class="tooltip" style="display: inline-block;">
+                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
+                        <div class="tooltip-text">
+                          Measuring material properties at scale can be daunting. Predictive first-principles calculations suffer efficiency-accuracy tradeoffs. Our AI-accelerated computational tools enable rapid assessments up to 1000&times; faster than traditional DFT computations.
+                        </div>
+                      </div>
+                    </div>
+                <img src="images/characterization.png" alt="Characterization icon"
+                   style="width: 250px; height: 250px; margin-bottom: 1.5rem;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">High-Throughput Characterization</h3>
+                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
+                  <span class="tooltip">
+                    <span class="tag">Instrumentation Bottleneck</span>
+                    <span class="tooltip-text">Advanced characterization instruments require manual setup, calibration, and interpretation, limiting true throughput. A single detailed scan can take hours per sample.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Data Backlogs</span>
+                    <span class="tooltip-text">Over 60% of generated samples go uncharacterized in real-time due to instrument or personnel limitations.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Labor-Intensive Workflows</span>
+                    <span class="tooltip-text">Characterization often requires specialist intervention, resulting in autonomous pipelines and human error or bias.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Delayed Feedback Loops</span>
+                    <span class="tooltip-text">Without rapid property readouts, iterative optimization cycles stall, reducing the effective speed of discovery.</span>
+                  </span>
+                </p>
+                </div>
+                <div class="list-column">
+                <img src="images/prediction.png" alt="Prediction icon"
+                   style="margin-top: 0.7rem; width: 210px; height: 210px; margin-top: 2.3rem; margin-bottom: 3.4rem;">
+                <h3 style="text-align: center; margin-bottom: 0.5rem;">AI-Accelerated Predictive Analysis</h3>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 0.35rem; margin-top: 0.75rem;">
+                  <span style="font-size: 1rem; font-weight: 500;">Select Cleavage Plane:</span>
+                  <div class="tooltip" style="display: inline-block; position: relative;">
+                    <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.9em; cursor: help;">?</span>
+                    <div class="tooltip-text">
+                      In this example, we showcase the predictive analysis of surface properties. They reflect how the outermost layer of a material that interacts directly with its environment. These properties are crucial in applications of heterogeneous catalysis, coatings, semiconductors, energy storage and conversion, etc.
+                    </div>
+                  </div>
+                </div>
+                <div class="cleavage-btn-group">
+                  <button class="miller-btn selected" data-miller="[1,0,0]">(100)</button>
+                  <button class="miller-btn" data-miller="[1,1,0]">(110)</button>
+                  <button class="miller-btn" data-miller="[1,1,1]">(111)</button>
+                  <button class="miller-btn" id="customize-btn">customize</button>
+                </div>
+                <div id="custom-input-wrapper" style="display: none; margin-top: 0.75rem;">
+                  <input type="text" id="custom-miller" placeholder="hkl" style="padding: 0.3rem; font-size: 1rem;" />
+                </div>
+
+                <div style="margin: 1rem 0; text-align: center;">
+                  <p style="font-size: 1rem; margin-bottom: 0.5rem;">Select Adsorbate Molecule:</p>
+                  <div class="molecule-btn-group">
+                    <button class="molecule-btn selected" data-molecule="H2O">H<sub>2</sub>O</button>
+                    <button class="molecule-btn" data-molecule="CO">CO</button>
+                    <button class="molecule-btn" data-molecule="CO2">CO<sub>2</sub></button>
+                    <button class="molecule-btn" data-molecule="NH3">NH<sub>3</sub></button>
+                    <button class="molecule-btn" data-molecule="O2">O<sub>2</sub></button>
+                  </div>
+                </div>
+
+                <button id="surface-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;">Create Surface</button>
+                <div id="surface-generating" style="display:none;color:#007bff;font-weight:bold">Building Surface…</div>
+                <div id="surfaceWrapper" style="display:none; margin-top:1.5rem;">
+                  <div id="surfaceViewer" style="width:100%; height:200px;"></div>
+                <button id="relax-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;">Relax and Calculate</button>
+                <div id="relax-loading" style="display:none;color:#007bff;font-weight:bold">Calculating... About 1 minute!</div>
+                <div id="adsorption-energy" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div></div>
+
+                </div>
+            </div>
+
+            <div class="workflow-block">
+                <div class="list-column">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.75rem 0;">
+                      <h3 style="margin: 0; text-align: left;">Step 5: Enhance Functionality</h3>
+                      <div class="tooltip" style="display: inline-block;">
+                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
+                        <div class="tooltip-text">
+                          Our tools empower you to perform intelligent parameter optimization, automatically explore multi-dimensional parameter spaces to identify optimal processing conditions.
+                        </div>
+                      </div>
+                    </div>
+                <img src="images/tuning.png" alt="Modification icon"
+                   style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">Empirical Parameter Optimization</h3>
+                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
+                  <span class="tooltip">
+                    <span class="tag">Costly Experimentation</span>
+                    <span class="tooltip-text">Every non-optimal setting consumes time and material. Empirical tuning can account for 30–50% of total experimental cost in complex system development.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Trial Without Guidance</span>
+                    <span class="tooltip-text">Without data-driven optimization, researchers can miss global optima, spending 10&times; more time converging to acceptable but non-optimal outcomes.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Limited Knowledge Transfer</span>
+                    <span class="tooltip-text">Empirical strategies are hard to generalize. Parameter sets optimized for one condition often fail to transfer across scales or environments, increasing redundancy.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">High Dimensionality</span>
+                    <span class="tooltip-text">Complex systems typically involve numerous tunable variables, making brute-force or empirical tuning significantly inefficient.</span>
+                  </span>
+                </p>
+                </div>
+                <div class="list-column">
+                <img src="images/ai_tuning.png" alt="AI-Tuning icon"
+                   style="margin-top: 0.7rem; width: 230px; height: 230px; margin-top: 2rem; margin-bottom: 2.8rem;">
+                <h3 style="text-align: center; margin-bottom: 0.5rem;">AI-Guided Decision-Making</h3>
+                  <div style="margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                      <label for="swap-elem" style="white-space: nowrap;">Target Element:</label>
+                      <select id="swap-elem" style="padding: 0.4rem; min-width: 150px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="defect">Please Select</option>
+                      </select>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0rem;">
+                      <label for="swap-input" style="white-space: nowrap;">Swap With:</label>
+                      <input type="text" id="swap-input" placeholder="e.g., Fe or defect"
+                             style="padding: 0.4rem; min-width: 150px; border-radius: 4px; border: 1px solid #ccc;" />
+                      <div class="tooltip">
+                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px;
+                 font-size: 0.9em; cursor: help;">!</span>
+                        <div class="tooltip-text">
+                          The atom substitution is accumulative if you modify surface for more than once. If you want to start over, go back to create a new surface in the previous step.
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div id="swap-section" style="margin-top: 1.5rem; text-align: center;">
+                      <button id="swap-btn" class="read-more-btn" style="margin-top: 0.5rem; margin-bottom: 1rem;">Modify Surface</button>
+                      <div id="swap-loading" style="display: none; color: #007bff; font-weight: bold;">Modifying surface...</div>
+                      <div id="modsurfaceWrapper" style="display:none; margin-top:1.5rem;">
+                        <div id="modsurfaceViewer" style="width:100%; height:200px;"></div>
+                      <button id="mod-relax-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;">Relax and Calculate</button>
+                      <div id="mod-relax-loading" style="display:none;color:#007bff;font-weight:bold">Calculating... About 1 minute!</div>
+                      <div id="mod-adsorption-energy" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div></div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="workflow-block">
+                <div class="list-column">
+                <h3 style="margin: -1.5rem 0 0.75rem 0; text-align: left;">Step 6: Deploy for Commercial Use</h3>
+                <img src="images/deployment.png" alt="Deployment icon"
+                   style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">Inefficient Field Validation</h3>
+                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
+                  <span class="tooltip">
+                    <span class="tag">Prolonged Testing Cycles</span>
+                    <span class="tooltip-text">Field validation can take months to years to simulate aging, environmental exposure, or performance under operating conditions.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Iterative Redesign Delays</span>
+                    <span class="tooltip-text">Failed validations typically require going back to the lab, slowing down time-to-market by 6–18 months per iteration.</span>
+                  </span><br>
+
+                  <span class="tooltip">
+                    <span class="tag">Poor Transferability</span>
+                    <span class="tooltip-text">Lab-optimized materials may underperform in field environments due to uncontrolled variables like humidity, mechanical stress, or impurities.</span>
+                  </span>
+                </p>
+                </div>
+                <div class="list-column">
+                    <img src="images/ai_pilot.png" alt="AI-Pilot icon"
+                   style="margin-top: 0.7rem; width: 220px; height: 220px; margin-top: 2.3rem; margin-bottom: 2.7rem;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">AI-Piloted Final Testing</h3>
+                <p style="text-align: center">Ready to see the full potential? Reach out for an extended demo!</h3>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <p style="text-align: center;">
+            This is just the beginning! Connect with us to unlock a partnership experience tailored exclusively for your exponential growth!<br>
+            <a href="#contact" class="btn read-more-btn">Partner With Us</a>
+        </p>
+    </div>
+</section>
+
+
+<script>
+
+const symbols = [
+  'H','He',
+  'Li','Be','B','C','N','O','F','Ne',
+  'Na','Mg','Al','Si','P','S','Cl','Ar',
+  'K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr',
+  'Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','I','Xe',
+  'Cs','Ba','La','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn',
+  'Fr','Ra','Ac','Rf','Db','Sg','Bh','Hs','Mt','Ds','Rg','Cn','Nh','Fl','Mc','Lv','Ts','Og',
+  'Ce','Pr','Nd','Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu',
+  'Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr'
+];
+
+const gridPositions = {
+  H:1,He:18,Li:1,Be:2,B:13,C:14,N:15,O:16,F:17,Ne:18,
+  Na:1,Mg:2,Al:13,Si:14,P:15,S:16,Cl:17,Ar:18,
+  K:1,Ca:2,Sc:3,Ti:4,V:5,Cr:6,Mn:7,Fe:8,Co:9,Ni:10,Cu:11,Zn:12,
+  Ga:13,Ge:14,As:15,Se:16,Br:17,Kr:18,
+  Rb:1,Sr:2,Y:3,Zr:4,Nb:5,Mo:6,Tc:7,Ru:8,Rh:9,Pd:10,Ag:11,Cd:12,
+  In:13,Sn:14,Sb:15,Te:16,I:17,Xe:18,
+  Cs:1,Ba:2,La:3,Hf:4,Ta:5,W:6,Re:7,Os:8,Ir:9,Pt:10,Au:11,Hg:12,
+  Tl:13,Pb:14,Bi:15,Po:16,At:17,Rn:18,
+  Fr:1,Ra:2,Ac:3,Rf:4,Db:5,Sg:6,Bh:7,Hs:8,Mt:9,Ds:10,Rg:11,Cn:12,
+  Nh:13,Fl:14,Mc:15,Lv:16,Ts:17,Og:18,
+  Ce:3,Pr:4,Nd:5,Pm:6,Sm:7,Eu:8,Gd:9,Tb:10,Dy:11,Ho:12,Er:13,Tm:14,Yb:15,Lu:16,
+  Th:3,Pa:4,U:5,Np:6,Pu:7,Am:8,Cm:9,Bk:10,Cf:11,Es:12,Fm:13,Md:14,No:15,Lr:16
+};
+
+const table = document.getElementById('periodic-table');
+const selected = new Set();
+const output = document.getElementById('selected-output');
+
+symbols.forEach(sym => {
+  const cell = document.createElement('button');
+  cell.textContent = sym;
+  cell.style.cssText = `
+    grid-column: ${gridPositions[sym] || 'auto'};
+    padding: .4rem .2rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background:#f5f5f5;
+    font-size:.8rem;
+    cursor:pointer;
+  `;
+
+  cell.onclick = () => {
+    const active = selected.has(sym);
+    active ? selected.delete(sym) : selected.add(sym);
+    cell.style.background = active ? '#f5f5f5' : '#6F9EFF';
+    cell.style.color = active ? '#000' : '#fff';
+    output.textContent = selected.size ? [...selected].join(', ') : 'None';
+    updateSwapDropdown();
+  };
+
+  table.appendChild(cell);
+});
+
+async function queryChatGPT(atomArray = []) {
+    const box = document.getElementById('gpt-response');
+    const loadingTip = document.getElementById('loading-tooltip');
+    const apiKey = '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';
+    const prompt = atomArray.length
+                   ? `Examples of materials that can be composed of elements: ${atomArray.join(', ')}? What are their known structures and properties? What are the gaps in existing studies about these materials?`
+                   : 'Print this: Please select at least one atom in the periodic table above!';
+
+    box.innerHTML = '';
+    loadingTip.style.display = 'block';
+
+    try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o',
+                messages: [
+                    { role: 'system', content: 'You are a helpful scientific assistant. Always write chemical formulas using HTML <sub> tags for subscripts. For example, use H<sub>2</sub>O instead of H2O.' },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.7
+            })
+        });
+
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        box.innerHTML = marked.parse(data.choices?.[0]?.message?.content ?? 'No reply.');
+        loadingTip.style.display = 'none';
+    } catch (err) {
+        console.error(err);
+        box.textContent = 'Error: ' + err.message;
+        loadingTip.style.display = 'none';
+    }
+}
+
+const API_URL = "https://syj981022-aethorion.hf.space/generate";
+const hullSlider = document.getElementById("hull-slider");
+const hullValue = document.getElementById("hull-value");
+
+hullSlider.oninput = () => {
+  hullValue.textContent = parseFloat(hullSlider.value).toFixed(2);
+};
+
+document.getElementById("gen-btn").onclick = async () => {
+  const elements = [...selected];
+  if (elements.length === 0) {
+    alert("Please select at least one element first!");
+    return;
+  }
+
+  const load = document.getElementById("generating");
+  const wrapper = document.getElementById("nglWrapper");
+  const viewer = document.getElementById("nglViewer");
+  viewer.innerHTML = "";
+  load.style.display = "block";
+  wrapper.style.display = "none";
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        elements,
+        energy_above_hull: parseFloat(hullSlider.value)
+      })
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+    const pdbText = await res.text();
+    window.lastGeneratedPDB = pdbText;
+    wrapper.style.display = "block";
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    const stage = new NGL.Stage("nglViewer", { backgroundColor: "white", tooltip: false });
+    const blob = new Blob([pdbText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const comp = await stage.loadFile(url, { ext: "pdb" });
+    comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
+    comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
+
+    const offset = new NGL.Vector3(-5, -5, -5);
+    const axisLength = 5;
+    const shape = new NGL.Shape("axes");
+    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x + axisLength, offset.y, offset.z), [1, 0, 0], 0.3);
+    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y + axisLength, offset.z), [0, 1, 0], 0.3);
+    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y, offset.z + axisLength), [0, 0, 1], 0.3);
+    const shapeComp = stage.addComponentFromObject(shape);
+    shapeComp.addRepresentation("buffer");
+
+    stage.autoView();
+
+    viewer.style.position = "relative";
+    const tip = document.createElement("div");
+    Object.assign(tip.style, {
+      position: "absolute",
+      pointerEvents: "none",
+      padding: "2px 4px",
+      background: "rgba(255,255,255,0.9)",
+      border: "1px solid #ccc",
+      borderRadius: "3px",
+      font: "12px/1 sans-serif",
+      color: "#000",
+      display: "none",
+      zIndex: 10
+    });
+
+    stage.viewer.container.appendChild(tip);
+    stage.signals.hovered.add(pp => {
+      if (pp && pp.atom) {
+        tip.textContent = pp.atom.element.charAt(0).toUpperCase() + pp.atom.element.slice(1).toLowerCase();
+        tip.style.left = pp.canvasPosition.x + 8 + "px";
+        tip.style.top = pp.canvasPosition.y + 8 + "px";
+        tip.style.display = "block";
+      } else {
+        tip.style.display = "none";
+      }
+    });
+
+  } catch (err) {
+    alert(err.message);
+    console.error(err);
+  } finally {
+    load.style.display = "none";
+  }
+};
+
+const customizeBtn = document.getElementById('customize-btn');
+const inputWrapper = document.getElementById('custom-input-wrapper');
+const inputField = document.getElementById('custom-miller');
+let selectedMiller = [1, 0, 0];
+
+customizeBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  inputWrapper.style.display = inputWrapper.style.display === 'none' ? 'block' : 'none';
+  if (inputWrapper.style.display !== 'none') inputField.focus();
+  document.querySelectorAll('.miller-btn').forEach(b => b.classList.remove('selected'));
+  customizeBtn.classList.add('selected');
+});
+
+document.querySelectorAll('.miller-btn:not(#customize-btn)').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const millerData = this.getAttribute('data-miller');
+    if (millerData) selectedMiller = JSON.parse(millerData);
+    document.querySelectorAll('.miller-btn').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+    inputWrapper.style.display = 'none';
+  });
+});
+
+document.getElementById("surface-btn").onclick = async () => {
+  if (!window.lastGeneratedPDB) {
+    alert("Please generate a crystal first!");
+    return;
+  }
+
+  if (customizeBtn.classList.contains('selected')) {
+    const input = inputField.value.trim();
+    if (!input) {
+      alert("Please enter Miller indices (e.g., 210) or select a preset");
+      return;
+    }
+    const parts = input.split('').map(Number).filter(n => !isNaN(n));
+    if (parts.length !== 3) {
+      alert("Please enter exactly 3 numbers (e.g., 210)");
+      return;
+    }
+    selectedMiller = parts;
+  }
+
+  const surfaceLoad = document.getElementById("surface-generating");
+  const surfaceWrapper = document.getElementById("surfaceWrapper");
+  const surfaceViewer = document.getElementById("surfaceViewer");
+  surfaceWrapper.style.display = "none";
+  surfaceViewer.innerHTML = "";
+  surfaceLoad.style.display = "block";
+
+  try {
+    const res = await fetch("https://syj981022-aethorion.hf.space/surface", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pdb_text: window.lastGeneratedPDB,
+        miller: selectedMiller,
+        layers: 3,
+        molecule: selectedMolecule
+      })
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+    const surfaceData = await res.json();
+    const pdbSurface = surfaceData.adsorbed_surface_pdb;
+    window.lastGeneratedBareSurface = surfaceData.bare_surface_pdb;
+    window.lastGeneratedSurface = surfaceData.adsorbed_surface_pdb;
+    surfaceWrapper.style.display = "block";
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    const stage = new NGL.Stage("surfaceViewer", { backgroundColor: "white", tooltip: false });
+    const blob = new Blob([pdbSurface], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const comp = await stage.loadFile(url, { ext: "pdb" });
+    comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
+    comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
+
+    const offset = new NGL.Vector3(-5, -5, -5);
+    const axisLength = 5;
+    const shape = new NGL.Shape("axes");
+    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x + axisLength, offset.y, offset.z), [1, 0, 0], 0.3);
+    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y + axisLength, offset.z), [0, 1, 0], 0.3);
+    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y, offset.z + axisLength), [0, 0, 1], 0.3);
+    const shapeComp = stage.addComponentFromObject(shape);
+    shapeComp.addRepresentation("buffer");
+
+    stage.autoView();
+
+  } catch (err) {
+    alert("Surface generation failed: " + err.message);
+    console.error(err);
+  } finally {
+    surfaceLoad.style.display = "none";
+  }
+};
+
+let showingAdsorptionEnergy = false;
+let selectedMolecule = "H2O";
+
+document.querySelectorAll(".molecule-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".molecule-btn").forEach((b) => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    selectedMolecule = btn.getAttribute("data-molecule");
+  });
+});
+
+document.getElementById("relax-btn").onclick = async () => {
+  if (!window.lastGeneratedSurface) {
+    alert("Please generate a surface first!");
+    return;
+  }
+
+  const loading = document.getElementById("relax-loading");
+  const energyDisplay = document.getElementById("adsorption-energy");
+  energyDisplay.textContent = "";
+  loading.style.display = "block";
+  
+  try {
+    const res = await fetch("https://syj981022-aethorion.hf.space/relax", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        bare_surface_pdb: window.lastGeneratedBareSurface,
+        adsorbed_surface_pdb: window.lastGeneratedSurface,
+        molecule: selectedMolecule
+      })
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+    const result = await res.json();
+    window.originalAdsorptionEnergy = result.adsorption_energy;
+    window.baseRelaxed = true;
+    showingAdsorptionEnergy = true;
+    energyDisplay.textContent = `Adsorption Energy: ${result.adsorption_energy} eV`;
+
+  } catch (err) {
+    console.error(err);
+    energyDisplay.textContent = "Calculation failed";
+  } finally {
+    loading.style.display = "none";
+  }
+};
+
+document.getElementById("mod-relax-btn").onclick = async () => {
+  if (!window.baseRelaxed) {
+    alert("You must relax the original surface first before relaxing the modified one.");
+    return;
+  }
+
+  if (!window.lastGeneratedSurface || !window.lastGeneratedBareSurface) {
+    alert("Please generate and modify a surface first!");
+    return;
+  }
+
+  const loading = document.getElementById("mod-relax-loading");
+  const energyDisplay = document.getElementById("mod-adsorption-energy");
+  energyDisplay.textContent = "";
+  loading.style.display = "block";
+
+  try {
+    const res = await fetch("https://syj981022-aethorion.hf.space/relax", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        bare_surface_pdb: window.lastGeneratedBareSurface,
+        adsorbed_surface_pdb: window.lastGeneratedSurface,
+        molecule: selectedMolecule
+      })
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+    const result = await res.json();
+    const modEnergy = result.adsorption_energy;
+    energyDisplay.textContent = `Adsorption Energy: ${modEnergy} eV`;
+
+    if (typeof window.originalAdsorptionEnergy === "number") {
+      const comparison = document.createElement("div");
+      comparison.style.marginTop = "0.5rem";
+      comparison.style.fontWeight = "bold";
+
+      if (modEnergy < window.originalAdsorptionEnergy) {
+        comparison.style.color = "green";
+        comparison.textContent = "Your surface modification makes adsorption more favorable.";
+      } else {
+        comparison.style.color = "red";
+        comparison.textContent = "Your surface modification makes adsorption less favorable.";
+      }
+
+      energyDisplay.appendChild(comparison);
+    }
+
+  } catch (err) {
+    console.error(err);
+    energyDisplay.textContent = "Calculation failed";
+  } finally {
+    loading.style.display = "none";
+  }
+};
+
+document.getElementById("gen-btn").addEventListener("click", () => {
+  document.getElementById("adsorption-energy").textContent = "";
+  showingAdsorptionEnergy = false;
+});
+
+document.getElementById("surface-btn").addEventListener("click", () => {
+  document.getElementById("adsorption-energy").textContent = "";
+  showingAdsorptionEnergy = false;
+});
+
+document.querySelectorAll(".miller-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (showingAdsorptionEnergy) {
+      document.getElementById("adsorption-energy").textContent = "";
+      showingAdsorptionEnergy = false;
+    }
+  });
+});
+
+document.querySelectorAll("#periodic-table button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (showingAdsorptionEnergy) {
+      document.getElementById("adsorption-energy").textContent = "";
+      showingAdsorptionEnergy = false;
+    }
+  });
+});
+
+function updateSwapDropdown() {
+  const swapSelect = document.getElementById("swap-elem");
+  if (!swapSelect) return;
+
+  swapSelect.innerHTML = "";
+
+  const defOpt = document.createElement("option");
+  defOpt.value = "";
+  defOpt.textContent = "Please Select";
+  defOpt.selected = true;
+  defOpt.disabled = true;
+  swapSelect.appendChild(defOpt);
+
+  selected.forEach((el) => {
+    const opt = document.createElement("option");
+    opt.value = el;
+    opt.textContent = el;
+    swapSelect.appendChild(opt);
+  });
+}
+
+function initSwapFunctionality() {
+  document.getElementById("swap-btn").addEventListener("click", async () => {
+    if (!window.baseRelaxed) {
+      alert("You must first relax and calculate the original surface before modifying it.");
+      return;
+    }
+
+    const targetElement = document.getElementById("swap-elem").value;
+    let swapWith = document.getElementById("swap-input").value.trim();
+    const loading = document.getElementById("swap-loading");
+    const surfaceViewer = document.getElementById("modsurfaceViewer");
+    const surfaceWrapper = document.getElementById("modsurfaceWrapper");
+
+    document.getElementById("mod-adsorption-energy").innerText = "";
+    document.getElementById("mod-adsorption-energy").style.color = "";
+
+    if (!targetElement) {
+      alert("Please select a target element first.");
+      return;
+    }
+
+    if (!window.lastGeneratedBareSurface) {
+      alert("Please generate a surface first.");
+      return;
+    }
+
+    loading.style.display = "block";
+    surfaceViewer.innerHTML = "";
+    surfaceWrapper.style.display = "none";
+
+    try {
+      const isDefect = swapWith.toLowerCase() === "defect";
+      const swapRes = await fetch("https://syj981022-aethorion.hf.space/swap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pdb_text: window.lastGeneratedBareSurface,
+          target_element: targetElement,
+          swap_with: isDefect ? "defect" : swapWith
+        })
+      });
+
+      if (!swapRes.ok) throw new Error(await swapRes.text());
+      const defectStructure = await swapRes.json();
+
+      if (isDefect) {
+        const lines = defectStructure.pdb_text.split("\n").filter(line => {
+          if (line.startsWith("ATOM") || line.startsWith("HETATM")) {
+            const symbol = line.substring(76, 78).trim();
+            return symbol !== targetElement;
+          }
+          return true;
+        });
+        defectStructure.pdb_text = lines.join("\n");
+      }
+
+      const recombineRes = await fetch("https://syj981022-aethorion.hf.space/recombine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pdb_text: defectStructure.pdb_text,
+          molecule: selectedMolecule
+        })
+      });
+
+      if (!recombineRes.ok) throw new Error(await recombineRes.text());
+
+      window.lastGeneratedBareSurface = defectStructure.pdb_text;
+      window.lastGeneratedSurface = await recombineRes.text();
+      surfaceWrapper.style.display = "block";
+
+      if (window.modSurfaceStage) {
+        window.modSurfaceStage.dispose();
+      }
+
+      const stage = new NGL.Stage("modsurfaceViewer", {
+        backgroundColor: "white",
+        tooltip: false
+      });
+
+      const blob = new Blob([window.lastGeneratedSurface], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const comp = await stage.loadFile(url, { ext: "pdb" });
+      
+      comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
+      comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
+
+
+      const offset = new NGL.Vector3(-5, -5, -5);
+      const axisLength = 5;
+      const shape = new NGL.Shape("axes");
+      shape.addArrow(offset.clone(), new NGL.Vector3(offset.x + axisLength, offset.y, offset.z), [1, 0, 0], 0.3);
+      shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y + axisLength, offset.z), [0, 1, 0], 0.3);
+      shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y, offset.z + axisLength), [0, 0, 1], 0.3)
+      
+      const shapeComp = stage.addComponentFromObject(shape);
+      shapeComp.addRepresentation("buffer");
+
+      stage.autoView();
+
+      const tip = document.createElement("div");
+      Object.assign(tip.style, {
+        position: "absolute",
+        pointerEvents: "none",
+        padding: "2px 4px",
+        background: "rgba(255,255,255,0.9)",
+        border: "1px solid #ccc",
+        borderRadius: "3px",
+        font: "12px/1 sans-serif",
+        color: "#000",
+        display: "none",
+        zIndex: 10
+      });
+      stage.viewer.container.appendChild(tip);
+      
+      stage.signals.hovered.add(pp => {
+        if (pp && pp.atom) {
+          tip.textContent = pp.atom.element;
+          tip.style.left = pp.canvasPosition.x + 8 + "px";
+          tip.style.top = pp.canvasPosition.y + 8 + "px";
+          tip.style.display = "block";
+        } else {
+          tip.style.display = "none";
+        }
+      });
+
+      const resizeObserver = new ResizeObserver(() => stage.handleResize());
+      resizeObserver.observe(surfaceViewer);
+
+      window.modSurfaceStage = stage;
+      window.modSurfaceResizeObserver = resizeObserver;
+
+    } catch (err) {
+      console.error(err);
+      alert("Modification failed: " + err.message);
+    } finally {
+      loading.style.display = "none";
+      document.getElementById("swap-input").value = "";
+      updateSwapDropdown();
+    }
+  });
+
+  window.addEventListener('beforeunload', () => {
+    if (window.modSurfaceStage) window.modSurfaceStage.dispose();
+    if (window.modSurfaceResizeObserver) window.modSurfaceResizeObserver.disconnect();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateSwapDropdown();
+  initSwapFunctionality();
+});
+</script>
+
+
+
+<section id="partnership" style="padding: 2rem 0; background: #f9f9f9;">
+  <h2 style="text-align: center; margin-bottom: 2rem;">Our Collaborators</h2>
+  <div class="logo-carousel">
+    <div class="logo-track">
+      <img src="images/upenn.png" alt="Partner 1" />
+      <img src="images/ecoforge.png" alt="Partner 2" />
+      <img src="images/metavive.png" alt="Partner 3" />
+      <img src="images/sinopharm.png" alt="Partner 4" />
+      <img src="images/pqvc.png" alt="Partner 5" />
+      <!-- Repeat for smooth infinite scroll -->
+      <img src="images/upenn.png" alt="Partner 1 D" />
+      <img src="images/ecoforge.png" alt="Partner 2 D" />
+      <img src="images/metavive.png" alt="Partner 3 D" />
+      <img src="images/sinopharm.png" alt="Partner 4 D" />
+      <img src="images/pqvc.png" alt="Partner 5 D" />
+    </div>
+  </div>
+</section>
+
+
+<section id="news">
+  <h2 style="text-align:center;margin-bottom:2rem;">Latest News</h2>
+  <div class="features">
+    <div class="feature-card">
+      <h3>June 19, 2025</h3>
+      <p>We launched Aethorix v1.0 to introduce our breakthrough solutions to the chemical and materials industry!</p>
+      <a href="https://doi.org/10.48550/arXiv.2506.16609" target="_blank" class="read-more-btn">View Paper</a>
+      <a href="https://github.com/syj1022/aethorix" target="_blank" class="read-more-btn">View Code</a>
+      <img src="images/v1.png" alt="Aethorix" class="news-image">
+    </div>
+    <div class="feature-card">
+      <h3>May 18, 2025</h3>
+      <p>The co-founders won the second prize in the 2025 Sustainability In Action (SIA) Business Competition!</p>
+      <a href="https://news.sina.cn/sx/2025-06-09/detail-ineznafh6693867.d.html?from=wap" target="_blank" class="read-more-btn">Read More</a>
+      <img src="images/SIA.png" alt="SIA Award" class="news-image">
+    </div>
+  </div>
+</section>
+
+
+<section id="contact" style="margin-top: -2rem;">
+  <h2 style="text-align:center;margin-bottom:2rem;">Get in Touch</h2>
+  <form id="contact-form" style="max-width:600px;margin:auto;display:flex;flex-direction:column;gap:1rem;">
+    <input type="email" name="email" placeholder="Email" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;">
+    <input type="text" name="other" placeholder="Other contacts" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;">
+    <textarea name="message" rows="4" placeholder="How can we help?" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;"></textarea>
+    <button type="submit" class="btn" style="align-self:center; width: 120px;">Send</button>
+  </form>
+
+  <div id="popup" style="display:none;position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid #ccc;padding:1rem 2rem;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.2);z-index:1000;font-weight:600;">
+    <span id="popup-message"></span>
+  </div>
+</section>
+
+
+
+<footer>
+  <div class="footer-grid">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <img src="images/logo.png" alt="Aethorion Logo" style="height: 28px;">
+      <h3 style="margin: 0;">Aethorion AI</h3>
+    </div>
+    <div>
+      <h4 style="margin-bottom:.5rem;">Contact</h4>
+      <a href="mailto:info@aethorion.ai">info@aethorion.ai</a><br>
+      <a href="https://x.com/aethorionai" target="_blank">X / Twitter</a><br>
+      <a href="https://www.linkedin.com/company/aethorionai" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+  <p style="margin-top:2rem;font-size:.875rem;">© 2025 Aethorion AI Inc. All rights reserved.</p>
+</footer>
+
+<script>
+  const toggleBtn = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('nav');
+  toggleBtn.addEventListener('click', () => nav.classList.toggle('open'));
+</script>
+
+<script>
+  function scrollToTop(event) {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
