@@ -325,6 +325,13 @@ window.addEventListener("DOMContentLoaded", function () {
                        style="width: 200px; height: 170px; margin-top: 3.9rem; margin-bottom: 4rem;">
                     <h3 style="text-align: center; margin-bottom: 0.5rem;">AI-Assisted Literature Search</h3>
                     <button onclick="queryChatGPT([...selected])" class="read-more-btn" style="margin-bottom: 1rem;">One-Click&nbsp;Research</button> 
+                    <div class="tooltip" style="display: inline-block;">
+                      <span style="border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help; font-weight: bold;">!</span>
+                      <div class="tooltip-text">
+                        If you don't see the text generation is unsuccessful. This is most likely due to the GPU initialization issues. Please try and generate again!
+                      </div>
+                    </div>                  
+                    
                     <div id="loading-tooltip" style="display:none;color:#007bff;font-weight:bold">Reviewing… Only 10 seconds!</div>
                     <div id="gpt-response" style="margin-top:1rem;font-size:.95rem;color:#333; text-align: left;"></div>
                 </div>
@@ -382,12 +389,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 </div><br>
                 <input type="range" id="hull-slider" min="0.01" max="0.50" value="0.05" step="0.01" style="width: 300px;"></div>
                 <button id="gen-btn" class="read-more-btn" style="margin-bottom: 1rem;">Generate Design</button>
-                <div class="tooltip" style="display: inline-block;">
-                  <span style="border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help; font-weight: bold;">!</span>
-                  <div class="tooltip-text">
-                    If you don't see the crystal structure upon generation. This is most likely due to the GPU initialization issues. Please try and generate again!
-                  </div>
-                </div>
                 <div id="generating" style="display:none;color:#007bff;font-weight:bold">Generating… About 3 minutes!</div>
                 <div id="nglWrapper" style="display: none; margin-top: 1.5rem;">
                   <div id="nglViewer" style="width: 100%; height: 200px;"></div></div>
@@ -669,15 +670,16 @@ async function queryChatGPT(atomArray = []) {
 
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
-        box.innerHTML = marked.parse(data.reply ?? 'No reply.');
+
+        const rawHtml = marked.parse(data.reply ?? 'No reply.');
+        box.innerHTML = rawHtml;
     } catch (err) {
         console.error(err);
         box.textContent = 'Error: ' + err.message;
     } finally {
         loadingTip.style.display = 'none';
     }
-}
-
+}  
 
 const API_URL = "https://syj981022-aethorion.hf.space/generate";
 const hullSlider = document.getElementById("hull-slider");
