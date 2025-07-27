@@ -321,4 +321,6 @@ html, body {
   width: 100px;
 }
 
-
+.loading-message {
+  display: none;
+}
