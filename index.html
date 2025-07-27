@@ -184,6 +184,21 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+window.addEventListener("load", async () => {
+  try {
+    await fetch("https://syj981022-aethorion.hf.space/warmup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ping: "wake up" })
+    });
+    console.log("GPU backend warmed up.");
+  } catch (err) {
+    console.warn("Warmup failed:", err);
+  }
+});
+</script>
+  
 <body>
 
 <div id="home"></div>
