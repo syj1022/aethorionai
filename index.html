@@ -837,23 +837,55 @@ window.addEventListener("load", async () => {
 <script>
 let currentLanguage = 'en';
 
+function hideAllLoadingMessages() {
+  const loadingElements = [
+    "loading-tooltip", "loading-tooltip-zh",
+    "generating", "generating-zh",
+    "surface-generating", "surface-generating-zh",
+    "relax-loading", "relax-loading-zh",
+    "swap-loading", "swap-loading-zh",
+    "mod-relax-loading", "mod-relax-loading-zh"
+  ];
+  
+  loadingElements.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
 document.getElementById('lang-btn').addEventListener('click', function() {
+  hideAllLoadingMessages();
+  
   currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
   this.textContent = currentLanguage === 'en' ? 'EN' : '中';
   
   document.querySelectorAll('.en').forEach(el => {
-    el.style.display = currentLanguage === 'en' ? '' : 'none';
+    if (el.id !== 'selected-output') { // Don't hide the selected atoms display
+      el.style.display = currentLanguage === 'en' ? '' : 'none';
+    }
   });
   
   document.querySelectorAll('.zh').forEach(el => {
-    el.style.display = currentLanguage === 'zh' ? '' : 'none';
+    if (el.id !== 'selected-output-zh') { // Don't hide the selected atoms display
+      el.style.display = currentLanguage === 'zh' ? '' : 'none';
+    }
   });
   
   if (currentLanguage === 'zh') {
     document.getElementById('selected-output-zh').textContent = 
       document.getElementById('selected-output').textContent === 'None' ? '无' : 
       document.getElementById('selected-output').textContent;
+  } else {
+    document.getElementById('selected-output').textContent = 
+      document.getElementById('selected-output-zh').textContent === '无' ? 'None' : 
+      document.getElementById('selected-output-zh').textContent;
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  hideAllLoadingMessages();
+  updateSwapDropdown();
+  initSwapFunctionality();
 });
 
 const symbols = [
@@ -1481,20 +1513,6 @@ function scrollToTop(event) {
   event.preventDefault();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  [
-    "generating", "generating-zh",
-    "relax-loading", "relax-loading-zh",
-    "surface-generating", "surface-generating-zh",
-    "swap-loading", "swap-loading-zh",
-    "mod-relax-loading", "mod-relax-loading-zh",
-    "loading-tooltip", "loading-tooltip-zh"
-  ].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-});
 
 </script>
 </body>
