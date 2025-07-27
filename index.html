@@ -838,54 +838,53 @@ window.addEventListener("load", async () => {
 let currentLanguage = 'en';
 
 function hideAllLoadingMessages() {
-  const loadingElements = [
-    "loading-tooltip", "loading-tooltip-zh",
-    "generating", "generating-zh",
-    "surface-generating", "surface-generating-zh",
-    "relax-loading", "relax-loading-zh",
-    "swap-loading", "swap-loading-zh",
-    "mod-relax-loading", "mod-relax-loading-zh"
-  ];
+  const loadingElements = document.querySelectorAll('[id*="loading"], [id*="generating"], .loading-message');
   
-  loadingElements.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
+  loadingElements.forEach(el => {
+    el.style.display = 'none';
   });
 }
 
-document.getElementById('lang-btn').addEventListener('click', function() {
+function switchLanguage() {
   hideAllLoadingMessages();
   
   currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
-  this.textContent = currentLanguage === 'en' ? 'EN' : '中';
+  document.getElementById('lang-btn').textContent = currentLanguage === 'en' ? 'EN' : '中';
   
   document.querySelectorAll('.en').forEach(el => {
-    if (el.id !== 'selected-output') { // Don't hide the selected atoms display
+    if (!el.id.includes('selected-output')) {
       el.style.display = currentLanguage === 'en' ? '' : 'none';
     }
   });
   
   document.querySelectorAll('.zh').forEach(el => {
-    if (el.id !== 'selected-output-zh') { // Don't hide the selected atoms display
+    if (!el.id.includes('selected-output')) {
       el.style.display = currentLanguage === 'zh' ? '' : 'none';
     }
   });
   
+  const selectedEn = document.getElementById('selected-output');
+  const selectedZh = document.getElementById('selected-output-zh');
+  
   if (currentLanguage === 'zh') {
-    document.getElementById('selected-output-zh').textContent = 
-      document.getElementById('selected-output').textContent === 'None' ? '无' : 
-      document.getElementById('selected-output').textContent;
+    selectedZh.textContent = selectedEn.textContent === 'None' ? '无' : selectedEn.textContent;
   } else {
-    document.getElementById('selected-output').textContent = 
-      document.getElementById('selected-output-zh').textContent === '无' ? 'None' : 
-      document.getElementById('selected-output-zh').textContent;
+    selectedEn.textContent = selectedZh.textContent === '无' ? 'None' : selectedZh.textContent;
   }
-});
+}
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('.zh').forEach(el => {
+    if (!el.id.includes('selected-output')) {
+      el.style.display = 'none';
+    }
+  });
+  
   hideAllLoadingMessages();
   updateSwapDropdown();
   initSwapFunctionality();
+  
+  document.getElementById('lang-btn').addEventListener('click', switchLanguage);
 });
 
 const symbols = [
