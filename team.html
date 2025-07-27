@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" type="image/png" href="images/logo.png">
   <meta charset="UTF-8">
-  <title>Aethorion AI </title>
+  <title>Aethorion AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=1">
@@ -31,28 +31,38 @@
     .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; }
     .hero p { font-size: 1.25rem; color: var(--grey); max-width: 720px; margin-bottom: 2rem; }
 
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .feature-card { background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); }
-    .feature-card h3 { margin-bottom: .5rem; font-size: 1.1rem; }
-    .feature-card p { color: var(--grey); }
-
-    .banner { background: var(--primary); color: #fff; border-radius: 16px; padding: 4rem; text-align: center; position: relative; overflow: hidden; }
-    .banner h2 { font-size: 2rem; margin-bottom: 1rem; }
-    .banner p { max-width: 600px; margin: auto; margin-bottom: 2rem; }
-
-    footer { background: var(--primary); color: #fff; padding: 2rem; }
-    footer .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; }
-    footer a { color: #fff; text-decoration: none; font-size: .95rem; }
-    footer a:hover { text-decoration: underline; }
-
     @media (max-width: 768px) {
       nav { display: none; }
       nav.open { display: flex; flex-direction: column; position: absolute; right: 2rem; top: 70px; background: var(--light); padding: 1rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
       .menu-toggle { display: block; }
     }
+
+    .language-switcher {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .language-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .language-btn:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
-
 
 <body>
 
@@ -65,15 +75,14 @@
   </div>
   <nav>
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="career.html">Career</a></li>
-      <li><a href="team.html">Team</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="index.html"><span class="en">Home</span><span class="zh" style="display:none">首页</span></a></li>
+      <li><a href="career.html"><span class="en">Career</span><span class="zh" style="display:none">招聘</span></a></li>
+      <li><a href="team.html"><span class="en">Team</span><span class="zh" style="display:none">团队</span></a></li>
+      <li><a href="index.html#contact"><span class="en">Contact</span><span class="zh" style="display:none">联系</span></a></li>
     </ul>
   </nav>
   <button class="menu-toggle">☰</button>
-  <a href="#benefits" class="btn">See Our Demo</a>
-
+  <a href="index.html#benefits" class="btn"><span class="en">See Our Demo</span><span class="zh" style="display:none">演示</span></a>
 </header>
 
 <section class="hero">
@@ -82,16 +91,40 @@
   </video>
   <div class="video-overlay"></div>
   <div class="hero-content" style="color: white; text-shadow: 2px 2px 5px black; padding-top: 50px;">
-    <h1>About Us</h1>
-    <p style="color: #fafafa !important;"> The co-founders are two Ph.D. candidates at UPenn with a blend of scientific depth and entrepreneurial drive. With backgrounds spanning computational materials science, chemical engineering, mathematics, and business, we operate at the intersection of academia and industry. Guided by a deep commitment to impact, we seek visionary industrial partnerships to transform frontier scientific breakthroughs into scalable solutions. </p>
+    <h1 class="en">About Us</h1>
+    <h1 class="zh" style="display:none">关于我们</h1>
+    <p class="en" style="color: #fafafa !important;">
+      The co-founders are two Ph.D. candidates at UPenn with a blend of scientific depth and entrepreneurial drive. With backgrounds spanning computational materials science, chemical engineering, mathematics, and business, we operate at the intersection of academia and industry. Guided by a deep commitment to impact, we seek visionary industrial partnerships to transform frontier scientific breakthroughs into scalable solutions.
+    </p>
+    <p class="zh" style="display:none; color: #fafafa !important;">
+      我们的联合创始人是宾夕法尼亚大学的博士候选人，兼具科研深度与创业精神，专业背景涵盖计算材料科学、化学工程、数学与商业。我们致力于在学术与产业之间架起桥梁，推动前沿科研成果落地为可规模化的现实解决方案，并积极寻求具有远见的产业合作伙伴，共创变革性影响。
+    </p>
   </div>
 </section>
+
+<div class="language-switcher">
+  <button class="language-btn" id="lang-btn">EN</button>
+</div>
 
 <script>
   const toggleBtn = document.querySelector('.menu-toggle');
   const nav = document.querySelector('nav');
   toggleBtn.addEventListener('click', () => nav.classList.toggle('open'));
+
+  let currentLanguage = 'en';
+  document.getElementById('lang-btn').addEventListener('click', function () {
+    currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+    this.textContent = currentLanguage === 'en' ? 'EN' : '中';
+
+    document.querySelectorAll('.en').forEach(el => {
+      el.style.display = currentLanguage === 'en' ? '' : 'none';
+    });
+
+    document.querySelectorAll('.zh').forEach(el => {
+      el.style.display = currentLanguage === 'zh' ? '' : 'none';
+    });
+  });
 </script>
+
 </body>
 </html>
-
