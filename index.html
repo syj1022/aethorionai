@@ -862,6 +862,8 @@ let isLoadingLiterature = false;
 let isGeneratingDesign = false;
 let isSurfaceGenerating = false;
 let isModifyingSurface = false;
+let isCalcSurface = false;
+let isCalcModSurface = false;
 let currentLanguage = 'en';
 
 function hideAllLoadingMessages() {
@@ -927,6 +929,12 @@ function switchLanguage() {
 
   document.getElementById("swap-loading").style.display = isModifyingSurface && currentLanguage === 'en' ? 'block' : 'none';
   document.getElementById("swap-loading-zh").style.display = isModifyingSurface && currentLanguage === 'zh' ? 'block' : 'none';
+
+  document.getElementById("relax-loading").style.display = isCalcSurface && currentLanguage === 'en' ? 'block' : 'none';
+  document.getElementById("relax-loading-zh").style.display = isCalcSurface && currentLanguage === 'zh' ? 'block' : 'none';
+
+  document.getElementById("mod-relax-loading").style.display = isCalcModSurface && currentLanguage === 'en' ? 'block' : 'none';
+  document.getElementById("mod-relax-loading-zh").style.display = isCalcModSurface && currentLanguage === 'zh' ? 'block' : 'none';
 }
 
 
