@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <title>Aethorion AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <style>
+    :root {
+      --primary: #0C0E2C;
+      --accent: #6F9EFF;
+      --light: #F9FAFC;
+      --grey: #7A7F9A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: var(--light); color: var(--primary); line-height: 1.6; }
+
+    header { background: var(--light); position: fixed; top: 0; width: 100%; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,.05); z-index: 1000; }
+    header .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    nav ul { display: flex; gap: 1.5rem; list-style: none; }
+    nav a { color: var(--primary); text-decoration: none; font-weight: 600; transition: color .2s; }
+    nav a:hover { color: var(--accent); }
+    .btn { display: inline-block; padding: .75rem 1.5rem; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; transition: background .2s; }
+    .btn:hover { background: #547dff; }
+    .menu-toggle { display: none; background: transparent; border: none; font-size: 1.5rem; color: var(--primary); cursor: pointer; }
+
+    section { padding: 6rem 2rem 4rem; max-width: 1200px; margin: auto; }
+    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8rem; }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; }
+    .hero p { font-size: 1.25rem; color: var(--grey); max-width: 720px; margin-bottom: 2rem; }
+
+    @media (max-width: 768px) {
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; position: absolute; right: 2rem; top: 70px; background: var(--light); padding: 1rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+      .menu-toggle { display: block; }
+    }
+
+    .language-switcher {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .language-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .language-btn:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="home"></div>
+
+<header>
+  <div class="logo" style="display: flex; align-items: center; gap: 0.5rem;">
+    <img src="images/logo.png" alt="Logo" style="height: 28px;">
+    <span>Aethorion AI</span>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="index.html"><span class="en">Home</span><span class="zh" style="display:none">首页</span></a></li>
+      <li><a href="career.html"><span class="en">Career</span><span class="zh" style="display:none">招聘</span></a></li>
+      <li><a href="team.html"><span class="en">Team</span><span class="zh" style="display:none">团队</span></a></li>
+      <li><a href="index.html#contact"><span class="en">Contact</span><span class="zh" style="display:none">联系</span></a></li>
+    </ul>
+  </nav>
+  <button class="menu-toggle">☰</button>
+  <a href="index.html#benefits" class="btn"><span class="en">See Our Demo</span><span class="zh" style="display:none">演示</span></a>
+</header>
+
+<section class="hero">
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="https://ia600907.us.archive.org/22/items/background_20250727/background.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+  <div class="hero-content" style="color: white; text-shadow: 2px 2px 5px black; padding-top: 50px;">
+    <h1 class="en">At Aethorion</h1>
+    <h1 class="zh" style="display:none">加入Aethorion</h1>
+    <p class="en" style="color: #fafafa !important;">
+      You will stand at the vanguard of a technological renaissance, where generative AI meets the physical fabric of the universe. We are cultivating an exceptional collective of pioneering scientists, visionary engineers, strategic business minds, and multidisciplinary polymaths to architect the next era of materials innovation. We empower you not just to contribute to change, but to be the force that drives it. You will find the autonomy, vision, and platform to redefine what’s possible for the world.
+    </p>
+    <p class="zh" style="display:none; color: #fafafa !important;">
+      在Aethorion，您将站在技术复兴的最前沿，见证生成式AI与物质世界的深度融合。我们正在打造一个由开拓性科学家、远见工程师、战略型商业人才和多领域通才组成的卓越集体，共同构建材料创新的新时代。在这里，您不仅是变革的参与者，更是推动者。我们为您提供足够的自主权、愿景与平台，重新定义人类对未来可能性的想象。
+    </p>
+  </div>
+</section>
+
+<div class="language-switcher">
+  <button class="language-btn" id="lang-btn">EN</button>
+</div>
+
+<script>
+  const toggleBtn = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('nav');
+  toggleBtn.addEventListener('click', () => nav.classList.toggle('open'));
+
+  let currentLanguage = 'en';
+  document.getElementById('lang-btn').addEventListener('click', function () {
+    currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+    this.textContent = currentLanguage === 'en' ? 'EN' : '中';
+
+    document.querySelectorAll('.en').forEach(el => {
+      el.style.display = currentLanguage === 'en' ? '' : 'none';
+    });
+
+    document.querySelectorAll('.zh').forEach(el => {
+      el.style.display = currentLanguage === 'zh' ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
