@@ -838,30 +838,31 @@ function hideAllLoadingMessages() {
 
 function switchLanguage() {
   hideAllLoadingMessages();
-  
+
   currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
   document.getElementById('lang-btn').textContent = currentLanguage === 'en' ? 'EN' : '中';
-  
+
   document.querySelectorAll('.en').forEach(el => {
     if (!el.id.includes('selected-output')) {
       el.style.display = currentLanguage === 'en' ? '' : 'none';
     }
   });
-  
+
   document.querySelectorAll('.zh').forEach(el => {
     if (!el.id.includes('selected-output')) {
       el.style.display = currentLanguage === 'zh' ? '' : 'none';
     }
   });
-  
+
   const selectedEn = document.getElementById('selected-output');
   const selectedZh = document.getElementById('selected-output-zh');
-  
+
   if (currentLanguage === 'zh') {
     selectedZh.textContent = selectedEn.textContent === 'None' ? '无' : selectedEn.textContent;
   } else {
     selectedEn.textContent = selectedZh.textContent === '无' ? 'None' : selectedZh.textContent;
   }
+
   document.getElementById("loading-tooltip").style.display = isLoadingLiterature && currentLanguage === 'en' ? 'block' : 'none';
   document.getElementById("loading-tooltip-zh").style.display = isLoadingLiterature && currentLanguage === 'zh' ? 'block' : 'none';
 
@@ -873,6 +874,17 @@ function switchLanguage() {
 
   document.getElementById("swap-loading").style.display = isModifyingSurface && currentLanguage === 'en' ? 'block' : 'none';
   document.getElementById("swap-loading-zh").style.display = isModifyingSurface && currentLanguage === 'zh' ? 'block' : 'none';
+
+  const enMessage = document.querySelector('textarea.en[name="message"]');
+  const zhMessage = document.querySelector('textarea.zh[name="message"]');
+
+  if (currentLanguage === 'en') {
+    enMessage.setAttribute('required', 'required');
+    zhMessage.removeAttribute('required');
+  } else {
+    zhMessage.setAttribute('required', 'required');
+    enMessage.removeAttribute('required');
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
