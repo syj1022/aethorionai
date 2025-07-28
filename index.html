@@ -815,17 +815,18 @@ window.addEventListener("load", async () => {
   <h2 style="text-align:center;margin-bottom:2rem; display:none" class="zh">联系我们</h2>
 <form id="contact-form" style="max-width:600px;margin:auto;display:flex;flex-direction:column;gap:1rem;">
   <input type="email" name="email" placeholder="Email" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;">
-  <input type="text" id="other-en" placeholder="Other contacts" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en">
-  <input type="text" id="other-zh" placeholder="其他联系方式" style="padding:.75rem;border:1px solid #ccc;border-radius:6px; display:none" class="zh">
-  <input type="hidden" name="other" id="other-hidden">
-  <textarea id="message-en" rows="4" placeholder="How can we help?" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en"></textarea>
-  <textarea id="message-zh" rows="4" placeholder="我们可以如何帮助您？" style="padding:.75rem;border:1px solid #ccc;border-radius:6px; display:none" class="zh"></textarea>
-  <input type="hidden" name="message" id="message-hidden">
+  
+  <input type="text" id="other-en" name="other" placeholder="Other contacts" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en">
+  <input type="text" id="other-zh" placeholder="其他联系方式" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;display:none;" class="zh">
+
+  <textarea id="message-en" name="message" rows="4" placeholder="How can we help?" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en"></textarea>
+  <textarea id="message-zh" rows="4" placeholder="我们可以如何帮助您？" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;display:none;" class="zh"></textarea>
+
   <button type="submit" class="btn" style="align-self:center; width: 120px;">
-    <span class="en">Send</span>
-    <span class="zh" style="display:none">发送</span>
+    <span class="en">Send</span><span class="zh" style="display:none;">发送</span>
   </button>
 </form>
+
 
 <div id="popup" style="display:none;position:fixed;top:30%;left:50%;
   transform:translate(-50%,-50%);background:#fff;border:1px solid #ccc;
