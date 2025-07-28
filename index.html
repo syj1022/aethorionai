@@ -172,20 +172,19 @@ window.addEventListener("DOMContentLoaded", function () {
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const payload = {
-      email: form.email.value,
-      other: form.other.value,
-      message: form.message.value
-    };
+    const formData = new FormData();
+    formData.append("access_key", "REPLACE_WITH_YOUR_ACCESS_KEY");
+    formData.append("email", form.email.value);
+    formData.append("other", form.other.value);
+    formData.append("message", form.message.value);
 
-    fetch("https://script.google.com/macros/s/AKfycbwhB0otb-RaeCp86_sQxaMk7nn8IeKmaTi_wAEFD0wVML9U-htaXl1690aQyGvc-QA/exec", {
+    fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: formData
     })
     .then(response => response.json())
     .then(data => {
-      if (data.status === "success") {
+      if (data.success) {
         messageBox.innerText = currentLanguage === 'en'
           ? "Message successfully sent! We will get back to you in 24 hours!"
           : "消息发送成功！我们将在24小时内回复您！";
@@ -209,6 +208,7 @@ window.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+
 
 
 <script>
@@ -805,14 +805,23 @@ window.addEventListener("load", async () => {
 <section id="contact" style="margin-top: -2rem;">
   <h2 style="text-align:center;margin-bottom:2rem;" class="en">Get in Touch</h2>
   <h2 style="text-align:center;margin-bottom:2rem; display:none" class="zh">联系我们</h2>
-  <form id="contact-form" style="max-width:600px;margin:auto;display:flex;flex-direction:column;gap:1rem;">
-    <input type="email" name="email" placeholder="Email" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;">
-    <input type="text" name="other" placeholder="Other contacts" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en">
-    <input type="text" name="other" placeholder="其他联系方式" style="padding:.75rem;border:1px solid #ccc;border-radius:6px; display:none" class="zh">
-    <textarea name="message" rows="4" placeholder="How can we help?" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en"></textarea>
-    <textarea name="message" rows="4" placeholder="我们可以如何帮助您？" style="padding:.75rem;border:1px solid #ccc;border-radius:6px; display:none" class="zh"></textarea>
-    <button type="submit" class="btn" style="align-self:center; width: 120px;"><span class="en">Send</span><span class="zh" style="display:none">发送</span></button>
-  </form>
+<form id="contact-form" style="max-width:600px;margin:auto;display:flex;flex-direction:column;gap:1rem;">
+  <input type="email" name="email" placeholder="Email" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;">
+  <input type="text" id="other-en" placeholder="Other contacts" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en">
+  <input type="text" id="other-zh" placeholder="其他联系方式" style="padding:.75rem;border:1px solid #ccc;border-radius:6px; display:none" class="zh">
+  <input type="hidden" name="other" id="other-hidden">
+  <textarea id="message-en" rows="4" placeholder="How can we help?" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en"></textarea>
+  <textarea id="message-zh" rows="4" placeholder="我们可以如何帮助您？" style="padding:.75rem;border:1px solid #ccc;border-radius:6px; display:none" class="zh"></textarea>
+  <input type="hidden" name="message" id="message-hidden">
+  <button type="submit" class="btn" style="align-self:center; width: 120px;">
+    <span class="en">Send</span>
+    <span class="zh" style="display:none">发送</span>
+  </button>
+</form>
+
+<div id="popup" style="display: none;">
+  <p id="popup-message"></p>
+</div>
 
   <div id="popup" style="display:none;position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid #ccc;padding:1rem 2rem;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.2);z-index:1000;font-weight:600;">
     <span id="popup-message"></span>
