@@ -873,30 +873,47 @@ function hideAllLoadingMessages() {
 }
 
 function switchLanguage() {
-  hideAllLoadingMessages();
+  const otherEn = document.getElementById("other-en");
+  const otherZh = document.getElementById("other-zh");
+  const messageEn = document.getElementById("message-en");
+  const messageZh = document.getElementById("message-zh");
 
-  currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
-  document.getElementById('lang-btn').textContent = currentLanguage === 'en' ? 'EN' : '中';
+  if (currentLanguage === "en") {
+    currentLanguage = "zh";
+    document.getElementById('lang-btn').textContent = '中';
 
-  document.querySelectorAll('.en').forEach(el => {
-    if (!el.id.includes('selected-output')) {
-      el.style.display = currentLanguage === 'en' ? '' : 'none';
-    }
-  });
+    otherEn.removeAttribute("name");
+    otherZh.setAttribute("name", "other");
 
-  document.querySelectorAll('.zh').forEach(el => {
-    if (!el.id.includes('selected-output')) {
-      el.style.display = currentLanguage === 'zh' ? '' : 'none';
-    }
-  });
+    messageEn.removeAttribute("name");
+    messageEn.removeAttribute("required");
+    messageZh.setAttribute("name", "message");
+    messageZh.setAttribute("required", "");
+
+  } else {
+    currentLanguage = "en";
+    document.getElementById('lang-btn').textContent = 'EN';
+
+    otherZh.removeAttribute("name");
+    otherEn.setAttribute("name", "other");
+
+    messageZh.removeAttribute("name");
+    messageZh.removeAttribute("required");
+    messageEn.setAttribute("name", "message");
+    messageEn.setAttribute("required", "");
+  }
+
+  document.querySelectorAll(".en").forEach(el => el.style.display = currentLanguage === 'en' ? "" : "none");
+  document.querySelectorAll(".zh").forEach(el => el.style.display = currentLanguage === 'zh' ? "" : "none");
 
   const selectedEn = document.getElementById('selected-output');
   const selectedZh = document.getElementById('selected-output-zh');
-
-  if (currentLanguage === 'zh') {
-    selectedZh.textContent = selectedEn.textContent === 'None' ? '无' : selectedEn.textContent;
-  } else {
-    selectedEn.textContent = selectedZh.textContent === '无' ? 'None' : selectedZh.textContent;
+  if (selectedEn && selectedZh) {
+    if (currentLanguage === 'zh') {
+      selectedZh.textContent = selectedEn.textContent === 'None' ? '无' : selectedEn.textContent;
+    } else {
+      selectedEn.textContent = selectedZh.textContent === '无' ? 'None' : selectedZh.textContent;
+    }
   }
 
   document.getElementById("loading-tooltip").style.display = isLoadingLiterature && currentLanguage === 'en' ? 'block' : 'none';
@@ -910,18 +927,8 @@ function switchLanguage() {
 
   document.getElementById("swap-loading").style.display = isModifyingSurface && currentLanguage === 'en' ? 'block' : 'none';
   document.getElementById("swap-loading-zh").style.display = isModifyingSurface && currentLanguage === 'zh' ? 'block' : 'none';
-
-  const enMessage = document.querySelector('textarea.en[name="message"]');
-  const zhMessage = document.querySelector('textarea.zh[name="message"]');
-
-  if (currentLanguage === 'en') {
-    enMessage.setAttribute('required', 'required');
-    zhMessage.removeAttribute('required');
-  } else {
-    zhMessage.setAttribute('required', 'required');
-    enMessage.removeAttribute('required');
-  }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('.zh').forEach(el => {
