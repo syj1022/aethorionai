@@ -613,7 +613,8 @@ window.addEventListener("load", async () => {
                 <button id="relax-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;"><span class="en">Relax and Calculate</span><span class="zh" style="display:none">弛豫并计算</span></button>
                 <div id="relax-loading" style="display:none;color:#007bff;font-weight:bold" class="en">Calculating... About 1 minute!</div>
                 <div id="relax-loading-zh" style="display:none;color:#007bff;font-weight:bold" class="zh">正在计算... 约1分钟！</div>
-                <div id="adsorption-energy" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div></div>
+                <div id="adsorption-energy" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div>
+                </div>
                 </div>
             </div>
 
@@ -1263,9 +1264,9 @@ document.getElementById("relax-btn").onclick = async () => {
 
   const loading = currentLanguage === 'en' ? document.getElementById("relax-loading") : document.getElementById("relax-loading-zh");
   const energyDisplay = document.getElementById("adsorption-energy");
-  energyDisplay.textContent = "";
+  energyDisplay.innerHTML = "";
   loading.style.display = "block";
-  
+
   try {
     const res = await fetch("https://syj981022-aethorion.hf.space/relax", {
       method: "POST",
@@ -1280,11 +1281,34 @@ document.getElementById("relax-btn").onclick = async () => {
     if (!res.ok) throw new Error(await res.text());
     const result = await res.json();
     window.originalAdsorptionEnergy = result.adsorption_energy;
+
+    const viewerDiv = document.getElementById("modsurfaceViewer");
+    viewerDiv.style.display = "block";
+    viewerDiv.innerHTML = ""; 
+
+    setTimeout(() => {
+      const modStage = new NGL.Stage("modsurfaceViewer", { backgroundColor: "white" });
+      modStage.loadFile(new Blob([result.relaxed_pdb], { type: "text/plain" }), { ext: "pdb" })
+        .then(component => {
+          component.addRepresentation("ball+stick");
+          component.autoView();
+        });
+    }, 100);
+
     window.baseRelaxed = true;
     showingAdsorptionEnergy = true;
-    energyDisplay.textContent = currentLanguage === 'en' 
-      ? `Adsorption Energy: ${result.adsorption_energy} eV`
-      : `吸附能: ${result.adsorption_energy} eV`;
+
+    energyDisplay.innerHTML = currentLanguage === 'en'
+      ? `Adsorption Energy: ${result.adsorption_energy} eV
+        <div class="tooltip" style="display:inline-block;position:relative;">
+          <span style="font-weight:bold;border:1px solid #333;border-radius:50%;padding:0 6px;font-size:0.9em;cursor:help;">?</span>
+          <div class="tooltip-text">Adsorption energy reflects the interaction strength between the adsorbate and surface. Negative values typically indicate favorable adsorption.</div>
+        </div>`
+      : `吸附能: ${result.adsorption_energy} eV
+        <div class="tooltip zh" style="display:inline-block;position:relative;">
+          <span style="font-weight:bold;border:1px solid #333;border-radius:50%;padding:0 6px;font-size:0.9em;cursor:help;">?</span>
+          <div class="tooltip-text">吸附能表示吸附物与表面之间的相互作用强度，通常为负值意味着吸附较为有利。</div>
+        </div>`;
 
   } catch (err) {
     console.error(err);
@@ -1293,6 +1317,7 @@ document.getElementById("relax-btn").onclick = async () => {
     loading.style.display = "none";
   }
 };
+
 
 document.getElementById("mod-relax-btn").onclick = async () => {
   if (!window.baseRelaxed) {
