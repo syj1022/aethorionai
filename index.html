@@ -275,10 +275,10 @@ window.addEventListener("load", async () => {
     <div class="feature-card">
       <div style="text-align: center;">
       <img src="images/icon1.png" alt="icon" width="100" height="100"></div>
-      <h3 class="en">Driving Breakthrough Applications with Generative AI</h3>
-      <h3 class="zh" style="display:none">开拓未知领域</h3>
-      <p class="en">Our intelligent platform leverages advanced algorithms to design novel materials tailored for real-world needs, assisting industries innovate faster and more efficiently.</p>
-      <p class="zh" style="display:none">我们的智能平台通过先进算法设计面向实际需求的新型材料，助力产业更快、更高效地实现创新。</p>
+      <h3 class="en">Driving Breakthrough Applications</h3>
+      <h3 class="zh" style="display:none">引领突破性应用</h3>
+      <p class="en">Our intelligent platform leverages advanced algorithms to design novel materials tailored for real-world needs, assisting industries innovate faster.</p>
+      <p class="zh" style="display:none">我们的智能平台通过先进算法设计面向实际需求的新型材料，助力产业更高效地实现创新。</p>
     </div>
     <div class="feature-card">
       <div style="text-align: center; margin-top: 0.5rem; margin-bottom: -0.5rem;">
@@ -1520,8 +1520,6 @@ function initSwapFunctionality() {
         tooltip: false
       });
 
-      document.getElementById("modsurfaceViewer").style.pointerEvents = "auto";
-
       const blob = new Blob([window.lastGeneratedSurface], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
       const comp = await stage.loadFile(url, { ext: "pdb" });
@@ -1599,13 +1597,6 @@ document.addEventListener("DOMContentLoaded", () => {
 const toggleBtn = document.querySelector('.menu-toggle');
 const nav = document.querySelector('nav');
 toggleBtn.addEventListener('click', () => nav.classList.toggle('open'));
-
-
-window.addEventListener('resize', () => {
-  if (window.modSurfaceStage) {
-    window.modSurfaceStage.handleResize();
-  }
-});
   
 function scrollToTop(event) {
   event.preventDefault();
