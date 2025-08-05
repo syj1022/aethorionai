@@ -181,7 +181,7 @@ window.addEventListener("DOMContentLoaded", function () {
       : document.getElementById("message-en").value;
 
     const formData = new FormData();
-    formData.append("access_key", "67d5a211-5fb0-4b30-9bd9-4a18e65947cd");
+    formData.append("access_key", "a3f3c621-d9dc-4a1e-ac21-da76dbc45d91");
     formData.append("email", form.email.value);
     formData.append("other", otherValue);
     formData.append("message", messageValue);
@@ -846,7 +846,7 @@ window.addEventListener("load", async () => {
     <div>
       <h4 style="margin-bottom:.5rem;" class="en">Contact</h4>
       <h4 style="margin-bottom:.5rem; display:none" class="zh">联系方式</h4>
-      <a href="mailto:info@aethorionai.com">info@aethorionai.com</a><br>
+      <a href="mailto:info@aethorion.ai">info@aethorion.ai</a><br>
       <a href="https://x.com/aethorionai" target="_blank">X / Twitter</a><br>
       <a href="https://www.linkedin.com/company/aethorionai" target="_blank">LinkedIn</a>
     </div>
@@ -1286,14 +1286,26 @@ document.getElementById("relax-btn").onclick = async () => {
     viewerDiv.style.display = "block";
     viewerDiv.innerHTML = ""; 
 
-    setTimeout(() => {
-      const modStage = new NGL.Stage("modsurfaceViewer", { backgroundColor: "white" });
-      modStage.loadFile(new Blob([result.relaxed_pdb], { type: "text/plain" }), { ext: "pdb" })
-        .then(component => {
-          component.addRepresentation("ball+stick");
-          component.autoView();
-        });
-    }, 100);
+    let stage;
+
+    if (!window.modSurfaceStage) {
+      stage = new NGL.Stage("modsurfaceViewer", {
+        backgroundColor: "white",
+        tooltip: false
+      });
+      window.modSurfaceStage = stage;
+    } else {
+      stage = window.modSurfaceStage;
+      stage.removeAllComponents();
+    }
+
+    const blob = new Blob([result.relaxed_pdb], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const comp = await stage.loadFile(url, { ext: "pdb" });
+
+    comp.addRepresentation("ball+stick");
+    comp.autoView();
+    stage.handleResize();
 
     window.baseRelaxed = true;
     showingAdsorptionEnergy = true;
@@ -1338,8 +1350,21 @@ document.getElementById("mod-relax-btn").onclick = async () => {
     ? document.getElementById("mod-relax-loading") 
     : document.getElementById("mod-relax-loading-zh");
   const energyDisplay = document.getElementById("mod-adsorption-energy");
+  const wrapper = document.getElementById("modsurfaceWrapper");
+  const viewerParent = document.getElementById("modsurfaceViewer").parentNode;
+
   energyDisplay.textContent = "";
   loading.style.display = "block";
+  wrapper.style.display = "block";
+
+  const oldViewer = document.getElementById("modsurfaceViewer");
+  if (oldViewer) viewerParent.removeChild(oldViewer);
+
+  const newViewer = document.createElement("div");
+  newViewer.id = "modsurfaceViewer";
+  newViewer.style.width = "100%";
+  newViewer.style.height = "500px";
+  viewerParent.appendChild(newViewer);
 
   try {
     const res = await fetch("https://syj981022-aethorion.hf.space/relax", {
@@ -1354,30 +1379,28 @@ document.getElementById("mod-relax-btn").onclick = async () => {
 
     if (!res.ok) throw new Error(await res.text());
     const result = await res.json();
-    const modEnergy = result.adsorption_energy;
-    energyDisplay.textContent = currentLanguage === 'en'
-      ? `Adsorption Energy: ${modEnergy} eV`
-      : `吸附能: ${modEnergy} eV`;
+    window.originalAdsorptionEnergy = result.adsorption_energy;
 
-    if (typeof window.originalAdsorptionEnergy === "number") {
-      const comparison = document.createElement("div");
-      comparison.style.marginTop = "0.5rem";
-      comparison.style.fontWeight = "bold";
+    await new Promise(resolve => requestAnimationFrame(resolve));
 
-      if (modEnergy < window.originalAdsorptionEnergy) {
-        comparison.style.color = "green";
-        comparison.textContent = currentLanguage === 'en'
-          ? "Your surface modification makes adsorption more favorable."
-          : "您的表面修饰使吸附更有利。";
-      } else {
-        comparison.style.color = "red";
-        comparison.textContent = currentLanguage === 'en'
-          ? "Your surface modification makes adsorption less favorable."
-          : "您的表面修饰使吸附不利。";
-      }
+    const stage = new NGL.Stage("modsurfaceViewer", {
+      backgroundColor: "white",
+      tooltip: false
+    });
 
-      energyDisplay.appendChild(comparison);
-    }
+    const blob = new Blob([result.relaxed_pdb], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const comp = await stage.loadFile(url, { ext: "pdb" });
+
+    comp.addRepresentation("ball+stick");
+    comp.autoView();
+    stage.handleResize();
+
+    window.modSurfaceStage = stage;
+
+    energyDisplay.innerHTML = currentLanguage === 'en'
+      ? `Adsorption Energy: ${result.adsorption_energy} eV`
+      : `吸附能: ${result.adsorption_energy} eV`;
 
   } catch (err) {
     console.error(err);
@@ -1387,24 +1410,6 @@ document.getElementById("mod-relax-btn").onclick = async () => {
   }
 };
 
-document.getElementById("gen-btn").addEventListener("click", () => {
-  document.getElementById("adsorption-energy").textContent = "";
-  showingAdsorptionEnergy = false;
-});
-
-document.getElementById("surface-btn").addEventListener("click", () => {
-  document.getElementById("adsorption-energy").textContent = "";
-  showingAdsorptionEnergy = false;
-});
-
-document.querySelectorAll(".miller-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (showingAdsorptionEnergy) {
-      document.getElementById("adsorption-energy").textContent = "";
-      showingAdsorptionEnergy = false;
-    }
-  });
-});
 
 document.querySelectorAll("#periodic-table button").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -1450,7 +1455,6 @@ function initSwapFunctionality() {
     const loading = currentLanguage === 'en' 
       ? document.getElementById("swap-loading") 
       : document.getElementById("swap-loading-zh");
-    const surfaceViewer = document.getElementById("modsurfaceViewer");
     const surfaceWrapper = document.getElementById("modsurfaceWrapper");
 
     document.getElementById("mod-adsorption-energy").innerText = "";
@@ -1467,7 +1471,6 @@ function initSwapFunctionality() {
     }
 
     loading.style.display = "block";
-    surfaceViewer.innerHTML = "";
     surfaceWrapper.style.display = "none";
 
     try {
@@ -1511,14 +1514,17 @@ function initSwapFunctionality() {
       window.lastGeneratedSurface = await recombineRes.text();
       surfaceWrapper.style.display = "block";
 
-      if (window.modSurfaceStage) {
-        window.modSurfaceStage.dispose();
+      let stage;
+      if (!window.modSurfaceStage) {
+        stage = new NGL.Stage("modsurfaceViewer", {
+          backgroundColor: "white",
+          tooltip: false
+        });
+        window.modSurfaceStage = stage;
+      } else {
+        stage = window.modSurfaceStage;
+        stage.removeAllComponents();
       }
-
-      const stage = new NGL.Stage("modsurfaceViewer", {
-        backgroundColor: "white",
-        tooltip: false
-      });
 
       const blob = new Blob([window.lastGeneratedSurface], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
@@ -1538,38 +1544,7 @@ function initSwapFunctionality() {
       shapeComp.addRepresentation("buffer");
 
       stage.autoView();
-
-      const tip = document.createElement("div");
-      Object.assign(tip.style, {
-        position: "absolute",
-        pointerEvents: "none",
-        padding: "2px 4px",
-        background: "rgba(255,255,255,0.9)",
-        border: "1px solid #ccc",
-        borderRadius: "3px",
-        font: "12px/1 sans-serif",
-        color: "#000",
-        display: "none",
-        zIndex: 10
-      });
-      stage.viewer.container.appendChild(tip);
-      
-      stage.signals.hovered.add(pp => {
-        if (pp && pp.atom) {
-          tip.textContent = pp.atom.element;
-          tip.style.left = pp.canvasPosition.x + 8 + "px";
-          tip.style.top = pp.canvasPosition.y + 8 + "px";
-          tip.style.display = "block";
-        } else {
-          tip.style.display = "none";
-        }
-      });
-
-      const resizeObserver = new ResizeObserver(() => stage.handleResize());
-      resizeObserver.observe(surfaceViewer);
-
-      window.modSurfaceStage = stage;
-      window.modSurfaceResizeObserver = resizeObserver;
+      stage.handleResize();
 
     } catch (err) {
       console.error(err);
@@ -1582,12 +1557,8 @@ function initSwapFunctionality() {
       updateSwapDropdown();
     }
   });
-
-  window.addEventListener('beforeunload', () => {
-    if (window.modSurfaceStage) window.modSurfaceStage.dispose();
-    if (window.modSurfaceResizeObserver) window.modSurfaceResizeObserver.disconnect();
-  });
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   updateSwapDropdown();
@@ -1597,7 +1568,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const toggleBtn = document.querySelector('.menu-toggle');
 const nav = document.querySelector('nav');
 toggleBtn.addEventListener('click', () => nav.classList.toggle('open'));
-  
+
 function scrollToTop(event) {
   event.preventDefault();
   window.scrollTo({ top: 0, behavior: 'smooth' });
