@@ -1091,8 +1091,14 @@ document.getElementById("gen-btn").onclick = async () => {
     });
 
     if (!res.ok) throw new Error(await res.text());
-    const pdbText = await res.text();
+
+    const rawText = await res.text();
+    console.log("Backend rawText preview:", rawText.slice(0, 500));
+
+    const data = JSON.parse(rawText);
+    const pdbText = data.pdb_text;
     window.lastGeneratedPDB = pdbText;
+
     wrapper.style.display = "block";
     await new Promise(resolve => setTimeout(resolve, 50));
 
@@ -1100,6 +1106,12 @@ document.getElementById("gen-btn").onclick = async () => {
     const blob = new Blob([pdbText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const comp = await stage.loadFile(url, { ext: "pdb" });
+
+    comp.addRepresentation("ball+stick", { multipleBond: true });
+    comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
+    comp.autoView();
+
+
     comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
     comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
 
