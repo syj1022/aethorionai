@@ -1,1591 +1,483 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="images/logo.png">
   <meta charset="UTF-8">
-  <title>Aethorion AI </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1">
-  <style>
-    :root {
-      --primary: #0C0E2C;
-      --accent: #6F9EFF;
-      --light: #F9FAFC;
-      --grey: #7A7F9A;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background: var(--light); color: var(--primary); line-height: 1.6; }
-
-    header { background: var(--light); position: fixed; top: 0; width: 100%; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,.05); z-index: 1000; }
-    header .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-    nav ul { display: flex; gap: 1.5rem; list-style: none; }
-    nav a { color: var(--primary); text-decoration: none; font-weight: 600; transition: color .2s; }
-    nav a:hover { color: var(--accent); }
-    .btn { display: inline-block; padding: .75rem 1.5rem; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; transition: background .2s; }
-    .btn:hover { background: #547dff; }
-    .menu-toggle { display: none; background: transparent; border: none; font-size: 1.5rem; color: var(--primary); cursor: pointer; }
-
-    section { padding: 6rem 2rem 4rem; max-width: 1200px; margin: auto; }
-    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8rem; }
-    .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; }
-    .hero p { font-size: 1.25rem; color: var(--grey); max-width: 720px; margin-bottom: 2rem; }
-
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .feature-card { background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); }
-    .feature-card h3 { margin-bottom: .5rem; font-size: 1.1rem; }
-    .feature-card p { color: var(--grey); }
-
-    .banner { background: var(--primary); color: #fff; border-radius: 16px; padding: 4rem; text-align: center; position: relative; overflow: hidden; }
-    .banner h2 { font-size: 2rem; margin-bottom: 1rem; }
-    .banner p { max-width: 600px; margin: auto; margin-bottom: 2rem; }
-
-    footer { background: var(--primary); color: #fff; padding: 2rem; }
-    footer .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; }
-    footer a { color: #fff; text-decoration: none; font-size: .95rem; }
-    footer a:hover { text-decoration: underline; }
-
-    @media (max-width: 768px) {
-      nav { display: none; }
-      nav.open { display: flex; flex-direction: column; position: absolute; right: 2rem; top: 70px; background: var(--light); padding: 1rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-      .menu-toggle { display: block; }
-    }
-
-    .language-switcher {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-    }
-    .language-btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      transition: all 0.3s;
-    }
-    .language-btn:hover {
-      transform: scale(1.1);
-    }
-  </style>
+  <title>Aethorion AI - Intelligent Materials Discovery</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ngl@latest/dist/ngl.js"></script>
-
-<style>
-  #gpt-response p,
-  #gpt-response li,
-  #gpt-response ul,
-  #gpt-response ol,
-  #gpt-response h1,
-  #gpt-response h2,
-  #gpt-response h3,
-  #gpt-response h4,
-  #gpt-response h5,
-  #gpt-response h6 {
-    margin: 0;
-    padding: 0;
-  }
-
-  #gpt-response li {
-    list-style-position: inside;
-  }
-</style>
-
-<style>
-  .miller-btn {
-    font-size: 0.85rem;
-    padding: 4px 10px;
-    margin: 4px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .miller-btn:hover {
-    border-color: #007bff;
-    background-color: #f0f8ff;
-  }
-
-  .miller-btn.selected {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-
-  .cleavage-btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 1rem;
-  }
-</style>
-
-<style>
-.molecule-btn-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 1rem;
-}
-
-.molecule-btn {
-  font-size: 0.85rem;
-  padding: 4px 10px;
-  margin: 4px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.molecule-btn:hover {
-  border-color: #007bff;
-  background-color: #f0f8ff;
-}
-
-.molecule-btn.selected {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
-}
-</style>
-
-<script>
-window.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("contact-form");
-  const popup = document.getElementById("popup");
-  const messageBox = document.getElementById("popup-message");
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const otherValue = currentLanguage === 'zh'
-      ? document.getElementById("other-zh").value
-      : document.getElementById("other-en").value;
-
-    const messageValue = currentLanguage === 'zh'
-      ? document.getElementById("message-zh").value
-      : document.getElementById("message-en").value;
-
-    const formData = new FormData();
-    formData.append("access_key", "67d5a211-5fb0-4b30-9bd9-4a18e65947cd");
-    formData.append("email", form.email.value);
-    formData.append("other", otherValue);
-    formData.append("message", messageValue);
-
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          messageBox.innerText = currentLanguage === 'en'
-            ? "Message successfully sent! We will get back to you in 24 hours!"
-            : "消息发送成功！我们将在24小时内回复您！";
-          form.reset();
-        } else {
-          messageBox.innerText = currentLanguage === 'en'
-            ? "Error: Failed to send."
-            : "错误：发送失败";
-        }
-        popup.style.display = "block";
-        setTimeout(() => popup.style.display = "none", 3000);
-      })
-      .catch(error => {
-        console.error("Fetch error:", error);
-        messageBox.innerText = currentLanguage === 'en'
-          ? "Network error."
-          : "网络错误";
-        popup.style.display = "block";
-        setTimeout(() => popup.style.display = "none", 3000);
-      });
-  });
-});
-</script>
-
-
-
-<script>
-window.addEventListener("load", async () => {
-  try {
-    await fetch("https://syj981022-aethorion.hf.space/warmup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ping: "wake up" })
-    });
-    console.log("GPU backend warmed up.");
-  } catch (err) {
-    console.warn("Warmup failed:", err);
-  }
-});
-</script>
-  
 <body>
-
-<div id="home"></div>
-
-<header>
-  <div class="logo" style="display: flex; align-items: center; gap: 0.5rem;">
-    <img src="images/logo.png" alt="Logo" style="height: 28px;">
-    <span>Aethorion AI</span>
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline id="bgVideo">
+      <source src="https://ia600907.us.archive.org/22/items/background_20250727/background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
   </div>
-  <nav>
-    <ul>
-      <a href="#" onclick="scrollToTop(event)"><span class="en">Home</span><span class="zh" style="display:none">首页</span></a>
-      <li><a href="career.html"><span class="en">Career</span><span class="zh" style="display:none">招聘</span></a></li>
-      <li><a href="team.html"><span class="en">Team</span><span class="zh" style="display:none">团队</span></a></li>
-      <li><a href="#contact"><span class="en">Contact</span><span class="zh" style="display:none">联系</span></a></li>
-    </ul>
-  </nav>
-  <button class="menu-toggle">☰</button>
-  <a href="#benefits" class="btn"><span class="en">See Our Demo</span><span class="zh" style="display:none">演示</span></a>
-</header>
 
-<section class="hero">
-  <video autoplay muted loop playsinline id="bg-video">
-    <source src="https://ia600907.us.archive.org/22/items/background_20250727/background.mp4" type="video/mp4">
-  </video>
-  <div class="video-overlay"></div>
-  <div class="hero-content" style="color: white; text-shadow: 2px 2px 5px black; padding-top: 50px;">
-    <h1 class="en">At the Dawn of Digital Matter</h1>
-    <h1 class="zh" style="display:none">数字化高端材料时代的黎明</h1>
-    <p style="color: #fafafa !important;" class="en">We digitalize the future of chemical and materials industries with cutting-edge generative AI, reducing go-to-market cycles from decades to months.</p>
-    <p style="color: #fafafa !important; display:none" class="zh">我们致力于运用尖端生成式AI数字化化学与材料工业的未来，目标将产品上市周期从数十年缩短至数月。</p>
-  </div>
-</section>
+  <!-- Futuristic Grid Overlay -->
+  <div class="grid-overlay"></div>
+  
+  <!-- Particle System -->
+  <canvas id="particles"></canvas>
 
-<section id="technology" style="background:#f1f4ff">
-  <h2 style="text-align:center;margin-bottom:2rem;margin-top:-4rem;" class="en">Introducing Our Unique Value</h2>
-  <h2 style="text-align:center;margin-bottom:2rem;margin-top:-4rem; display:none" class="zh">我们的独特价值</h2>
-  <div class="features">
-    <div class="feature-card">
-      <div style="text-align: center;">
-      <img src="images/icon1.png" alt="icon" width="100" height="100"></div>
-      <h3 class="en">Drive Breakthrough Applications</h3>
-      <h3 class="zh" style="display:none">引领突破性应用</h3>
-      <p class="en">Our intelligent platform leverages advanced algorithms to design novel materials tailored for real-world needs, assisting industries innovate faster.</p>
-      <p class="zh" style="display:none">我们的智能平台通过先进算法设计面向实际需求的新型材料，助力产业更高效地实现创新。</p>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <img src="images/logo.png" alt="Aethorion AI" class="logo-img">
+        <span class="logo-text">Aethorion AI</span>
+      </div>
+      <nav class="nav">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="team.html" class="nav-link">Team</a>
+        <a href="career.html" class="nav-link">Career</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
-    <div class="feature-card">
-      <div style="text-align: center; margin-top: 0.5rem; margin-bottom: -0.5rem;">
-      <img src="images/icon2.png" alt="icon" width="100" height="100"></div>
-      <h3 class="en">Ultra-Fast Predictive Analysis</h3>
-      <h3 class="zh" style="display:none">超快速预测分析</h3>
-      <p class="en">Our proprietary predictive simulations accelerate trial-test cycles 1000&times; faster than DFT, slashing development time and securing a critical time-to-market advantage. </p>
-      <p class="zh" style="display:none">我们的专有预测模拟系统比DFT快1000倍，有助于大幅缩短开发时间，获得关键的市场先机。</p>
-    </div>
-    <div class="feature-card">
-      <div style="text-align: center;">
-      <img src="images/icon3.png" alt="icon" width="100" height="100"></div>
-      <h3 class="en">Seamless Workflow Integration</h3>
-      <h3 class="zh" style="display:none">无缝工作流集成</h3>
-      <p class="en">Designed for flexibility, our tools adapt smoothly to your infrastructure and grow alongside your evolving research and production demands.</p>
-      <p class="zh" style="display:none">我们的工具专为灵活性为本，能够无缝适配您的基础设施，并随着科研与生产需求的演进持续扩展。</p>
-    </div>
-    <div class="feature-card">
-      <div style="text-align: center; margin-top: 0.5rem; margin-bottom: -0.5rem;">
-      <img src="images/icon4.png" alt="icon" width="100" height="100"></div>
-      <h3 class="en">End-to-End Innovation Partner</h3>
-      <h3 class="zh" style="display:none">端到端创新伙伴</h3>
-      <p class="en">From materials discovery to deployment, we offer holistic support across every stage of process to mitigate risk, improve product performance, and bring innovations to market faster.</p>
-      <p class="zh" style="display:none">从材料发现到部署，我们在每个阶段提供全面支持，以降低风险、提高产品性能并协助商业化。</p>
-    </div>
-  </div>
-</section>
+  </header>
 
-<section id="benefits">
-    <div class="banner">
-        <h2 style="text-align:center; margin-bottom:2rem;" class="en">Explore Your Benefits!</h2>
-        <h2 style="text-align:center; margin-bottom:2rem; display:none" class="zh">探索您的专属体验！</h2>
-        <p class="en">Are your company's legacy approaches holding you back? Take 7 minutes to discover how Aethorion AI delivers smarter solutions, lightning-fast results, and the competitive edge you have been missing!</p>
-        <p class="zh" style="display:none">贵公司的传统方法是否阻碍了发展？只需7分钟了解Aethorion AI如何提供更智能的解决方案、闪电般快速的结果和您一直缺少的竞争优势！</p>
+  <!-- Hero Section with Chatbot -->
+  <section class="hero-section fade-in-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Next-Gen Materials Intelligence</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="gradient-text">AI-Powered</span><br>
+          <span class="glitch" data-text="Materials Discovery">Materials Innovation</span>
+        </h1>
+        <p class="hero-subtitle">
+          Turn complex chemistry into your greatest competitive edge. <br>
+          Bring groundbreaking designs to market at unprecedented speed. 
+        </p>
+        <div class="hero-features">
+          <div class="feature-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            <span>Accelerated by AI </span>
+          </div>
+          <div class="feature-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"/>
+              <path d="M12 8v8m-4-4h8"/>
+            </svg>
+            <span>Anchored in Physics</span>
+          </div>
+          <div class="feature-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            <span>Industrial Throughput</span>
+          </div>
+        </div>
+      </div>
 
-        <div style="margin: 2rem auto; padding: 2rem; background: white; color: black; border-radius: 12px; text-align: center; max-width: 700px;">
-            <h3 class="en">
-              Step&nbsp;1: Select atom types in your desired product:
-              <div class="tooltip" style="display: inline-block;">
-                <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em;">?</span>
-                <div class="tooltip-text en">
-                  This defines the chemical system of your design. For example, choose Sr, Ti, O if you are interested in SrTiO<sub>3</sub>.
-                </div>
-                <div class="tooltip-text zh" style="display:none">
-                  这定义了您设计的化学系统。例如，如果您对SrTiO<sub>3</sub>感兴趣，请选择Sr、Ti、O。
-                </div>
-              </div>
-            </h3>
-            <h3 class="zh" style="display:none">
-              第一步：选择目标产品中的原子类型：
-              <div class="tooltip" style="display: inline-block;">
-                <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em;">?</span>
-                <div class="tooltip-text en" style="display:none">
-                  This defines the chemical system of your design. For example, choose Sr, Ti, O if you are interested in SrTiO<sub>3</sub>.
-                </div>
-                <div class="tooltip-text zh">
-                  这定义了您设计的化学系统。例如，如果您对SrTiO<sub>3</sub>感兴趣，请选择Sr、Ti、O。
-                </div>
-              </div>
-            </h3>
-
-            <div id="periodic-table"
-                 style="display: grid; grid-template-columns: repeat(18, 1fr); gap: 6px; margin-top: 1rem;">
+      <!-- Main Chatbot Interface -->
+      <div class="chatbot-container">
+        <div class="chatbot-glow"></div>
+        <div class="chatbot-header">
+          <div class="chatbot-header-left">
+            <div class="ai-avatar">
+              <div class="avatar-pulse"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+              </svg>
             </div>
-
-            <p style="margin-top: 1rem; font-weight: 600;" class="en">
-                Selected atoms:
-                <span id="selected-output">None</span>
-            </p>
-            <p style="margin-top: 1rem; font-weight: 600; display:none" class="zh">
-                已选原子:
-                <span id="selected-output-zh">无</span>
-            </p>
+            <div>
+              <div class="chatbot-title">AI Innovation Assistant</div>
+              <div class="chatbot-status">
+                <span class="status-dot"></span>
+                <span>Online & Ready</span>
+              </div>
+            </div>
+          </div>
+          <button class="minimize-btn" id="minimizeBtn">−</button>
         </div>
 
-        <div class="workflow-container">
-            <div class="workflow-header" style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                <div class="list-column" style="flex: 1; text-align: center; background: none; box-shadow: none; padding: 0;">
-                    <h4 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700;" class="en">Traditional</h4>
-                    <h4 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700; display:none" class="zh">传统方法</h4>
-                </div>
-                <div class="list-column" style="flex: 1; text-align: center; background: none; box-shadow: none; padding: 0;">
-                    <h4 style="color: white; margin: 0; font-size: 1.5rem; font-weight: 700;">Aethorion&nbsp;AI</h4>
-                </div>
+        <div class="chatbot-messages" id="chatMessages">
+          <!-- Welcome Message -->
+          <div class="message ai-message">
+            <div class="message-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+              </svg>
             </div>
-
-            <div class="workflow-block">
-                <div class="list-column">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.25rem 0;">
-                      <h3 style="margin: 0; text-align: left;" class="en">Step 2: Get Scientific Insight</h3>
-                      <h3 style="margin: 0; text-align: left; display:none" class="zh">第二步：获取科学见解</h3>
-                      <div class="tooltip" style="display: inline-block;">
-                        <span style="border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
-                        <div class="tooltip-text en">
-                          Pinpointing knowledge gaps is crucial! Our AI tools streamline this process, saving you time and reducing labor demands.
-                        </div>
-                        <div class="tooltip-text zh" style="display:none">
-                          找准知识缺口至关重要！我们的AI工具简化了这一过程，节省您的时间并减少人力需求。
-                        </div>
-                      </div>
-                    </div>
-                    <img src="images/literature.png" alt="Manual review icon"
-                       style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
-                    <h3 style="text-align: center; margin-bottom: 1rem;" class="en">Manual Literature Search</h3>
-                    <h3 style="text-align: center; margin-bottom: 1rem; display:none" class="zh">手动文献检索</h3>
-                    <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
-                      <span class="tooltip">
-                        <span class="tag en">Information Overload</span>
-                        <span class="tag zh" style="display:none">信息过载</span>
-                        <span class="tooltip-text en">Scholarly output exceeds 3 million articles per year.</span>
-                        <span class="tooltip-text zh" style="display:none">学术产出每年超过300万篇文章。</span>
-                      </span><br>
-
-                      <span class="tooltip">
-                        <span class="tag en">Human Bias</span>
-                        <span class="tag zh" style="display:none">人为偏见</span>
-                        <span class="tooltip-text en">Positive-result papers are 1.6× more likely to be cited.</span>
-                        <span class="tooltip-text zh" style="display:none">阳性结果论文被引用的可能性是1.6倍。</span>
-                      </span><br>
-
-                      <span class="tooltip">
-                        <span class="tag en">Domain Expertise Intensive</span>
-                        <span class="tag zh" style="display:none">领域专业知识密集</span>
-                        <span class="tooltip-text en">68% of researchers struggle to interpret literature outside their sub-field.</span>
-                        <span class="tooltip-text zh" style="display:none">68%的研究人员难以解释其子领域外的文献。</span>
-                      </span>
-                    </p>
+            <div class="message-content">
+              <div class="message-text">
+                👋 Welcome to Aethorion AI! I'm your innovation assistant.
+                <br><br>
+                I can help you with:
+                <br>
+                <div class="capability-tags">
+                  <span class="tag clickable-tag" data-action="literature">📚 Literature Analysis</span>
+                  <span class="tag clickable-tag" data-action="design">🔬 Materials Design</span>
+                  <span class="tag clickable-tag" data-action="predict">⚡ Property Prediction</span>
+                  <span class="tag clickable-tag" data-action="optimize">🎯 Parameter Optimization</span>
                 </div>
-
-                <div class="list-column">
-                    <img src="images/ai-literature.png" alt="AI review icon"
-                       style="width: 200px; height: 170px; margin-top: 3.9rem; margin-bottom: 4rem;">
-                    <h3 style="text-align: center; margin-bottom: 0.5rem;" class="en">AI-Assisted Literature Search</h3>
-                    <h3 style="text-align: center; margin-bottom: 0.5rem; display:none" class="zh">AI辅助文献检索</h3>
-                    <button onclick="queryChatGPT([...selected])" class="read-more-btn" style="margin-bottom: 1rem;"><span class="en">One-Click&nbsp;Research</span><span class="zh" style="display:none">一键研究</span></button> 
-                    <div class="tooltip" style="display: inline-block;">
-                      <span style="border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help; font-weight: bold;">!</span>
-                      <div class="tooltip-text en">
-                        If the text generation is unsuccessful, it is most likely due to the GPU initialization issues. Please try and generate again!
-                      </div>
-                      <div class="tooltip-text zh" style="display:none">
-                        如果文本生成失败，可能是由于GPU初始化问题。请尝试重新生成！
-                      </div>
-                    </div>                  
-                    
-                    <div id="loading-tooltip" style="display:none;color:#007bff;font-weight:bold" class="en">Reviewing… About 30 seconds!</div>
-                    <div id="loading-tooltip-zh" style="display:none;color:#007bff;font-weight:bold" class="zh">正在分析… 仅需10秒！</div>
-                    <div id="gpt-response" style="margin-top:1rem;font-size:.95rem;color:#333; text-align: left;"></div>
-                </div>
+                <br>
+                Try asking me something like:
+                <br>
+                <em>"Analyze research gaps in SrTiO₃ perovskite catalysts"</em>
+                <br>
+                <em>"Design a stable material containing Sr, Ti, and O"</em>
+                <br>
+                <em>"Predict adsorption properties of CO₂ on SrTiO₃ at 500K"</em>
+                <br><br>
+                💡 <strong>Tip:</strong> Click the 🧪 button to select elements for your design!
+              </div>
             </div>
-
-            <div class="workflow-block">
-                <div class="list-column">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.75rem 0;">
-                      <h3 style="margin: 0; text-align: left;" class="en">Step 3: Design Target Materials</h3>
-                      <h3 style="margin: 0; text-align: left; display:none" class="zh">第三步：设计目标材料</h3>
-                      <div class="tooltip" style="display: inline-block;">
-                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
-                        <div class="tooltip-text en">
-                          Trial-and-error methods waste time and resources. Instead, define your desired outcome and let inverse design guide the way.
-                        </div>
-                        <div class="tooltip-text zh" style="display:none">
-                          试错法消耗大量时间和资源。但是我们可以帮您从期望的结果出发，让逆向设计引导方向。
-                        </div>
-                      </div>
-                    </div>
-                <img src="images/tae.png" alt="Trial-and-error icon"
-                   style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
-                <h3 style="text-align: center; margin-bottom: 1rem;" class="en">Trial-And-Error Experiment</h3>
-                <h3 style="text-align: center; margin-bottom: 1rem; display:none" class="zh">试错实验</h3>
-                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
-                  <span class="tooltip">
-                    <span class="tag en">Time-Consuming Cycles</span>
-                    <span class="tag zh" style="display:none">耗时周期</span>
-                    <span class="tooltip-text en">It can take 5–10 years to discover and scale a new material from lab to market due to slow iteration loops.</span>
-                    <span class="tooltip-text zh" style="display:none">由于迭代周期缓慢，从实验室发现新材料到规模化生产可能需要5-10年。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">High Cost Burden</span>
-                    <span class="tag zh" style="display:none">高成本负担</span>
-                    <span class="tooltip-text en">Experimental trial-and-error can consume up to 70% of total R&D budgets.</span>
-                    <span class="tooltip-text zh" style="display:none">实验试错可能消耗高达70%的研发预算。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Poor Reproducibility</span>
-                    <span class="tag zh" style="display:none">重现性差</span>
-                    <span class="tooltip-text en">Over 85% of experimental efforts in materials R&D fail to produce viable results, often requiring hundreds of iterations to optimize a single formulation.</span>
-                    <span class="tooltip-text zh" style="display:none">材料研发中超过85%的实验未能产生可行结果，通常需要数百次迭代来优化单一配方。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Limited Scalability</span>
-                    <span class="tag zh" style="display:none">可扩展性有限</span>
-                    <span class="tooltip-text en">Physical experiments lack the scalability and speed of data-driven approaches, making high-throughput exploration prohibitive.</span>
-                    <span class="tooltip-text zh" style="display:none">物理实验缺乏数据驱动方法的可扩展性和速度，使得高通量探索变得困难。</span>
-                  </span>
-                </p>
-                </div>
-                <div class="list-column">
-                <img src="images/inverse.png" alt="Trial-and-error icon"
-                   style="margin-top: 0.7rem; width: 210px; height: 190px; margin-top: 3.6rem; margin-bottom: 3.62rem;">
-                <h3 style="text-align:center;" class="en">Property-Targeted Inverse Design</h3>
-                <h3 style="text-align:center; display:none" class="zh">属性导向的逆向设计</h3>
-                <div style="margin-top: 1rem;" class="en">
-                <label for="hull-slider">Energy Above Hull (eV): <span id="hull-value">0.05</span></label>
-                <div class="tooltip" style="display: inline-block;">
-                  <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em;">?</span>
-                  <div class="tooltip-text en">
-                    The value of energy above hull reflects the thermodynamic stability of a material. Lower values indicate higher stability. In this example, you are customizing the relative stability of your target design.
-                  </div>
-                  <div class="tooltip-text zh" style="display:none">
-                    能量高于凸包的值反映了材料的热力学稳定性。值越低表示稳定性越高。在此示例中，您正在自定义目标设计的相对稳定性。
-                  </div>
-                </div><br>
-                <input type="range" id="hull-slider" min="0.01" max="0.50" value="0.05" step="0.01" style="width: 300px;"></div>
-                <div style="margin-top: 1rem; display:none" class="zh">
-                <label for="hull-slider">能量高于凸包 (eV): <span id="hull-value-zh">0.05</span></label>
-                <div class="tooltip" style="display: inline-block;">
-                  <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em;">?</span>
-                  <div class="tooltip-text en" style="display:none">
-                    The value of energy above hull reflects the thermodynamic stability of a material. Lower values indicate higher stability. In this example, you are customizing the relative stability of your target design.
-                  </div>
-                  <div class="tooltip-text zh">
-                    能量高于凸包的值反映了材料的热力学稳定性。值越低表示稳定性越高。在此示例中，您正在自定义目标设计的相对稳定性。
-                  </div>
-                </div><br>
-                <input type="range" id="hull-slider-zh" min="0.01" max="0.50" value="0.05" step="0.01" style="width: 300px;"></div>
-                <button id="gen-btn" class="read-more-btn" style="margin-bottom: 1rem;"><span class="en">Generate Design</span><span class="zh" style="display:none">生成设计</span></button>
-                <div id="generating" style="display:none;color:#007bff;font-weight:bold" class="en">Generating… About 3 minutes!</div>
-                <div id="generating-zh" style="display:none;color:#007bff;font-weight:bold" class="zh">正在生成… 约3分钟！</div>
-                <div id="nglWrapper" style="display: none; margin-top: 1.5rem;">
-                  <div id="nglViewer" style="width: 100%; height: 200px;"></div></div>
-                </div>
-            </div>
-
-            <div class="workflow-block">
-                <div class="list-column">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.75rem 0;">
-                      <h3 style="margin: 0; text-align: left;" class="en">Step 4: Evaluate Performance</h3>
-                      <h3 style="margin: 0; text-align: left; display:none" class="zh">第四步：评估性能</h3>
-                      <div class="tooltip" style="display: inline-block;">
-                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
-                        <div class="tooltip-text en">
-                          Measuring material properties at scale can be daunting. Predictive first-principles calculations suffer efficiency-accuracy tradeoffs. Our AI-accelerated computational tools enable rapid assessments up to 1000&times; faster than traditional DFT computations.
-                        </div>
-                        <div class="tooltip-text zh" style="display:none">
-                          大规模测量材料性能难以高效实现。预测性第一性原理计算存在效率-准确性的权衡。我们的AI加速计算工具比传统DFT计算快1000倍。
-                        </div>
-                      </div>
-                    </div>
-                <img src="images/characterization.png" alt="Characterization icon"
-                   style="width: 250px; height: 250px; margin-bottom: 1.5rem;">
-                <h3 style="text-align: center; margin-bottom: 1rem;" class="en">High-Throughput Characterization</h3>
-                <h3 style="text-align: center; margin-bottom: 1rem; display:none" class="zh">高通量表征</h3>
-                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
-                  <span class="tooltip">
-                    <span class="tag en">Instrumentation Bottleneck</span>
-                    <span class="tag zh" style="display:none">仪器瓶颈</span>
-                    <span class="tooltip-text en">Advanced characterization instruments require manual setup, calibration, and interpretation, limiting true throughput. A single detailed scan can take hours per sample.</span>
-                    <span class="tooltip-text zh" style="display:none">先进表征仪器需要手动设置、校准和解释，限制了实际通量。单个详细扫描可能需要每个样品数小时。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Data Backlogs</span>
-                    <span class="tag zh" style="display:none">数据积压</span>
-                    <span class="tooltip-text en">Over 60% of generated samples go uncharacterized in real-time due to instrument or personnel limitations.</span>
-                    <span class="tooltip-text zh" style="display:none">由于仪器或人员限制，超过60%生成的样品无法实时表征。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Labor-Intensive Workflows</span>
-                    <span class="tag zh" style="display:none">劳动密集型工作流</span>
-                    <span class="tooltip-text en">Characterization often requires specialist intervention, resulting in autonomous pipelines and human error or bias.</span>
-                    <span class="tooltip-text zh" style="display:none">表征通常需要专家干预，导致自主流程和人为错误或偏见。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Delayed Feedback Loops</span>
-                    <span class="tag zh" style="display:none">延迟的反馈循环</span>
-                    <span class="tooltip-text en">Without rapid property readouts, iterative optimization cycles stall, reducing the effective speed of discovery.</span>
-                    <span class="tooltip-text zh" style="display:none">没有快速的性能读数，迭代优化周期停滞，降低了发现的有效速度。</span>
-                  </span>
-                </p>
-                </div>
-                <div class="list-column">
-                <img src="images/prediction.png" alt="Prediction icon"
-                   style="margin-top: 0.7rem; width: 210px; height: 210px; margin-top: 2.3rem; margin-bottom: 3.4rem;">
-                <h3 style="text-align: center; margin-bottom: 0.5rem;" class="en">AI-Accelerated Predictive Analysis</h3>
-                <h3 style="text-align: center; margin-bottom: 0.5rem; display:none" class="zh">AI加速预测分析</h3>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 0.35rem; margin-top: 0.75rem;">
-                  <span style="font-size: 1rem; font-weight: 500;" class="en">Select Cleavage Plane:</span>
-                  <span style="font-size: 1rem; font-weight: 500; display:none" class="zh">选择解理面:</span>
-                  <div class="tooltip" style="display: inline-block; position: relative;">
-                    <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.9em; cursor: help;">?</span>
-                    <div class="tooltip-text en">
-                      In this example, we showcase the predictive analysis of surface properties. They reflect how the outermost layer of a material that interacts directly with its environment. These properties are crucial in applications of heterogeneous catalysis, coatings, semiconductors, energy storage and conversion, etc.
-                    </div>
-                    <div class="tooltip-text zh" style="display:none">
-                      在此示例中，我们展示表面性质的预测分析。它们反映了材料最外层与环境直接相互作用的方式。这些性质在多相催化、涂层、半导体、能量存储和转换等应用中至关重要。
-                    </div>
-                  </div>
-                </div>
-                <div class="cleavage-btn-group">
-                  <button class="miller-btn selected" data-miller="[1,0,0]">(100)</button>
-                  <button class="miller-btn" data-miller="[1,1,0]">(110)</button>
-                  <button class="miller-btn" data-miller="[1,1,1]">(111)</button>
-                  <button class="miller-btn" id="customize-btn"><span class="en">customize</span><span class="zh" style="display:none">自定义</span></button>
-                </div>
-                <div id="custom-input-wrapper" style="display: none; margin-top: 0.75rem;">
-                  <input type="text" id="custom-miller" placeholder="hkl" style="padding: 0.3rem; font-size: 1rem;" />
-                </div>
-
-                <div style="margin: 1rem 0; text-align: center;">
-                  <p style="font-size: 1rem; margin-bottom: 0.5rem;" class="en">Select Adsorbate Molecule:</p>
-                  <p style="font-size: 1rem; margin-bottom: 0.5rem; display:none" class="zh">选择吸附分子:</p>
-                  <div class="molecule-btn-group">
-                    <button class="molecule-btn selected" data-molecule="H2O">H<sub>2</sub>O</button>
-                    <button class="molecule-btn" data-molecule="CO">CO</button>
-                    <button class="molecule-btn" data-molecule="CO2">CO<sub>2</sub></button>
-                    <button class="molecule-btn" data-molecule="NH3">NH<sub>3</sub></button>
-                    <button class="molecule-btn" data-molecule="O2">O<sub>2</sub></button>
-                  </div>
-                </div>
-
-                <button id="surface-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;"><span class="en">Create Surface</span><span class="zh" style="display:none">创建表面</span></button>
-                <div id="surface-generating" style="display:none;color:#007bff;font-weight:bold" class="en">Building Surface…</div>
-                <div id="surface-generating-zh" style="display:none;color:#007bff;font-weight:bold" class="zh">正在构建表面…</div>
-                <div id="surfaceWrapper" style="display:none; margin-top:1.5rem;">
-                  <div id="surfaceViewer" style="width:100%; height:200px;"></div>
-                <button id="relax-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;"><span class="en">Relax and Calculate</span><span class="zh" style="display:none">弛豫并计算</span></button>
-                <div id="relax-loading" style="display:none;color:#007bff;font-weight:bold" class="en">Calculating... About 1 minute!</div>
-                <div id="relax-loading-zh" style="display:none;color:#007bff;font-weight:bold" class="zh">正在计算... 约1分钟！</div>
-                <div id="adsorption-energy" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div>
-                </div>
-                </div>
-            </div>
-
-            <div class="workflow-block">
-                <div class="list-column">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin: -1.5rem 0 0.75rem 0;">
-                      <h3 style="margin: 0; text-align: left;" class="en">Step 5: Enhance Functionality</h3>
-                      <h3 style="margin: 0; text-align: left; display:none" class="zh">第五步：提升性能</h3>
-                      <div class="tooltip" style="display: inline-block;">
-                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px; font-size: 0.85em; cursor: help;">?</span>
-                        <div class="tooltip-text en">
-                          Our tools empower you to perform intelligent parameter optimization, automatically explore multi-dimensional parameter spaces to identify optimal processing conditions.
-                        </div>
-                        <div class="tooltip-text zh" style="display:none">
-                          我们的工具使您能够执行智能参数优化，自动探索多维参数空间以确定最佳处理条件。
-                        </div>
-                      </div>
-                    </div>
-                <img src="images/tuning.png" alt="Modification icon"
-                   style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
-                <h3 style="text-align: center; margin-bottom: 1rem;" class="en">Empirical Parameter Optimization</h3>
-                <h3 style="text-align: center; margin-bottom: 1rem; display:none" class="zh">经验参数优化</h3>
-                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
-                  <span class="tooltip">
-                    <span class="tag en">Costly Experimentation</span>
-                    <span class="tag zh" style="display:none">昂贵的实验</span>
-                    <span class="tooltip-text en">Every non-optimal setting consumes time and material. Empirical tuning can account for 30–50% of total experimental cost in complex system development.</span>
-                    <span class="tooltip-text zh" style="display:none">每个非最优设置都会消耗时间和材料。在复杂系统开发中，经验调优可能占总实验成本的30-50%。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Trial Without Guidance</span>
-                    <span class="tag zh" style="display:none">无指导尝试</span>
-                    <span class="tooltip-text en">Without data-driven optimization, researchers can miss global optima, spending 10&times; more time converging to acceptable but non-optimal outcomes.</span>
-                    <span class="tooltip-text zh" style="display:none">没有数据驱动的优化，研究人员可能会错过全局最优，花费10倍的时间收敛到可接受但非最优的结果。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Limited Knowledge Transfer</span>
-                    <span class="tag zh" style="display:none">知识转移有限</span>
-                    <span class="tooltip-text en">Empirical strategies are hard to generalize. Parameter sets optimized for one condition often fail to transfer across scales or environments, increasing redundancy.</span>
-                    <span class="tooltip-text zh" style="display:none">经验策略难以推广。为一个条件优化的参数集通常无法跨尺度或环境转移，增加了冗余。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">High Dimensionality</span>
-                    <span class="tag zh" style="display:none">高维度</span>
-                    <span class="tooltip-text en">Complex systems typically involve numerous tunable variables, making brute-force or empirical tuning significantly inefficient.</span>
-                    <span class="tooltip-text zh" style="display:none">复杂系统通常涉及大量可调变量，使得暴力或经验调优效率极低。</span>
-                  </span>
-                </p>
-                </div>
-                <div class="list-column">
-                <img src="images/ai_tuning.png" alt="AI-Tuning icon"
-                   style="margin-top: 0.7rem; width: 230px; height: 230px; margin-top: 2rem; margin-bottom: 2.8rem;">
-                <h3 style="text-align: center; margin-bottom: 0.5rem;" class="en">AI-Guided Decision-Making</h3>
-                <h3 style="text-align: center; margin-bottom: 0.5rem; display:none" class="zh">AI引导决策</h3>
-                  <div style="margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-                    <div style="display: flex; align-items: center; gap: 0.8rem;">
-                      <label for="swap-elem" style="white-space: nowrap;" class="en">Target Element:</label>
-                      <label for="swap-elem" style="white-space: nowrap; display:none" class="zh">目标元素:</label>
-                      <select id="swap-elem" style="padding: 0.4rem; min-width: 150px; border-radius: 4px; border: 1px solid #ccc;">
-                        <option value="defect" class="en">Please Select</option>
-                        <option value="defect" class="zh" style="display:none">请选择</option>
-                      </select>
-                    </div>
-
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0rem;">
-                      <label for="swap-input" style="white-space: nowrap;" class="en">Swap With:</label>
-                      <label for="swap-input" style="white-space: nowrap; display:none" class="zh">替换为:</label>
-                      <input type="text" id="swap-input" placeholder="e.g., Fe or defect"
-                             style="padding: 0.4rem; min-width: 150px; border-radius: 4px; border: 1px solid #ccc;" />
-                      <div class="tooltip">
-                        <span style="font-weight: bold; border: 1px solid #333; border-radius: 50%; padding: 0 6px;
-                 font-size: 0.9em; cursor: help;">!</span>
-                        <div class="tooltip-text en">
-                          The atom substitution is accumulative if you modify surface for more than once. If you want to start over, go back to create a new surface in the previous step.
-                        </div>
-                        <div class="tooltip-text zh" style="display:none">
-                          如果您多次修改表面，原子替换是累积的。如果要重新开始，请返回上一步创建新表面。
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div id="swap-section" style="margin-top: 1.5rem; text-align: center;">
-                      <button id="swap-btn" class="read-more-btn" style="margin-top: 0.5rem; margin-bottom: 1rem;"><span class="en">Modify Surface</span><span class="zh" style="display:none">修改表面</span></button>
-                      <div id="swap-loading" style="display: none; color: #007bff; font-weight: bold;" class="en">Modifying surface...</div>
-                      <div id="swap-loading-zh" style="display: none; color: #007bff; font-weight: bold;" class="zh">正在修改表面...</div>
-                      <div id="modsurfaceWrapper" style="display:none; margin-top:1.5rem;">
-                        <div id="modsurfaceViewer" style="width:100%; height:200px;"></div>
-                      <button id="mod-relax-btn" class="read-more-btn" style="margin-top: 1rem; margin-bottom: 1rem;"><span class="en">Relax and Calculate</span><span class="zh" style="display:none">弛豫并计算</span></button>
-                      <div id="mod-relax-loading" style="display:none;color:#007bff;font-weight:bold" class="en">Calculating... About 1 minute!</div>
-                      <div id="mod-relax-loading-zh" style="display:none;color:#007bff;font-weight:bold" class="zh">正在计算... 约1分钟！</div>
-                      <div id="mod-adsorption-energy" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div></div>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-
-            <div class="workflow-block">
-                <div class="list-column">
-                <h3 style="margin: -1.5rem 0 0.75rem 0; text-align: left;" class="en">Step 6: Deploy for Commercial Use</h3>
-                <h3 style="margin: -1.5rem 0 0.75rem 0; text-align: left; display:none" class="zh">第六步：商业部署</h3>
-                <img src="images/deployment.png" alt="Deployment icon"
-                   style="width: 250px; height: 250px; margin-top: 1rem; margin-bottom: 1rem;">
-                <h3 style="text-align: center; margin-bottom: 1rem;" class="en">Inefficient Field Validation</h3>
-                <h3 style="text-align: center; margin-bottom: 1rem; display:none" class="zh">低效的现场验证</h3>
-                <p style="text-align: center; margin: 0 auto; max-width: 90%; display: flex; flex-wrap: wrap; justify-content: center;">
-                  <span class="tooltip">
-                    <span class="tag en">Prolonged Testing Cycles</span>
-                    <span class="tag zh" style="display:none">测试周期长</span>
-                    <span class="tooltip-text en">Field validation can take months to years to simulate aging, environmental exposure, or performance under operating conditions.</span>
-                    <span class="tooltip-text zh" style="display:none">现场验证可能需要数月到数年来模拟老化、环境暴露或操作条件下的性能。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Iterative Redesign Delays</span>
-                    <span class="tag zh" style="display:none">迭代重新设计延迟</span>
-                    <span class="tooltip-text en">Failed validations typically require going back to the lab, slowing down time-to-market by 6–18 months per iteration.</span>
-                    <span class="tooltip-text zh" style="display:none">验证失败通常需要返回实验室，每次迭代使上市时间减慢6-18个月。</span>
-                  </span><br>
-
-                  <span class="tooltip">
-                    <span class="tag en">Poor Transferability</span>
-                    <span class="tag zh" style="display:none">可转移性差</span>
-                    <span class="tooltip-text en">Lab-optimized materials may underperform in field environments due to uncontrolled variables like humidity, mechanical stress, or impurities.</span>
-                    <span class="tooltip-text zh" style="display:none">实验室优化的材料在野外环境中可能表现不佳，因为湿度、机械应力或杂质等不受控变量。</span>
-                  </span>
-                </p>
-                </div>
-                <div class="list-column">
-                    <img src="images/ai_pilot.png" alt="AI-Pilot icon"
-                   style="margin-top: 0.7rem; width: 220px; height: 220px; margin-top: 2.3rem; margin-bottom: 2.7rem;">
-                <h3 style="text-align: center; margin-bottom: 1rem;" class="en">AI-Piloted Final Testing</h3>
-                <h3 style="text-align: center; margin-bottom: 1rem; display:none" class="zh">AI陪伴的最终测试</h3>
-                <p style="text-align: center" class="en">Ready to see the full potential? Reach out for an extended demo!</h3>
-                <p style="text-align: center; display:none" class="zh">联系我们探索更多合作空间！</h3>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <br>
-        <p style="text-align: center;" class="en">
-            This is just the beginning! Connect with us to unlock a partnership experience tailored exclusively for your exponential growth!<br>
-            <a href="#contact" class="btn read-more-btn">Partner With Us</a>
-        </p>
-        <p style="text-align: center; display:none" class="zh">
-            这只是开始！与我们联系，开启专为您指数级增长定制的合作伙伴体验！<br>
-            <a href="#contact" class="btn read-more-btn">与我们合作</a>
-        </p>
+        <!-- Input Area -->
+        <div class="chatbot-input">
+          <button class="attachment-btn periodic-table-btn" id="periodicTableBtn" title="Select elements from periodic table">
+            🧪
+            <div class="periodic-hint" id="periodicHint">
+              <span>👆 Try me!</span>
+            </div>
+          </button>
+          <input 
+            type="text" 
+            class="message-input" 
+            id="messageInput" 
+            placeholder="Ask me anything about materials innovation..."
+            autocomplete="off"
+          />
+          <button class="send-btn" id="sendBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Selected Elements Display -->
+        <div class="selected-elements" id="selectedElementsDisplay" style="display: none;">
+          <div class="selected-elements-label">Selected Elements:</div>
+          <div class="selected-elements-list" id="selectedElementsList"></div>
+          <button class="clear-selection-btn" id="clearSelectionBtn">Clear</button>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section id="partnership" style="padding: 2rem 0; background: #f9f9f9;">
-  <h2 style="text-align: center; margin-bottom: 2rem;" class="en">Our Collaborators</h2>
-  <h2 style="text-align: center; margin-bottom: 2rem; display:none" class="zh">我们的合作伙伴</h2>
-  <div class="logo-carousel">
-    <div class="logo-track">
-      <img src="images/upenn.png" alt="Partner 1" />
-      <img src="images/ecoforge.png" alt="Partner 2" />
-      <img src="images/metavive.png" alt="Partner 3" />
-      <img src="images/sinopharm.png" alt="Partner 4" />
-      <img src="images/pqvc.png" alt="Partner 5" />
-
-      <img src="images/upenn.png" alt="Partner 1 D" />
-      <img src="images/ecoforge.png" alt="Partner 2 D" />
-      <img src="images/metavive.png" alt="Partner 3 D" />
-      <img src="images/sinopharm.png" alt="Partner 4 D" />
-      <img src="images/pqvc.png" alt="Partner 5 D" />
-    </div>
-  </div>
-</section>
-
-<section id="news">
-  <h2 style="text-align:center;margin-bottom:2rem;" class="en">Latest News</h2>
-  <h2 style="text-align:center;margin-bottom:2rem; display:none" class="zh">最新动态</h2>
-  <div class="features">
-    <div class="feature-card">
-      <h3>June 19, 2025</h3>
-      <p class="en">We launched Aethorix v1.0 to introduce our breakthrough solutions to the chemical and materials industry!</p>
-      <p class="zh" style="display:none">我们发布了Aethorix v1.0，向化学和材料行业推出我们的突破性解决方案！</p>
-      <a href="https://doi.org/10.48550/arXiv.2506.16609" target="_blank" class="read-more-btn"><span class="en">View Paper</span><span class="zh" style="display:none">查看论文</span></a>
-      <a href="https://github.com/syj1022/aethorix" target="_blank" class="read-more-btn"><span class="en">View Code</span><span class="zh" style="display:none">查看代码</span></a>
-      <img src="images/v1.png" alt="Aethorix" class="news-image">
-    </div>
-    <div class="feature-card">
-      <h3>May 18, 2025</h3>
-      <p class="en">The co-founders won the second prize in the 2025 Sustainability In Action (SIA) Business Competition!</p>
-      <p class="zh" style="display:none">联合创始人在2025年可持续发展行动(SIA)商业竞赛中获得总决赛二等奖！</p>
-      <a href="https://news.sina.cn/sx/2025-06-09/detail-ineznafh6693867.d.html?from=wap" target="_blank" class="read-more-btn"><span class="en">Read More</span><span class="zh" style="display:none">阅读更多</span></a>
-      <img src="images/SIA.png" alt="SIA Award" class="news-image">
-    </div>
-  </div>
-</section>
-
-<section id="contact" style="margin-top: -2rem;">
-  <h2 style="text-align:center;margin-bottom:2rem;" class="en">Get in Touch</h2>
-  <h2 style="text-align:center;margin-bottom:2rem; display:none" class="zh">联系我们</h2>
-<form id="contact-form" style="max-width:600px;margin:auto;display:flex;flex-direction:column;gap:1rem;">
-  <input type="email" name="email" placeholder="Email" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;">
-  
-  <input type="text" id="other-en" name="other" placeholder="Other contacts" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en">
-  <input type="text" id="other-zh" placeholder="其他联系方式" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;display:none;" class="zh">
-
-  <textarea id="message-en" name="message" rows="4" placeholder="How can we help?" required style="padding:.75rem;border:1px solid #ccc;border-radius:6px;" class="en"></textarea>
-  <textarea id="message-zh" rows="4" placeholder="我们可以如何帮助您？" style="padding:.75rem;border:1px solid #ccc;border-radius:6px;display:none;" class="zh"></textarea>
-
-  <button type="submit" class="btn" style="align-self:center; width: 120px;">
-    <span class="en">Send</span><span class="zh" style="display:none;">发送</span>
-  </button>
-</form>
-
-
-<div id="popup" style="display:none;position:fixed;top:30%;left:50%;
-  transform:translate(-50%,-50%);background:#fff;border:1px solid #ccc;
-  padding:1rem 2rem;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.2);
-  z-index:1000;font-weight:600;">
-  <span id="popup-message"></span>
-</div>
-</section>
-
-<footer>
-  <div class="footer-grid">
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
-      <img src="images/logo.png" alt="Aethorion Logo" style="height: 28px;">
-      <h3 style="margin: 0;">Aethorion AI</h3>
-    </div>
-    <div>
-      <h4 style="margin-bottom:.5rem;" class="en">Contact</h4>
-      <h4 style="margin-bottom:.5rem; display:none" class="zh">联系方式</h4>
-      <a href="mailto:info@aethorionai.com">info@aethorionai.com</a><br>
-      <a href="https://x.com/aethorionai" target="_blank">X / Twitter</a><br>
-      <a href="https://www.linkedin.com/company/aethorionai" target="_blank">LinkedIn</a>
+  <!-- Periodic Table Modal -->
+  <div class="periodic-table-modal" id="periodicTableModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Elements</h3>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="periodic-table-info">
+          <div class="selection-counter">
+            <span>Selected: <strong id="selectionCount">0</strong> elements</span>
+          </div>
+          <div class="periodic-table-legend">
+            <span class="legend-item"><span class="legend-color nonmetal"></span> Nonmetal</span>
+            <span class="legend-item"><span class="legend-color noble-gas"></span> Noble Gas</span>
+            <span class="legend-item"><span class="legend-color alkali"></span> Alkali</span>
+            <span class="legend-item"><span class="legend-color alkaline"></span> Alkaline Earth</span>
+            <span class="legend-item"><span class="legend-color transition"></span> Transition Metal</span>
+            <span class="legend-item"><span class="legend-color post-transition"></span> Post-transition</span>
+            <span class="legend-item"><span class="legend-color metalloid"></span> Metalloid</span>
+            <span class="legend-item"><span class="legend-color halogen"></span> Halogen</span>
+            <span class="legend-item"><span class="legend-color lanthanide"></span> Lanthanide</span>
+            <span class="legend-item"><span class="legend-color actinide"></span> Actinide</span>
+          </div>
+        </div>
+        <div class="periodic-table" id="periodicTable"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="modalClearAll">Clear All</button>
+        <button class="modal-btn modal-btn-primary" id="modalApply">Apply Selection</button>
+      </div>
     </div>
   </div>
-  <p style="margin-top:2rem;font-size:.875rem;">© 2025 Aethorion AI Inc. All rights reserved.</p>
-</footer>
 
-<div class="language-switcher">
-  <button class="language-btn" id="lang-btn">EN</button>
-</div>
-
-<script>
-let isLoadingLiterature = false;
-let isGeneratingDesign = false;
-let isSurfaceGenerating = false;
-let isModifyingSurface = false;
-let isCalcSurface = false;
-let isCalcModSurface = false;
-let currentLanguage = 'en';
-
-function hideAllLoadingMessages() {
-  const loadingElements = document.querySelectorAll('[id*="loading"], [id*="generating"], .loading-message');
-  
-  loadingElements.forEach(el => {
-    el.style.display = 'none';
-  });
-}
-
-function switchLanguage() {
-  const otherEn = document.getElementById("other-en");
-  const otherZh = document.getElementById("other-zh");
-  const messageEn = document.getElementById("message-en");
-  const messageZh = document.getElementById("message-zh");
-
-  if (currentLanguage === "en") {
-    currentLanguage = "zh";
-    document.getElementById('lang-btn').textContent = '中';
-
-    otherEn.removeAttribute("name");
-    otherZh.setAttribute("name", "other");
-
-    messageEn.removeAttribute("name");
-    messageEn.removeAttribute("required");
-    messageZh.setAttribute("name", "message");
-    messageZh.setAttribute("required", "");
-
-  } else {
-    currentLanguage = "en";
-    document.getElementById('lang-btn').textContent = 'EN';
-
-    otherZh.removeAttribute("name");
-    otherEn.setAttribute("name", "other");
-
-    messageZh.removeAttribute("name");
-    messageZh.removeAttribute("required");
-    messageEn.setAttribute("name", "message");
-    messageEn.setAttribute("required", "");
-  }
-
-  document.querySelectorAll(".en").forEach(el => el.style.display = currentLanguage === 'en' ? "" : "none");
-  document.querySelectorAll(".zh").forEach(el => el.style.display = currentLanguage === 'zh' ? "" : "none");
-
-  const selectedEn = document.getElementById('selected-output');
-  const selectedZh = document.getElementById('selected-output-zh');
-  if (selectedEn && selectedZh) {
-    if (currentLanguage === 'zh') {
-      selectedZh.textContent = selectedEn.textContent === 'None' ? '无' : selectedEn.textContent;
-    } else {
-      selectedEn.textContent = selectedZh.textContent === '无' ? 'None' : selectedZh.textContent;
-    }
-  }
-
-  document.getElementById("loading-tooltip").style.display = isLoadingLiterature && currentLanguage === 'en' ? 'block' : 'none';
-  document.getElementById("loading-tooltip-zh").style.display = isLoadingLiterature && currentLanguage === 'zh' ? 'block' : 'none';
-
-  document.getElementById("generating").style.display = isGeneratingDesign && currentLanguage === 'en' ? 'block' : 'none';
-  document.getElementById("generating-zh").style.display = isGeneratingDesign && currentLanguage === 'zh' ? 'block' : 'none';
-
-  document.getElementById("surface-generating").style.display = isSurfaceGenerating && currentLanguage === 'en' ? 'block' : 'none';
-  document.getElementById("surface-generating-zh").style.display = isSurfaceGenerating && currentLanguage === 'zh' ? 'block' : 'none';
-
-  document.getElementById("swap-loading").style.display = isModifyingSurface && currentLanguage === 'en' ? 'block' : 'none';
-  document.getElementById("swap-loading-zh").style.display = isModifyingSurface && currentLanguage === 'zh' ? 'block' : 'none';
-
-  document.getElementById("relax-loading").style.display = isCalcSurface && currentLanguage === 'en' ? 'block' : 'none';
-  document.getElementById("relax-loading-zh").style.display = isCalcSurface && currentLanguage === 'zh' ? 'block' : 'none';
-
-  document.getElementById("mod-relax-loading").style.display = isCalcModSurface && currentLanguage === 'en' ? 'block' : 'none';
-  document.getElementById("mod-relax-loading-zh").style.display = isCalcModSurface && currentLanguage === 'zh' ? 'block' : 'none';
-}
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('.zh').forEach(el => {
-    if (!el.id.includes('selected-output')) {
-      el.style.display = 'none';
-    }
-  });
-  
-  hideAllLoadingMessages();
-  updateSwapDropdown();
-  initSwapFunctionality();
-  
-  document.getElementById('lang-btn').addEventListener('click', switchLanguage);
-});
-
-const symbols = [
-  'H','He',
-  'Li','Be','B','C','N','O','F','Ne',
-  'Na','Mg','Al','Si','P','S','Cl','Ar',
-  'K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr',
-  'Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','I','Xe',
-  'Cs','Ba','La','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn',
-  'Fr','Ra','Ac','Rf','Db','Sg','Bh','Hs','Mt','Ds','Rg','Cn','Nh','Fl','Mc','Lv','Ts','Og',
-  'Ce','Pr','Nd','Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu',
-  'Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr'
-];
-
-const gridPositions = {
-  H:1,He:18,Li:1,Be:2,B:13,C:14,N:15,O:16,F:17,Ne:18,
-  Na:1,Mg:2,Al:13,Si:14,P:15,S:16,Cl:17,Ar:18,
-  K:1,Ca:2,Sc:3,Ti:4,V:5,Cr:6,Mn:7,Fe:8,Co:9,Ni:10,Cu:11,Zn:12,
-  Ga:13,Ge:14,As:15,Se:16,Br:17,Kr:18,
-  Rb:1,Sr:2,Y:3,Zr:4,Nb:5,Mo:6,Tc:7,Ru:8,Rh:9,Pd:10,Ag:11,Cd:12,
-  In:13,Sn:14,Sb:15,Te:16,I:17,Xe:18,
-  Cs:1,Ba:2,La:3,Hf:4,Ta:5,W:6,Re:7,Os:8,Ir:9,Pt:10,Au:11,Hg:12,
-  Tl:13,Pb:14,Bi:15,Po:16,At:17,Rn:18,
-  Fr:1,Ra:2,Ac:3,Rf:4,Db:5,Sg:6,Bh:7,Hs:8,Mt:9,Ds:10,Rg:11,Cn:12,
-  Nh:13,Fl:14,Mc:15,Lv:16,Ts:17,Og:18,
-  Ce:3,Pr:4,Nd:5,Pm:6,Sm:7,Eu:8,Gd:9,Tb:10,Dy:11,Ho:12,Er:13,Tm:14,Yb:15,Lu:16,
-  Th:3,Pa:4,U:5,Np:6,Pu:7,Am:8,Cm:9,Bk:10,Cf:11,Es:12,Fm:13,Md:14,No:15,Lr:16
-};
-
-const table = document.getElementById('periodic-table');
-const selected = new Set();
-const output = document.getElementById('selected-output');
-const outputZh = document.getElementById('selected-output-zh');
-
-symbols.forEach(sym => {
-  const cell = document.createElement('button');
-  cell.textContent = sym;
-  cell.style.cssText = `
-    grid-column: ${gridPositions[sym] || 'auto'};
-    padding: .4rem .2rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background:#f5f5f5;
-    font-size:.8rem;
-    cursor:pointer;
-  `;
-
-  cell.onclick = () => {
-    const active = selected.has(sym);
-    active ? selected.delete(sym) : selected.add(sym);
-    cell.style.background = active ? '#f5f5f5' : '#6F9EFF';
-    cell.style.color = active ? '#000' : '#fff';
-    output.textContent = selected.size ? [...selected].join(', ') : 'None';
-    outputZh.textContent = selected.size ? [...selected].join(', ') : '无';
-    updateSwapDropdown();
-  };
-
-  table.appendChild(cell);
-});
-
-async function queryChatGPT(atomArray = []) {
-    const box = document.getElementById('gpt-response');
-    const loadingTip = currentLanguage === 'en' ? document.getElementById('loading-tooltip') : document.getElementById('loading-tooltip-zh');
-
-    const prompt = atomArray.length
-        ? currentLanguage === 'en' 
-          ? `Examples of materials that can be composed of elements: ${atomArray.join(', ')}? What are their known structures and properties? What are the gaps in existing studies about these materials?`
-          : `由元素 ${atomArray.join(', ')} 组成的材料有哪些例子？它们的已知结构和性质是什么？关于这些材料的现有研究存在哪些空白？`
-        : currentLanguage === 'en' 
-          ? 'Please select at least one atom in the periodic table above!'
-          : '请在上面的周期表中至少选择一个原子！';
-
-    box.innerHTML = '';
-    loadingTip.style.display = 'block';
-
-    try {
-        const res = await fetch('https://syj981022-aethorion.hf.space/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt })
-        });
-
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-
-        const rawHtml = marked.parse(data.reply ?? 'No reply.');
-        box.innerHTML = rawHtml;
-    } catch (err) {
-        console.error(err);
-        box.textContent = currentLanguage === 'en' ? 'Error: ' + err.message : '错误: ' + err.message;
-    } finally {
-        loadingTip.style.display = 'none';
-    }
-}  
-
-const API_URL = "https://syj981022-aethorion.hf.space/generate";
-const hullSlider = document.getElementById("hull-slider");
-const hullValue = document.getElementById("hull-value");
-const hullSliderZh = document.getElementById("hull-slider-zh");
-const hullValueZh = document.getElementById("hull-value-zh");
-
-hullSlider.oninput = () => {
-  const value = parseFloat(hullSlider.value).toFixed(2);
-  hullValue.textContent = value;
-  hullValueZh.textContent = value;
-  hullSliderZh.value = hullSlider.value;
-};
-
-hullSliderZh.oninput = () => {
-  const value = parseFloat(hullSliderZh.value).toFixed(2);
-  hullValue.textContent = value;
-  hullValueZh.textContent = value;
-  hullSlider.value = hullSliderZh.value;
-};
-
-document.getElementById("gen-btn").onclick = async () => {
-  const elements = [...selected];
-  if (elements.length === 0) {
-    alert(currentLanguage === 'en' ? "Please select at least one element first!" : "请先选择至少一个元素！");
-    return;
-  }
-
-  const load = currentLanguage === 'en' ? document.getElementById("generating") : document.getElementById("generating-zh");
-  const wrapper = document.getElementById("nglWrapper");
-  const viewer = document.getElementById("nglViewer");
-  viewer.innerHTML = "";
-  load.style.display = "block";
-  wrapper.style.display = "none";
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        elements,
-        energy_above_hull: parseFloat(hullSlider.value)
-      })
-    });
-
-    if (!res.ok) throw new Error(await res.text());
-
-    const rawText = await res.text();
-    console.log("Backend rawText preview:", rawText.slice(0, 500));
-
-    const data = JSON.parse(rawText);
-    const pdbText = data.pdb_text;
-    window.lastGeneratedPDB = pdbText;
-
-    wrapper.style.display = "block";
-    await new Promise(resolve => setTimeout(resolve, 50));
-
-    const stage = new NGL.Stage("nglViewer", { backgroundColor: "white", tooltip: false });
-    const blob = new Blob([pdbText], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const comp = await stage.loadFile(url, { ext: "pdb" });
-
-    comp.addRepresentation("ball+stick", { multipleBond: true });
-    comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
-    comp.autoView();
-
-
-    comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
-    comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
-
-    const offset = new NGL.Vector3(-5, -5, -5);
-    const axisLength = 5;
-    const shape = new NGL.Shape("axes");
-    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x + axisLength, offset.y, offset.z), [1, 0, 0], 0.3);
-    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y + axisLength, offset.z), [0, 1, 0], 0.3);
-    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y, offset.z + axisLength), [0, 0, 1], 0.3);
-    const shapeComp = stage.addComponentFromObject(shape);
-    shapeComp.addRepresentation("buffer");
-
-    stage.autoView();
-
-    viewer.style.position = "relative";
-    const tip = document.createElement("div");
-    Object.assign(tip.style, {
-      position: "absolute",
-      pointerEvents: "none",
-      padding: "2px 4px",
-      background: "rgba(255,255,255,0.9)",
-      border: "1px solid #ccc",
-      borderRadius: "3px",
-      font: "12px/1 sans-serif",
-      color: "#000",
-      display: "none",
-      zIndex: 10
-    });
-
-    stage.viewer.container.appendChild(tip);
-    stage.signals.hovered.add(pp => {
-      if (pp && pp.atom) {
-        tip.textContent = pp.atom.element.charAt(0).toUpperCase() + pp.atom.element.slice(1).toLowerCase();
-        tip.style.left = pp.canvasPosition.x + 8 + "px";
-        tip.style.top = pp.canvasPosition.y + 8 + "px";
-        tip.style.display = "block";
-      } else {
-        tip.style.display = "none";
-      }
-    });
-
-  } catch (err) {
-    alert(currentLanguage === 'en' ? err.message : "生成失败: " + err.message);
-    console.error(err);
-  } finally {
-    load.style.display = "none";
-  }
-};
-
-const customizeBtn = document.getElementById('customize-btn');
-const inputWrapper = document.getElementById('custom-input-wrapper');
-const inputField = document.getElementById('custom-miller');
-let selectedMiller = [1, 0, 0];
-
-customizeBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  inputWrapper.style.display = inputWrapper.style.display === 'none' ? 'block' : 'none';
-  if (inputWrapper.style.display !== 'none') inputField.focus();
-  document.querySelectorAll('.miller-btn').forEach(b => b.classList.remove('selected'));
-  customizeBtn.classList.add('selected');
-});
-
-document.querySelectorAll('.miller-btn:not(#customize-btn)').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const millerData = this.getAttribute('data-miller');
-    if (millerData) selectedMiller = JSON.parse(millerData);
-    document.querySelectorAll('.miller-btn').forEach(b => b.classList.remove('selected'));
-    this.classList.add('selected');
-    inputWrapper.style.display = 'none';
-  });
-});
-
-document.getElementById("surface-btn").onclick = async () => {
-  if (!window.lastGeneratedPDB) {
-    alert(currentLanguage === 'en' ? "Please generate a crystal first!" : "请先生成晶体结构！");
-    return;
-  }
-
-  if (customizeBtn.classList.contains('selected')) {
-    const input = inputField.value.trim();
-    if (!input) {
-      alert(currentLanguage === 'en' ? "Please enter Miller indices (e.g., 210) or select a preset" : "请输入米勒指数(如210)或选择预设");
-      return;
-    }
-    const parts = input.split('').map(Number).filter(n => !isNaN(n));
-    if (parts.length !== 3) {
-      alert(currentLanguage === 'en' ? "Please enter exactly 3 numbers (e.g., 210)" : "请输入3个数字(如210)");
-      return;
-    }
-    selectedMiller = parts;
-  }
-
-  const surfaceLoad = currentLanguage === 'en' ? document.getElementById("surface-generating") : document.getElementById("surface-generating-zh");
-  const surfaceWrapper = document.getElementById("surfaceWrapper");
-  const surfaceViewer = document.getElementById("surfaceViewer");
-  surfaceWrapper.style.display = "none";
-  surfaceViewer.innerHTML = "";
-  surfaceLoad.style.display = "block";
-
-  try {
-    const res = await fetch("https://syj981022-aethorion.hf.space/surface", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pdb_text: window.lastGeneratedPDB,
-        miller: selectedMiller,
-        layers: 3,
-        molecule: selectedMolecule
-      })
-    });
-
-    if (!res.ok) throw new Error(await res.text());
-    const surfaceData = await res.json();
-    const pdbSurface = surfaceData.adsorbed_surface_pdb;
-    window.lastGeneratedBareSurface = surfaceData.bare_surface_pdb;
-    window.lastGeneratedSurface = surfaceData.adsorbed_surface_pdb;
-    surfaceWrapper.style.display = "block";
-    await new Promise(resolve => setTimeout(resolve, 50));
-
-    const stage = new NGL.Stage("surfaceViewer", { backgroundColor: "white", tooltip: false });
-    const blob = new Blob([pdbSurface], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const comp = await stage.loadFile(url, { ext: "pdb" });
-    comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
-    comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
-
-    const offset = new NGL.Vector3(-5, -5, -5);
-    const axisLength = 5;
-    const shape = new NGL.Shape("axes");
-    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x + axisLength, offset.y, offset.z), [1, 0, 0], 0.3);
-    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y + axisLength, offset.z), [0, 1, 0], 0.3);
-    shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y, offset.z + axisLength), [0, 0, 1], 0.3);
-    const shapeComp = stage.addComponentFromObject(shape);
-    shapeComp.addRepresentation("buffer");
-
-    stage.autoView();
-
-  } catch (err) {
-    alert(currentLanguage === 'en' ? "Surface generation failed: " + err.message : "表面生成失败: " + err.message);
-    console.error(err);
-  } finally {
-    surfaceLoad.style.display = "none";
-  }
-};
-
-let showingAdsorptionEnergy = false;
-let selectedMolecule = "H2O";
-
-document.querySelectorAll(".molecule-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".molecule-btn").forEach((b) => b.classList.remove("selected"));
-    btn.classList.add("selected");
-    selectedMolecule = btn.getAttribute("data-molecule");
-  });
-});
-
-document.getElementById("relax-btn").onclick = async () => {
-  if (!window.lastGeneratedSurface) {
-    alert(currentLanguage === 'en' ? "Please generate a surface first!" : "请先生成表面结构！");
-    return;
-  }
-
-  const loading = currentLanguage === 'en' ? document.getElementById("relax-loading") : document.getElementById("relax-loading-zh");
-  const energyDisplay = document.getElementById("adsorption-energy");
-  energyDisplay.innerHTML = "";
-  loading.style.display = "block";
-
-  try {
-    const res = await fetch("https://syj981022-aethorion.hf.space/relax", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        bare_surface_pdb: window.lastGeneratedBareSurface,
-        adsorbed_surface_pdb: window.lastGeneratedSurface,
-        molecule: selectedMolecule
-      })
-    });
-
-    if (!res.ok) throw new Error(await res.text());
-    const result = await res.json();
-    window.originalAdsorptionEnergy = result.adsorption_energy;
-
-    const viewerDiv = document.getElementById("modsurfaceViewer");
-    viewerDiv.style.display = "block";
-    viewerDiv.innerHTML = ""; 
-
-    let stage;
-
-    if (!window.modSurfaceStage) {
-      stage = new NGL.Stage("modsurfaceViewer", {
-        backgroundColor: "white",
-        tooltip: false
-      });
-      window.modSurfaceStage = stage;
-    } else {
-      stage = window.modSurfaceStage;
-      stage.removeAllComponents();
-    }
-
-    const blob = new Blob([result.relaxed_pdb], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const comp = await stage.loadFile(url, { ext: "pdb" });
-
-    comp.addRepresentation("ball+stick");
-    comp.autoView();
-    stage.handleResize();
-
-    window.baseRelaxed = true;
-    showingAdsorptionEnergy = true;
-
-    energyDisplay.innerHTML = currentLanguage === 'en'
-      ? `Adsorption Energy: ${result.adsorption_energy} eV
-        <div class="tooltip" style="display:inline-block;position:relative;">
-          <span style="font-weight:bold;border:1px solid #333;border-radius:50%;padding:0 6px;font-size:0.9em;cursor:help;">?</span>
-          <div class="tooltip-text">Adsorption energy reflects the interaction strength between the adsorbate and surface. Negative values typically indicate favorable adsorption.</div>
-        </div>`
-      : `吸附能: ${result.adsorption_energy} eV
-        <div class="tooltip zh" style="display:inline-block;position:relative;">
-          <span style="font-weight:bold;border:1px solid #333;border-radius:50%;padding:0 6px;font-size:0.9em;cursor:help;">?</span>
-          <div class="tooltip-text">吸附能表示吸附物与表面之间的相互作用强度，通常为负值意味着吸附较为有利。</div>
-        </div>`;
-
-  } catch (err) {
-    console.error(err);
-    energyDisplay.textContent = currentLanguage === 'en' ? "Calculation failed" : "计算失败";
-  } finally {
-    loading.style.display = "none";
-  }
-};
-
-
-document.getElementById("mod-relax-btn").onclick = async () => {
-  if (!window.baseRelaxed) {
-    alert(currentLanguage === 'en' 
-      ? "You must relax the original surface first before relaxing the modified one."
-      : "您必须先弛豫原始表面，然后才能弛豫修改后的表面。");
-    return;
-  }
-
-  if (!window.lastGeneratedSurface || !window.lastGeneratedBareSurface) {
-    alert(currentLanguage === 'en' 
-      ? "Please generate and modify a surface first!"
-      : "请先生成并修改表面结构！");
-    return;
-  }
-
-  const loading = currentLanguage === 'en' 
-    ? document.getElementById("mod-relax-loading") 
-    : document.getElementById("mod-relax-loading-zh");
-  const energyDisplay = document.getElementById("mod-adsorption-energy");
-  const wrapper = document.getElementById("modsurfaceWrapper");
-  const viewerParent = document.getElementById("modsurfaceViewer").parentNode;
-
-  energyDisplay.textContent = "";
-  loading.style.display = "block";
-  wrapper.style.display = "block";
-
-  const oldViewer = document.getElementById("modsurfaceViewer");
-  if (oldViewer) viewerParent.removeChild(oldViewer);
-
-  const newViewer = document.createElement("div");
-  newViewer.id = "modsurfaceViewer";
-  newViewer.style.width = "100%";
-  newViewer.style.height = "500px";
-  viewerParent.appendChild(newViewer);
-
-  try {
-    const res = await fetch("https://syj981022-aethorion.hf.space/relax", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        bare_surface_pdb: window.lastGeneratedBareSurface,
-        adsorbed_surface_pdb: window.lastGeneratedSurface,
-        molecule: selectedMolecule
-      })
-    });
-
-    if (!res.ok) throw new Error(await res.text());
-    const result = await res.json();
-    window.originalAdsorptionEnergy = result.adsorption_energy;
-
-    await new Promise(resolve => requestAnimationFrame(resolve));
-
-    const stage = new NGL.Stage("modsurfaceViewer", {
-      backgroundColor: "white",
-      tooltip: false
-    });
-
-    const blob = new Blob([result.relaxed_pdb], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const comp = await stage.loadFile(url, { ext: "pdb" });
-
-    comp.addRepresentation("ball+stick");
-    comp.autoView();
-    stage.handleResize();
-
-    window.modSurfaceStage = stage;
-
-    energyDisplay.innerHTML = currentLanguage === 'en'
-      ? `Adsorption Energy: ${result.adsorption_energy} eV`
-      : `吸附能: ${result.adsorption_energy} eV`;
-
-  } catch (err) {
-    console.error(err);
-    energyDisplay.textContent = currentLanguage === 'en' ? "Calculation failed" : "计算失败";
-  } finally {
-    loading.style.display = "none";
-  }
-};
-
-
-document.querySelectorAll("#periodic-table button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (showingAdsorptionEnergy) {
-      document.getElementById("adsorption-energy").textContent = "";
-      showingAdsorptionEnergy = false;
-    }
-  });
-});
-
-function updateSwapDropdown() {
-  const swapSelect = document.getElementById("swap-elem");
-  if (!swapSelect) return;
-
-  swapSelect.innerHTML = "";
-
-  const defOpt = document.createElement("option");
-  defOpt.value = "";
-  defOpt.textContent = currentLanguage === 'en' ? "Please Select" : "请选择";
-  defOpt.selected = true;
-  defOpt.disabled = true;
-  swapSelect.appendChild(defOpt);
-
-  selected.forEach((el) => {
-    const opt = document.createElement("option");
-    opt.value = el;
-    opt.textContent = el;
-    swapSelect.appendChild(opt);
-  });
-}
-
-function initSwapFunctionality() {
-  document.getElementById("swap-btn").addEventListener("click", async () => {
-    if (!window.baseRelaxed) {
-      alert(currentLanguage === 'en'
-        ? "You must first relax and calculate the original surface before modifying it."
-        : "您必须先弛豫并计算原始表面，然后才能修改它。");
-      return;
-    }
-
-    const targetElement = document.getElementById("swap-elem").value;
-    let swapWith = document.getElementById("swap-input").value.trim();
-    const loading = currentLanguage === 'en' 
-      ? document.getElementById("swap-loading") 
-      : document.getElementById("swap-loading-zh");
-    const surfaceWrapper = document.getElementById("modsurfaceWrapper");
-
-    document.getElementById("mod-adsorption-energy").innerText = "";
-    document.getElementById("mod-adsorption-energy").style.color = "";
-
-    if (!targetElement) {
-      alert(currentLanguage === 'en' ? "Please select a target element first." : "请先选择目标元素。");
-      return;
-    }
-
-    if (!window.lastGeneratedBareSurface) {
-      alert(currentLanguage === 'en' ? "Please generate a surface first." : "请先生成表面结构。");
-      return;
-    }
-
-    loading.style.display = "block";
-    surfaceWrapper.style.display = "none";
-
-    try {
-      const isDefect = swapWith.toLowerCase() === "defect";
-      const swapRes = await fetch("https://syj981022-aethorion.hf.space/swap", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pdb_text: window.lastGeneratedBareSurface,
-          target_element: targetElement,
-          swap_with: isDefect ? "defect" : swapWith
-        })
-      });
-
-      if (!swapRes.ok) throw new Error(await swapRes.text());
-      const defectStructure = await swapRes.json();
-
-      if (isDefect) {
-        const lines = defectStructure.pdb_text.split("\n").filter(line => {
-          if (line.startsWith("ATOM") || line.startsWith("HETATM")) {
-            const symbol = line.substring(76, 78).trim();
-            return symbol !== targetElement;
-          }
-          return true;
-        });
-        defectStructure.pdb_text = lines.join("\n");
-      }
-
-      const recombineRes = await fetch("https://syj981022-aethorion.hf.space/recombine", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pdb_text: defectStructure.pdb_text,
-          molecule: selectedMolecule
-        })
-      });
-
-      if (!recombineRes.ok) throw new Error(await recombineRes.text());
-
-      window.lastGeneratedBareSurface = defectStructure.pdb_text;
-      window.lastGeneratedSurface = await recombineRes.text();
-      surfaceWrapper.style.display = "block";
-
-      let stage;
-      if (!window.modSurfaceStage) {
-        stage = new NGL.Stage("modsurfaceViewer", {
-          backgroundColor: "white",
-          tooltip: false
-        });
-        window.modSurfaceStage = stage;
-      } else {
-        stage = window.modSurfaceStage;
-        stage.removeAllComponents();
-      }
-
-      const blob = new Blob([window.lastGeneratedSurface], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const comp = await stage.loadFile(url, { ext: "pdb" });
+  <!-- About Section (Mission) -->
+  <section class="about-section fade-in-section" id="about">
+    <div class="section-header">
+      <div class="section-badge">Our Mission</div>
+      <h2 class="section-title">At the Dawn of Digital Matter</h2>
+      <p class="mission-description">
+        We revolutionize the future of chemical and materials industries with cutting-edge generative AI. <br>
+        Our mission is to reduce prolonged go-to-market cycles of novel advanced materials from decades to months.
+      </p>
+    </div>
+    
+    <div class="mission-cards-horizontal">
+      <div class="mission-card-large">
+        <h3 class="mission-title-large">Acceleration</h3>
+        <h4 class="mission-tagline">You will innovate,<br>NOT wait</h4>
+        <p class="mission-desc">Discovery cycles are shortened from years to months.</p>
+      </div>
       
-      comp.addRepresentation("spacefill", { radiusType: "vdw", radiusScale: 0.6 });
-      comp.addRepresentation("unitcell", { color: "grey", linewidth: 1, opacity: 0.6 });
+      <div class="mission-card-large">
+        <h3 class="mission-title-large">Synchronized</h3>
+        <h4 class="mission-tagline">You will produce,<br>NOT guess</h4>
+        <p class="mission-desc">Process parameters are optimized and adapted to match production pace.</p>
+      </div>
+     
+      <div class="mission-card-large">
+        <h3 class="mission-title-large">Scalability</h3>
+        <h4 class="mission-tagline">You will scale,<br>NOT stall</h4>
+        <p class="mission-desc">Products are designed with proven cost and manufacturability from the start.</p>
+      </div>
+    </div>
+    
+  </section>
 
-      const offset = new NGL.Vector3(-5, -5, -5);
-      const axisLength = 5;
-      const shape = new NGL.Shape("axes");
-      shape.addArrow(offset.clone(), new NGL.Vector3(offset.x + axisLength, offset.y, offset.z), [1, 0, 0], 0.3);
-      shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y + axisLength, offset.z), [0, 1, 0], 0.3);
-      shape.addArrow(offset.clone(), new NGL.Vector3(offset.x, offset.y, offset.z + axisLength), [0, 0, 1], 0.3);
-      
-      const shapeComp = stage.addComponentFromObject(shape);
-      shapeComp.addRepresentation("buffer");
+  <!-- Features Section (Hierarchical Network) -->
+  <section class="features-section fade-in-section" id="features">
+    <div class="section-header">
+      <div class="section-badge">Capabilities</div>
+      <h3 class="section-title"> AI to decode the laws of matter</h3>
+      <p class="mission-description">Explore the four core capabilities that converge into an AI unlike anything before.</p>
+    </div>
 
-      stage.autoView();
-      stage.handleResize();
+    <div class="feature-network">
+      <!-- Top Row: Core Features -->
+      <div class="feature-row">
+        <div class="feature-node slide-in-left" data-feature="literature">
+          <div class="node-glow"></div>
+          <div class="node-content">
+            <img src="images/ai_lit.png" alt="AI Literature Analysis" class="node-icon-img">
+            <h3>Scientific Oracle</h3>
+            <p>stantly crystallizes intelligence from millions of scientific papers, identifying the gaps that define the next frontier.</p>
+          </div>
+        </div>
+    
+        <div class="feature-node slide-in-down" data-feature="design">
+          <div class="node-glow"></div>
+          <div class="node-content">
+            <img src="images/ai_inv.png" alt="Inverse Design" class="node-icon-img">
+            <h3>Inverse Design</h3>
+            <p>Leads you straight to what you want to design — less guessing, less trial, more intelligent creation.</p>
+          </div>
+        </div>
+    
+        <div class="feature-node slide-in-down" data-feature="prediction">
+          <div class="node-glow"></div>
+          <div class="node-content">
+            <img src="images/ai_pred.png" alt="Fast Prediction" class="node-icon-img">
+            <h3>Ultra-Fast Simulations</h3>
+            <p>Derives physicochemical properties at the atomistic level in the blink of an eye, not after months of waiting.</p>
+          </div>
+        </div>
+    
+        <div class="feature-node slide-in-right" data-feature="optimization">
+          <div class="node-glow"></div>
+          <div class="node-content">
+            <img src="images/ai_opt.png" alt="Smart Optimization" class="node-icon-img">
+            <h3>Smart Optimization</h3>
+            <p>Breaks the black box of process parameter tuning, driving higher efficiency, yield, and consistency.</p>
+          </div>
+        </div>
+      </div>
 
-    } catch (err) {
-      console.error(err);
-      alert(currentLanguage === 'en' 
-        ? "Modification failed: " + err.message 
-        : "修改失败: " + err.message);
-    } finally {
-      loading.style.display = "none";
-      document.getElementById("swap-input").value = "";
-      updateSwapDropdown();
-    }
-  });
-}
+      <!-- Connection Lines (SVG) -->
+      <svg class="connection-lines" width="100%" height="100%">
+        <line class="connection-line" x1="12.5%" y1="40%" x2="50%" y2="85%" />
+        <line class="connection-line" x1="37.5%" y1="40%" x2="50%" y2="85%" />
+        <line class="connection-line" x1="62.5%" y1="40%" x2="50%" y2="85%" />
+        <line class="connection-line" x1="87.5%" y1="40%" x2="50%" y2="85%" />
+      </svg>
 
+      <!-- Bottom Row: Central Outcome -->
+      <div class="feature-outcome">
+        <div class="feature-node outcome-node slide-in-up" data-feature="outcome">
+          <div class="node-glow outcome-glow"></div>
+          <div class="node-content">
+            <img src="images/ai_acc.png" alt="Faster Time-to-Market" class="node-icon-img">
+            <h3>Faster Go-to-Market</h3>
+            <p>Keeps you in sync with the world’s acceleration, compressing decades of progress into months of breakthrough.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-document.addEventListener("DOMContentLoaded", () => {
-  updateSwapDropdown();
-  initSwapFunctionality();
-});
+  <!-- Collaborators Section -->
+  <section class="collaborators-section fade-in-section" id="collaborators">
+    <div class="section-header">
+      <div class="section-badge">Partners</div>
+      <h2 class="section-title">Our Valued Collaborators</h2>
+      <p class="section-subtitle">We share the mission to ignite humanity's next singularity!</p>
+    </div>
+    <div class="logo-carousel">
+      <div class="logo-track">
+        <img src="images/upenn.png" alt="University of Pennsylvania" />
+        <img src="images/ecoforge.png" alt="EcoForge" />
+        <img src="images/metavive.png" alt="Metavive" />
+        <img src="images/sinopharm.png" alt="Sinopharm" />
+        <img src="images/pqvc.png" alt="PQVC" />
+        <img src="images/upenn.png" alt="University of Pennsylvania" />
+        <img src="images/ecoforge.png" alt="EcoForge" />
+        <img src="images/metavive.png" alt="Metavive" />
+        <img src="images/sinopharm.png" alt="Sinopharm" />
+        <img src="images/pqvc.png" alt="PQVC" />
+        <img src="images/upenn.png" alt="University of Pennsylvania" />
+        <img src="images/ecoforge.png" alt="EcoForge" />
+        <img src="images/metavive.png" alt="Metavive" />
+        <img src="images/sinopharm.png" alt="Sinopharm" />
+        <img src="images/pqvc.png" alt="PQVC" />
+      </div>
+    </div>
+  </section>
 
-const toggleBtn = document.querySelector('.menu-toggle');
-const nav = document.querySelector('nav');
-toggleBtn.addEventListener('click', () => nav.classList.toggle('open'));
+  <!-- Latest News Section -->
+  <section class="news-section fade-in-section" id="news">
+    <div class="section-header">
+      <div class="section-badge">Updates</div>
+      <h2 class="section-title">Latest News</h2>
+      <p class="section-subtitle">Stay informed about our latest achievements and developments!</p>
+    </div>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-image-wrapper">
+          <img src="images/v1.pdf" alt="Aethorix v1.0" class="news-image">
+        </div>
+        <div class="news-content">
+          <div class="news-date">June 19, 2025</div>
+          <h3 class="news-title">Aethorix v1.0 Launch</h3>
+          <p class="news-description">
+            We launched Aethorix v1.0 to introduce our breakthrough solutions to the chemical and materials industry!
+          </p>
+          <div class="news-actions">
+            <a href="https://doi.org/10.48550/arXiv.2506.16609" target="_blank" class="news-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span>View Paper</span>
+            </a>
+            <a href="https://github.com/syj1022/aethorix" target="_blank" class="news-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+              <span>View Code</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-image-wrapper">
+          <img src="images/SIA.png" alt="SIA Award" class="news-image">
+        </div>
+        <div class="news-content">
+          <div class="news-date">May 18, 2025</div>
+          <h3 class="news-title">SIA Business Competition Award</h3>
+          <p class="news-description">
+            The co-founders won the second prize in the 2025 Sustainability In Action (SIA) Business Competition!
+          </p>
+          <div class="news-actions">
+            <a href="https://news.sina.cn/sx/2025-06-09/detail-ineznafh6693867.d.html?from=wap" target="_blank" class="news-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              <span>Read More</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-function scrollToTop(event) {
-  event.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+  <!-- Contact Section -->
+  <section class="contact-section fade-in-section" id="contact">
+    <div class="contact-content">
+      <div class="contact-text">
+        <div class="section-badge light">Get In Touch</div>
+        <h2 class="section-title">Let's Build the Future Together</h2>
+        <p class="contact-description">
+          Are legacy approaches slowing your progress? It's time to witness the transformation!
+          Let Aethorion AI propel your organization into the next era of intelligence!
+        </p>
+        <div class="contact-info">
+          <div class="contact-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span><a href="mailto:info@aethorionai.com">info@aethorionai.com</a></span>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <div class="form-group">
+          <input type="email" class="form-input" placeholder="Your Email" required id="emailInput">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Company / Institution" id="companyInput">
+        </div>
+        <div class="form-group">
+          <textarea class="form-input form-textarea" placeholder="Tell us about your needs..." rows="4" required id="messageTextarea"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">
+          <span>Send Message</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </section>
 
-</script>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="Aethorion AI" class="footer-logo-img">
+          <span class="footer-logo-text">Aethorion AI</span>
+        </div>
+        <p class="footer-description">
+          Redefining how the world designs and manufactures advanced materials.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-title">Product</h4>
+        <a href="#features" class="footer-link">Features</a>
+        <a href="career.html" class="footer-link">Careers</a>
+        <a href="team.html" class="footer-link">Team</a>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-title">Company</h4>
+        <a href="#about" class="footer-link">About</a>
+        <a href="#contact" class="footer-link">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Aethorion AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast">
+    <div class="toast-content">
+      <div class="toast-icon">✓</div>
+      <div class="toast-message" id="toastMessage"></div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js"></script>
 </body>
 </html>
