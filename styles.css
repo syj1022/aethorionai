@@ -2706,3 +2706,83 @@ body {
   }
 }
 
+/* ===================================
+   Request Demo Button in Header Styles
+   =================================== */
+
+.demo-request-btn-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #6F9EFF 0%, #547dff 100%);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(111, 158, 255, 0.3);
+  white-space: nowrap;
+}
+
+.demo-request-btn-header:hover {
+  background: linear-gradient(135deg, #547dff 0%, #6F9EFF 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(111, 158, 255, 0.5);
+}
+
+.demo-request-btn-header:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(111, 158, 255, 0.4);
+}
+
+.demo-request-btn-header svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+.demo-request-btn-header span {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix: Make hero section immediately visible (it's above the fold) */
+.hero-section.fade-in-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Also make header immediately visible */
+.header {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Emergency fix: Make all sections visible by default */
+.about-section.fade-in-section,
+.features-section.fade-in-section,
+.collaborators-section.fade-in-section,
+.news-section.fade-in-section,
+.contact-section.fade-in-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Also make slide-in elements visible */
+.slide-in-left,
+.slide-in-right,
+.slide-in-up,
+.slide-in-down {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
