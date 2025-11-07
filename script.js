@@ -107,7 +107,6 @@ const periodicTableData = [
   { number: 118, symbol: 'Og', name: 'Oganesson', weight: '294', category: 'noble-gas', row: 7, col: 18 },
   
   // Lanthanides (f-block, row 8)
-  { number: 57, symbol: 'La', name: 'Lanthanum', weight: '138.9', category: 'lanthanide', row: 8, col: 3 },
   { number: 58, symbol: 'Ce', name: 'Cerium', weight: '140.1', category: 'lanthanide', row: 8, col: 4 },
   { number: 59, symbol: 'Pr', name: 'Praseodymium', weight: '140.9', category: 'lanthanide', row: 8, col: 5 },
   { number: 60, symbol: 'Nd', name: 'Neodymium', weight: '144.2', category: 'lanthanide', row: 8, col: 6 },
