@@ -91,7 +91,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 .video-overlay {
@@ -101,9 +101,9 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, 
-    rgba(12, 14, 44, 0.7) 0%,
-    rgba(12, 14, 44, 0.85) 50%,
-    rgba(12, 14, 44, 0.95) 100%
+    rgba(12, 14, 44, 0.4) 0%,
+    rgba(12, 14, 44, 0.5) 50%,
+    rgba(12, 14, 44, 0.6) 100%
   );
 }
 
@@ -156,7 +156,7 @@ body {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(12, 14, 44, 0.7);
+  background: rgba(12, 14, 44, 0.4);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(111, 158, 255, 0.2);
@@ -164,7 +164,7 @@ body {
 }
 
 .header.scrolled {
-  background: rgba(12, 14, 44, 0.95);
+  background: rgba(12, 14, 44, 0.6);
   box-shadow: 0 4px 30px rgba(111, 158, 255, 0.1);
 }
 
@@ -1154,7 +1154,7 @@ body {
 }
 
 .news-card {
-  background: rgba(12, 14, 44, 0.7);
+  background: rgba(12, 14, 44, 0.4);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(111, 158, 255, 0.2);
   border-radius: var(--radius-lg);
@@ -1515,7 +1515,7 @@ body {
    Footer
    =================================== */
 .footer {
-  background: rgba(12, 14, 44, 0.95);
+  background: rgba(12, 14, 44, 0.6);
   color: var(--white);
   padding: 3rem 2rem 1.5rem;
   border-top: 1px solid rgba(111, 158, 255, 0.2);
@@ -1599,7 +1599,7 @@ body {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: rgba(12, 14, 44, 0.95);
+  background: rgba(12, 14, 44, 0.6);
   backdrop-filter: blur(20px);
   padding: 1rem 1.5rem;
   border-radius: var(--radius-md);
@@ -1758,7 +1758,7 @@ body {
 
 .modal-content {
   position: relative;
-  background: rgba(12, 14, 44, 0.95);
+  background: rgba(12, 14, 44, 0.6);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(111, 158, 255, 0.3);
   border-radius: var(--radius-xl);
@@ -2176,7 +2176,7 @@ body {
 
 .feature-node {
   position: relative;
-  background: rgba(12, 14, 44, 0.7);
+  background: rgba(12, 14, 44, 0.4);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(111, 158, 255, 0.3);
   border-radius: var(--radius-lg);
@@ -2379,7 +2379,7 @@ body {
 }
 
 .mission-card-compact {
-  background: rgba(12, 14, 44, 0.7);
+  background: rgba(12, 14, 44, 0.4);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(111, 158, 255, 0.3);
   border-radius: var(--radius-lg);
@@ -2612,7 +2612,7 @@ body {
    =================================== */
 .feature-node {
   position: relative;
-  background: rgba(12, 14, 44, 0.7);
+  background: rgba(12, 14, 44, 0.4);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(111, 158, 255, 0.3);
   border-radius: var(--radius-lg);
@@ -2785,4 +2785,313 @@ html {
 .slide-in-down {
   opacity: 1;
   transform: translateX(0) translateY(0);
+}
+
+/* ===================================
+
+/* ===================================
+   Offer Page Styles - FIXED
+   =================================== */
+
+/* Offer Hero Section */
+.offer-hero-section {
+  min-height: 50vh;
+  padding: 160px 2rem 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(12, 14, 44, 0.5);
+}
+
+.offer-hero-section .section-header {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.offer-hero-section .section-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(111, 158, 255, 0.2);
+  border: 1px solid rgba(111, 158, 255, 0.4);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 20px rgba(111, 158, 255, 0.3);
+}
+
+.offer-hero-section .section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: var(--white);
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 30px rgba(111, 158, 255, 0.5);
+  position: relative;
+  z-index: 10;
+}
+
+.offer-hero-section .hero-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 10;
+}
+
+/* Offer Blocks Section */
+.offer-blocks-section {
+  padding: 80px 2rem 100px;
+  background: rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.offer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+.offer-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  background: rgba(12, 14, 44, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid rgba(111, 158, 255, 0.2);
+  transition: var(--transition-base);
+}
+
+.offer-block:hover {
+  border-color: var(--accent);
+  box-shadow: 0 20px 60px rgba(111, 158, 255, 0.3);
+  transform: translateY(-5px);
+}
+
+.offer-block-reverse {
+  grid-template-columns: 1fr 1fr;
+}
+
+.offer-block-reverse .offer-image-wrapper {
+  order: 2;
+}
+
+.offer-block-reverse .offer-content {
+  order: 1;
+}
+
+.offer-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.offer-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-slow);
+}
+
+.offer-block:hover .offer-image {
+  transform: scale(1.05);
+}
+
+.offer-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(111, 158, 255, 0.2) 0%, rgba(12, 14, 44, 0.4) 100%);
+  opacity: 0.6;
+  transition: var(--transition-base);
+}
+
+.offer-block:hover .offer-image-overlay {
+  opacity: 0.3;
+}
+
+.offer-content {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 5;
+}
+
+.offer-number {
+  font-size: 4rem;
+  font-weight: 800;
+  font-family: 'Orbitron', sans-serif;
+  background: var(--gradient-futuristic);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  opacity: 0.3;
+  filter: drop-shadow(0 0 20px rgba(111, 158, 255, 0.5));
+}
+
+.offer-title {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--white);
+  font-family: 'Orbitron', sans-serif;
+  margin-top: 1.5rem;
+  line-height: 1.2;
+  text-shadow: 0 0 30px rgba(111, 158, 255, 0.6), 0 2px 15px rgba(111, 158, 255, 0.4);
+  position: relative;
+  z-index: 10;
+}
+
+.offer-description {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+}
+
+.offer-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.offer-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.offer-features li svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+  color: var(--accent-light);
+  filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.offer-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: var(--gradient-primary);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: var(--transition-fast);
+  box-shadow: 0 0 30px rgba(111, 158, 255, 0.3);
+  width: fit-content;
+  margin-top: 1rem;
+}
+
+.offer-cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px rgba(111, 158, 255, 0.5);
+  background: linear-gradient(135deg, #7fa9ff 0%, #457dcf 100%);
+}
+
+.offer-cta-btn svg {
+  width: 18px;
+  height: 18px;
+  transition: var(--transition-fast);
+}
+
+.offer-cta-btn:hover svg {
+  transform: translateX(5px);
+}
+
+/* Responsive Design for Offer Page */
+@media (max-width: 968px) {
+  .offer-block,
+  .offer-block-reverse {
+    grid-template-columns: 1fr;
+  }
+  
+  .offer-block-reverse .offer-image-wrapper,
+  .offer-block-reverse .offer-content {
+    order: unset;
+  }
+  
+  .offer-image-wrapper {
+    height: 350px;
+  }
+  
+  .offer-content {
+    padding: 2rem;
+  }
+  
+  .offer-number {
+    font-size: 3rem;
+  }
+  
+  .offer-hero-section .section-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .offer-blocks-section {
+    padding: 60px 1rem 80px;
+  }
+  
+  .offer-container {
+    gap: 4rem;
+  }
+  
+  .offer-image-wrapper {
+    height: 250px;
+  }
+  
+  .offer-content {
+    padding: 1.5rem;
+  }
+  
+  .offer-title {
+    font-size: 1.5rem;
+  }
+  
+  .offer-description {
+    font-size: 1rem;
+  }
+  
+  .offer-hero-section .section-title {
+    font-size: 2rem;
+  }
+  
+  .offer-hero-section {
+    padding: 140px 1rem 60px;
+  }
 }
