@@ -828,30 +828,72 @@ function showWelcomeMessage() {
   scrollToBottom();
 }
 
-// ===================================
-// Contact Form
-// ===================================
+// Enhanced Contact Form Handler for Web3Forms
 async function handleContactSubmit(e) {
   e.preventDefault();
 
-  const formData = {
-    email: document.getElementById('emailInput').value,
-    company: document.getElementById('companyInput').value,
-    message: document.getElementById('messageTextarea').value
-  };
+  const form = elements.contactForm;
+  const formData = new FormData(form);
+  const submitBtn = form.querySelector('.submit-btn');
+  const formStatus = document.getElementById('form-status');
+  
+  // Disable submit button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '0.6';
+  submitBtn.style.cursor = 'not-allowed';
+  
+  if (formStatus) {
+    formStatus.textContent = '⏳ Sending your message...';
+    formStatus.style.color = '#6F9EFF';
+  }
 
-  // Here you would typically send to your backend
-  // For now, we'll simulate submission
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    showToast('Message sent successfully! We\'ll get back to you within 24 hours.');
-    elements.contactForm.reset();
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // Success feedback
+      showToast('✅ Message sent successfully!', 'success');
+      if (formStatus) {
+        formStatus.textContent = '✅ Message sent! We\'ll get back to you soon.';
+        formStatus.style.color = '#10B981';
+      }
+      form.reset();
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        if (formStatus) formStatus.textContent = '';
+      }, 5000);
+      
+    } else {
+      // Error from Web3Forms
+      showToast('❌ ' + (result.message || 'Failed to send message'), 'error');
+      if (formStatus) {
+        formStatus.textContent = '❌ ' + (result.message || 'Failed to send. Please try again.');
+        formStatus.style.color = '#EF4444';
+      }
+      console.error('Web3Forms error:', result);
+    }
   } catch (error) {
-    showToast('Error sending message. Please try again.', 'error');
+    // Network or other errors
+    console.error('Submission failed:', error);
+    showToast('⚠️ Network error. Please try again.', 'error');
+    if (formStatus) {
+      formStatus.textContent = '⚠️ Network error. Please check your connection and try again.';
+      formStatus.style.color = '#EF4444';
+    }
+  } finally {
+    // Re-enable submit button
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
   }
 }
+
 
 // ===================================
 // UI Utilities
