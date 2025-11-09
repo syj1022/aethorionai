@@ -5,7 +5,6 @@ const periodicTableData = [
   // Period 1
   { number: 1, symbol: 'H', name: 'Hydrogen', weight: '1.008', category: 'nonmetal', row: 1, col: 1 },
   { number: 2, symbol: 'He', name: 'Helium', weight: '4.003', category: 'noble-gas', row: 1, col: 18 },
-  
   // Period 2
   { number: 3, symbol: 'Li', name: 'Lithium', weight: '6.941', category: 'alkali', row: 2, col: 1 },
   { number: 4, symbol: 'Be', name: 'Beryllium', weight: '9.012', category: 'alkaline', row: 2, col: 2 },
@@ -15,7 +14,6 @@ const periodicTableData = [
   { number: 8, symbol: 'O', name: 'Oxygen', weight: '16.00', category: 'nonmetal', row: 2, col: 16 },
   { number: 9, symbol: 'F', name: 'Fluorine', weight: '19.00', category: 'halogen', row: 2, col: 17 },
   { number: 10, symbol: 'Ne', name: 'Neon', weight: '20.18', category: 'noble-gas', row: 2, col: 18 },
-  
   // Period 3
   { number: 11, symbol: 'Na', name: 'Sodium', weight: '22.99', category: 'alkali', row: 3, col: 1 },
   { number: 12, symbol: 'Mg', name: 'Magnesium', weight: '24.31', category: 'alkaline', row: 3, col: 2 },
@@ -25,7 +23,6 @@ const periodicTableData = [
   { number: 16, symbol: 'S', name: 'Sulfur', weight: '32.07', category: 'nonmetal', row: 3, col: 16 },
   { number: 17, symbol: 'Cl', name: 'Chlorine', weight: '35.45', category: 'halogen', row: 3, col: 17 },
   { number: 18, symbol: 'Ar', name: 'Argon', weight: '39.95', category: 'noble-gas', row: 3, col: 18 },
-  
   // Period 4
   { number: 19, symbol: 'K', name: 'Potassium', weight: '39.10', category: 'alkali', row: 4, col: 1 },
   { number: 20, symbol: 'Ca', name: 'Calcium', weight: '40.08', category: 'alkaline', row: 4, col: 2 },
@@ -45,7 +42,6 @@ const periodicTableData = [
   { number: 34, symbol: 'Se', name: 'Selenium', weight: '78.96', category: 'nonmetal', row: 4, col: 16 },
   { number: 35, symbol: 'Br', name: 'Bromine', weight: '79.90', category: 'halogen', row: 4, col: 17 },
   { number: 36, symbol: 'Kr', name: 'Krypton', weight: '83.80', category: 'noble-gas', row: 4, col: 18 },
-  
   // Period 5
   { number: 37, symbol: 'Rb', name: 'Rubidium', weight: '85.47', category: 'alkali', row: 5, col: 1 },
   { number: 38, symbol: 'Sr', name: 'Strontium', weight: '87.62', category: 'alkaline', row: 5, col: 2 },
@@ -65,7 +61,6 @@ const periodicTableData = [
   { number: 52, symbol: 'Te', name: 'Tellurium', weight: '127.6', category: 'metalloid', row: 5, col: 16 },
   { number: 53, symbol: 'I', name: 'Iodine', weight: '126.9', category: 'halogen', row: 5, col: 17 },
   { number: 54, symbol: 'Xe', name: 'Xenon', weight: '131.3', category: 'noble-gas', row: 5, col: 18 },
-  
   // Period 6 (simplified - main group elements)
   { number: 55, symbol: 'Cs', name: 'Cesium', weight: '132.9', category: 'alkali', row: 6, col: 1 },
   { number: 56, symbol: 'Ba', name: 'Barium', weight: '137.3', category: 'alkaline', row: 6, col: 2 },
@@ -85,7 +80,6 @@ const periodicTableData = [
   { number: 84, symbol: 'Po', name: 'Polonium', weight: '209', category: 'post-transition', row: 6, col: 16 },
   { number: 85, symbol: 'At', name: 'Astatine', weight: '210', category: 'halogen', row: 6, col: 17 },
   { number: 86, symbol: 'Rn', name: 'Radon', weight: '222', category: 'noble-gas', row: 6, col: 18 },
-  
   // Period 7
   { number: 87, symbol: 'Fr', name: 'Francium', weight: '223', category: 'alkali', row: 7, col: 1 },
   { number: 88, symbol: 'Ra', name: 'Radium', weight: '226', category: 'alkaline', row: 7, col: 2 },
@@ -105,7 +99,6 @@ const periodicTableData = [
   { number: 116, symbol: 'Lv', name: 'Livermorium', weight: '293', category: 'post-transition', row: 7, col: 16 },
   { number: 117, symbol: 'Ts', name: 'Tennessine', weight: '294', category: 'halogen', row: 7, col: 17 },
   { number: 118, symbol: 'Og', name: 'Oganesson', weight: '294', category: 'noble-gas', row: 7, col: 18 },
-  
   // Lanthanides (f-block, row 8)
   { number: 58, symbol: 'Ce', name: 'Cerium', weight: '140.1', category: 'lanthanide', row: 8, col: 4 },
   { number: 59, symbol: 'Pr', name: 'Praseodymium', weight: '140.9', category: 'lanthanide', row: 8, col: 5 },
@@ -121,7 +114,6 @@ const periodicTableData = [
   { number: 69, symbol: 'Tm', name: 'Thulium', weight: '168.9', category: 'lanthanide', row: 8, col: 15 },
   { number: 70, symbol: 'Yb', name: 'Ytterbium', weight: '173.0', category: 'lanthanide', row: 8, col: 16 },
   { number: 71, symbol: 'Lu', name: 'Lutetium', weight: '175.0', category: 'lanthanide', row: 8, col: 17 },
-  
   // Actinides (f-block, row 9)
   { number: 90, symbol: 'Th', name: 'Thorium', weight: '232.0', category: 'actinide', row: 9, col: 4 },
   { number: 91, symbol: 'Pa', name: 'Protactinium', weight: '231.0', category: 'actinide', row: 9, col: 5 },
@@ -146,7 +138,8 @@ const state = {
   conversationHistory: [],
   isTyping: false,
   currentSessionId: null,
-  selectedElements: new Set()
+  selectedElements: new Set(),
+  chatHistory: [] // Store all chat sessions
 };
 
 // ===================================
@@ -156,7 +149,6 @@ const elements = {
   chatMessages: document.getElementById('chatMessages'),
   messageInput: document.getElementById('messageInput'),
   sendBtn: document.getElementById('sendBtn'),
-  attachmentBtn: document.getElementById('attachmentBtn'),
   periodicTableBtn: document.getElementById('periodicTableBtn'),
   quickActions: document.querySelectorAll('.quick-action-btn'),
   contactForm: document.getElementById('contactForm'),
@@ -174,7 +166,15 @@ const elements = {
   selectedElementsDisplay: document.getElementById('selectedElementsDisplay'),
   selectedElementsList: document.getElementById('selectedElementsList'),
   clearSelectionBtn: document.getElementById('clearSelectionBtn'),
-  periodicHint: document.getElementById('periodicHint')
+  periodicHint: document.getElementById('periodicHint'),
+  historyBtn: document.getElementById('historyBtn'),
+  newChatBtn: document.getElementById('newChatBtn'),
+  chatHistoryModal: document.getElementById('chatHistoryModal'),
+  historyModalOverlay: document.getElementById('historyModalOverlay'),
+  historyModalClose: document.getElementById('historyModalClose'),
+  historyList: document.getElementById('historyList'),
+  clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+  closeHistoryBtn: document.getElementById('closeHistoryBtn')
 };
 
 // ===================================
@@ -187,8 +187,149 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeParticles();
   initializePeriodicTable();
   initializePeriodicHint();
+  loadChatHistory();
   showWelcomeMessage();
 });
+
+// ===================================
+// Chat History Functions
+// ===================================
+function saveChatSession() {
+  if (state.conversationHistory.length === 0) return;
+  
+  const session = {
+    id: Date.now(),
+    timestamp: new Date().toISOString(),
+    messages: [...state.conversationHistory]
+  };
+  
+  state.chatHistory.push(session);
+  localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+}
+
+function loadChatHistory() {
+  const saved = localStorage.getItem('chatHistory');
+  if (saved) {
+    state.chatHistory = JSON.parse(saved);
+  }
+}
+
+function displayChatHistory() {
+  elements.historyList.innerHTML = '';
+  
+  if (state.chatHistory.length === 0) {
+    elements.historyList.innerHTML = '<div style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5);">No chat history yet</div>';
+    return;
+  }
+  
+  state.chatHistory.reverse().forEach(session => {
+    const date = new Date(session.timestamp);
+    const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    const firstMessage = session.messages.find(m => m.role === 'user')?.content || 'New Chat';
+    const preview = firstMessage.substring(0, 50) + (firstMessage.length > 50 ? '...' : '');
+    
+    const historyItem = document.createElement('div');
+    historyItem.className = 'history-item';
+    historyItem.innerHTML = `
+      <div class="history-item-header">
+        <div class="history-item-title">${preview}</div>
+        <div class="history-item-date">${dateStr}</div>
+      </div>
+      <div class="history-item-actions">
+        <button class="history-load-btn" data-session-id="${session.id}">Load</button>
+        <button class="history-delete-btn" data-session-id="${session.id}">Delete</button>
+      </div>
+    `;
+    
+    elements.historyList.appendChild(historyItem);
+  });
+  
+  state.chatHistory.reverse();
+  
+  // Add event listeners
+  document.querySelectorAll('.history-load-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const sessionId = parseInt(e.target.dataset.sessionId);
+      loadChatSession(sessionId);
+      closeChatHistoryModal();
+    });
+  });
+  
+  document.querySelectorAll('.history-delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const sessionId = parseInt(e.target.dataset.sessionId);
+      deleteChatSession(sessionId);
+    });
+  });
+}
+
+function loadChatSession(sessionId) {
+  const session = state.chatHistory.find(s => s.id === sessionId);
+  if (!session) return;
+  
+  // Clear current chat
+  clearChat(false);
+  
+  // Restore messages
+  state.conversationHistory = [...session.messages];
+  session.messages.forEach(msg => {
+    if (msg.role === 'user') {
+      addMessage(msg.content, 'user');
+    } else {
+      addMessage(msg.content, 'ai');
+    }
+  });
+  
+  showToast('💬 Chat session loaded');
+}
+
+function deleteChatSession(sessionId) {
+  state.chatHistory = state.chatHistory.filter(s => s.id !== sessionId);
+  localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+  displayChatHistory();
+  showToast('🗑️ Chat session deleted');
+}
+
+function clearAllHistory() {
+  if (confirm('Are you sure you want to clear all chat history?')) {
+    state.chatHistory = [];
+    localStorage.removeItem('chatHistory');
+    displayChatHistory();
+    showToast('🗑️ All chat history cleared');
+  }
+}
+
+function startNewChat() {
+  if (state.conversationHistory.length > 0) {
+    saveChatSession();
+  }
+  clearChat(true);
+  showToast('✨ New chat started');
+}
+
+function clearChat(showWelcome = true) {
+  // Clear conversation history
+  state.conversationHistory = [];
+  
+  // Clear chat display
+  elements.chatMessages.innerHTML = '';
+  
+  // Show welcome message if requested
+  if (showWelcome) {
+    showWelcomeMessage();
+  }
+}
+
+function openChatHistoryModal() {
+  displayChatHistory();
+  elements.chatHistoryModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeChatHistoryModal() {
+  elements.chatHistoryModal.classList.remove('active');
+  document.body.style.overflow = '';
+}
 
 // ===================================
 // Periodic Table Initialization
@@ -215,10 +356,10 @@ function initializePeriodicTable() {
       cell.className = `element ${el.category}`;
       cell.dataset.symbol = el.symbol;
       cell.innerHTML = `
-        <span class="element-number">${el.number}</span>
+        <div class="element-number">${el.number}</div>
         <div class="element-symbol">${el.symbol}</div>
         <div class="element-name">${el.name}</div>
-        <span class="element-weight">${el.weight}</span>
+        <div class="element-weight">${el.weight}</div>
       `;
       
       cell.addEventListener('click', () => toggleElement(el.symbol, cell));
@@ -238,7 +379,6 @@ function toggleElement(symbol, cell) {
     state.selectedElements.add(symbol);
     cell.classList.add('selected');
   }
-  
   updateSelectionCounter();
 }
 
@@ -287,7 +427,7 @@ function updateSelectedElementsDisplay() {
     chip.className = 'element-chip';
     chip.innerHTML = `
       <span>${symbol}</span>
-      <span class="element-chip-remove" data-symbol="${symbol}">×</span>
+      <span class="element-chip-remove">×</span>
     `;
     
     chip.querySelector('.element-chip-remove').addEventListener('click', (e) => {
@@ -448,24 +588,15 @@ function initializeEventListeners() {
       handleSendMessage();
     }
   });
-
-  // Quick action buttons
-  // Quick action buttons (if they exist)
-  elements.quickActions.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const action = btn.dataset.action;
-      handleQuickAction(action);
-    });
-  });
   
   // Clickable capability tags in welcome message
-  document.querySelectorAll('.clickable-tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-      const action = tag.dataset.action;
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('clickable-tag')) {
+      const action = e.target.dataset.action;
       handleQuickAction(action);
-    });
+    }
   });
-
+  
   // Periodic table modal
   elements.periodicTableBtn.addEventListener('click', () => {
     hidePeriodicHint();
@@ -482,26 +613,39 @@ function initializeEventListeners() {
     updateSelectedElementsDisplay();
   });
   
+  // Chat history and new chat buttons
+  elements.historyBtn.addEventListener('click', openChatHistoryModal);
+  elements.newChatBtn.addEventListener('click', startNewChat);
+  elements.historyModalClose.addEventListener('click', closeChatHistoryModal);
+  elements.historyModalOverlay.addEventListener('click', closeChatHistoryModal);
+  elements.clearHistoryBtn.addEventListener('click', clearAllHistory);
+  elements.closeHistoryBtn.addEventListener('click', closeChatHistoryModal);
+  
   // Hide periodic hint when user starts typing
   elements.messageInput.addEventListener('input', () => {
     if (elements.messageInput.value.length > 0) {
       hidePeriodicHint();
     }
   });
-
+  
   // Contact form
   elements.contactForm.addEventListener('submit', handleContactSubmit);
-
+  
   // Mobile menu toggle
   elements.menuToggle.addEventListener('click', toggleMobileMenu);
-
+  
   // Auto-resize textarea
   elements.messageInput.addEventListener('input', autoResizeInput);
   
-  // ESC key to close modal
+  // ESC key to close modals
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && elements.periodicTableModal.classList.contains('active')) {
-      closePeriodicTableModal();
+    if (e.key === 'Escape') {
+      if (elements.periodicTableModal.classList.contains('active')) {
+        closePeriodicTableModal();
+      }
+      if (elements.chatHistoryModal.classList.contains('active')) {
+        closeChatHistoryModal();
+      }
     }
   });
 }
@@ -511,79 +655,73 @@ function initializeEventListeners() {
 // ===================================
 function handleSendMessage() {
   const message = elements.messageInput.value.trim();
-  
   if (!message || state.isTyping) return;
-
-  // Add user message
-  addMessage(message, 'user');
-
-  // Clear input
+  
+  // Clear input FIRST to prevent double display
   elements.messageInput.value = '';
   elements.messageInput.style.height = 'auto';
-
+  
+  // Add user message
+  addMessage(message, 'user');
+  
   // Save to conversation history
   state.conversationHistory.push({
     role: 'user',
     content: message,
-    elements: Array.from(state.selectedElements)
+    elements: Array.from(state.selectedElements),
+    timestamp: new Date().toISOString()
   });
-
+  
   // Process message and generate response
   processUserMessage(message);
 }
 
-function addMessage(text, sender = 'ai', isTyping = false) {
+function addMessage(text, sender) {
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${sender}-message`;
-
+  
   // Create avatar
-  const avatar = document.createElement('div');
-  avatar.className = 'message-avatar';
+  const avatarDiv = document.createElement('div');
+  avatarDiv.className = 'message-avatar';
   
   if (sender === 'ai') {
-    avatar.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-      </svg>
-    `;
+    avatarDiv.innerHTML = '<img src="images/logo.png" alt="AI" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">';
   } else {
-    avatar.textContent = 'U';
+    avatarDiv.innerHTML = '<span style="font-size: 0.9rem;">👤</span>';
   }
-
-  // Create content
-  const content = document.createElement('div');
-  content.className = 'message-content';
+  
+  // Create message content
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
   
   const textDiv = document.createElement('div');
   textDiv.className = 'message-text';
   
-  if (isTyping) {
-    textDiv.innerHTML = `
-      <div class="typing-indicator">
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      </div>
-    `;
-  } else {
+  // Format message if it's from AI
+  if (sender === 'ai') {
     textDiv.innerHTML = formatMessage(text);
+  } else {
+    textDiv.textContent = text;
   }
-
-  content.appendChild(textDiv);
-  messageDiv.appendChild(avatar);
-  messageDiv.appendChild(content);
-
+  
+  contentDiv.appendChild(textDiv);
+  messageDiv.appendChild(avatarDiv);
+  messageDiv.appendChild(contentDiv);
+  
   elements.chatMessages.appendChild(messageDiv);
   scrollToBottom();
-
+  
   return messageDiv;
 }
 
 function formatMessage(text) {
-  // Convert markdown-like formatting to HTML
+  // Convert markdown-style formatting to HTML
   let formatted = text
+    // Bold text: **text** -> <strong>text</strong>
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Italic text: *text* -> <em>text</em>
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Line breaks
     .replace(/\n/g, '<br>');
   
   return formatted;
@@ -594,9 +732,29 @@ function scrollToBottom() {
 }
 
 function showTypingIndicator() {
-  const typingMsg = addMessage('', 'ai', true);
-  typingMsg.id = 'typing-indicator';
-  return typingMsg;
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'message ai-message';
+  typingDiv.id = 'typing-indicator';
+  
+  const avatarDiv = document.createElement('div');
+  avatarDiv.className = 'message-avatar';
+  avatarDiv.innerHTML = '<img src="images/logo.png" alt="AI" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">';
+  
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
+  
+  const typingContent = document.createElement('div');
+  typingContent.className = 'typing-indicator';
+  typingContent.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  
+  contentDiv.appendChild(typingContent);
+  typingDiv.appendChild(avatarDiv);
+  typingDiv.appendChild(contentDiv);
+  
+  elements.chatMessages.appendChild(typingDiv);
+  scrollToBottom();
+  
+  return typingDiv;
 }
 
 function removeTypingIndicator() {
@@ -611,30 +769,69 @@ function removeTypingIndicator() {
 // ===================================
 async function processUserMessage(message) {
   state.isTyping = true;
+  
+  // Show typing indicator
   const typingIndicator = showTypingIndicator();
-
-  // Simulate AI processing delay
-  await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-
-  removeTypingIndicator();
-
-  // Analyze message intent and generate appropriate response
-  const intent = analyzeMessageIntent(message);
-  const response = generateAIResponse(intent, message);
-
-  addMessage(response, 'ai');
-
-  state.conversationHistory.push({
-    role: 'assistant',
-    content: response
-  });
-
+  
+  try {
+    // Determine action based on message content
+    const action = analyzeMessageIntent(message);
+    
+    // Call backend API
+    const response = await fetch('http://localhost:3000/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: message,
+        action: action, // Send action parameter to backend
+        conversationHistory: state.conversationHistory.slice(-5) // Last 5 messages for context
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Backend error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Remove typing indicator
+    removeTypingIndicator();
+    
+    // Add AI response (no model badge shown)
+    addMessage(data.response, 'ai');
+    
+    // Save to conversation history
+    state.conversationHistory.push({
+      role: 'assistant',
+      content: data.response,
+      model: data.model,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Log which model was used (for debugging)
+    console.log(`Query routed to: ${data.model}`);
+    
+  } catch (error) {
+    console.error('Error:', error);
+    
+    // Remove typing indicator
+    removeTypingIndicator();
+    
+    // Show error message
+    addMessage(
+      'Sorry, I encountered an error. Please make sure the backend server is running on http://localhost:3000',
+      'ai'
+    );
+  }
+  
   state.isTyping = false;
 }
 
 function analyzeMessageIntent(message) {
   const lower = message.toLowerCase();
-
+  
   if (lower.includes('literature') || lower.includes('research') || lower.includes('paper') || lower.includes('analyze')) {
     return 'literature';
   } else if (lower.includes('design') || lower.includes('generate') || lower.includes('create') || lower.includes('material')) {
@@ -643,165 +840,9 @@ function analyzeMessageIntent(message) {
     return 'predict';
   } else if (lower.includes('optimize') || lower.includes('improve') || lower.includes('enhance') || lower.includes('tuning')) {
     return 'optimize';
-  } else if (lower.includes('hello') || lower.includes('hi') || lower.includes('help')) {
-    return 'greeting';
   } else {
     return 'general';
   }
-}
-
-function generateAIResponse(intent, message) {
-  const selectedElementsText = state.selectedElements.size > 0 
-    ? `<br><br>📋 <strong>Selected Elements:</strong> ${Array.from(state.selectedElements).join(', ')}`
-    : '';
-
-  const responses = {
-    literature: `
-      **Literature Analysis Initiated** ✨${selectedElementsText}
-      
-      I'll help you analyze the latest research! Based on your query, I can:
-      
-      **Search** through millions of research papers
-      **Extract** key findings and methodologies
-      **Identify** knowledge gaps and opportunities
-      **Summarize** critical insights
-      
-      For a complete analysis, please specify:
-      - **Chemical elements** or compounds of interest ${state.selectedElements.size > 0 ? '(you\'ve selected some!)' : ''}
-      - **Property focus** (catalysis, conductivity, stability, etc.)
-      - **Time range** (recent papers, historical overview, etc.)
-      
-      *Traditional approach: Weeks of manual review*
-      *Our AI: Seconds with comprehensive insights*
-      
-      What specific materials or properties would you like me to analyze?`,
-
-    design: `
-      **Inverse Design Module Activated** 🔬${selectedElementsText}
-      
-      Excellent! I can help you design novel materials with targeted properties.
-      
-      Here's how we'll proceed:
-      
-      **Step 1: Define Your Target**
-      - Chemical composition ${state.selectedElements.size > 0 ? '(✓ Elements selected!)' : '(which elements?)'}
-      - Target properties (stability, bandgap, catalytic activity, etc.)
-      - Constraints (synthesis conditions, cost, toxicity, etc.)
-      
-      **Step 2: AI Generation**
-      - Our generative model will create candidate structures
-      - Optimization for thermodynamic stability
-      - Screening for desired properties
-      
-      **Step 3: Validation**
-      - Structure visualization
-      - Property predictions
-      - Synthesizability assessment
-      
-      *Example: "Design a stable perovskite with Sr, Ti, O having energy above hull < 0.05 eV"*
-      
-      Please specify your target material composition and desired properties!`,
-
-    predict: `
-      **Predictive Analysis Ready** ⚡${selectedElementsText}
-      
-      I can predict material properties with unprecedented speed!
-      
-      Available analyses:
-      
-      **Surface Properties:**
-      • Adsorption energies (H₂O, CO, CO₂, NH₃, O₂, etc.)
-      • Surface stability across different Miller indices
-      • Work function and electronic properties
-      
-      **Bulk Properties:**
-      • Formation energy and thermodynamic stability
-      • Electronic band structure and bandgap
-      • Mechanical properties (elastic constants)
-      • Phonon dispersion and thermal properties
-      
-      **Process Parameters:**
-      • Reaction pathways and activation barriers
-      • Dopant effects and defect chemistry
-      
-      **To get started, please provide:**
-      - Material composition ${state.selectedElements.size > 0 ? '(✓ Elements selected!)' : '(e.g., SrTiO₃)'}
-      - Property of interest
-      - Specific conditions (surface orientation, adsorbate, etc.)
-      
-      What would you like to predict?`,
-
-    optimize: `
-      **Optimization Engine Online** 🎯${selectedElementsText}
-      
-      Perfect! I can help optimize your material or process parameters using AI-guided decision-making.
-      
-      **Optimization Capabilities:**
-      
-      **1. Composition Optimization**
-      - Dopant selection and concentration
-      - Elemental substitution for enhanced properties
-      - Multi-component systems ${state.selectedElements.size > 0 ? '(working with your selected elements)' : ''}
-      
-      **2. Structure Optimization**
-      - Crystal structure prediction
-      - Defect engineering
-      - Surface facet control
-      
-      **3. Process Optimization**
-      - Synthesis temperature and pressure
-      - Reaction time and atmosphere
-      - Post-treatment conditions
-      
-      **4. Multi-objective Optimization**
-      - Balance multiple competing properties
-      - Pareto frontier exploration
-      - Trade-off analysis
-      
-      **Benefits:**
-      - Significant cost reduction
-      - Faster convergence
-      - Global optimum discovery
-      
-      What parameters would you like to optimize?`,
-
-    greeting: `
-      Hello! 👋 I'm your AI research assistant for materials discovery.${selectedElementsText}
-      
-      I'm here to help accelerate your research with:
-      
-      **Quick Actions:**
-      1. **📚 Literature Analysis** - Search & analyze research papers
-      2. **🔬 Materials Design** - Generate novel materials with target properties
-      3. **⚡ Property Prediction** - Ultra-fast predictive simulations
-      4. **🎯 Optimization** - AI-guided parameter tuning
-      
-      **You can ask me things like:**
-      - "Analyze recent literature on Li-ion cathode materials"
-      - "Design a stable oxide containing La, Sr, and Co"
-      - "Predict CO₂ adsorption energy on CeO₂ (111) surface"
-      - "Optimize dopant concentration for maximum conductivity"
-      
-      💡 **Pro Tip:** Use the 🧪 button to select elements from the periodic table!
-      
-      What would you like to work on today?`,
-
-    general: `I understand you're interested in materials research!${selectedElementsText}
-    
-    To provide the most helpful response, could you clarify:
-    
-    **Are you looking to:**
-    1. **Research** existing literature on a topic?
-    2. **Design** new materials with specific properties?
-    3. **Predict** properties of known or new materials?
-    4. **Optimize** material composition or synthesis parameters?
-    
-    Please let me know, or feel free to describe your research goal in more detail!
-    
-    *Tip: Try clicking one of the quick action buttons below for common tasks.*`
-  };
-
-  return responses[intent] || responses.general;
 }
 
 // ===================================
@@ -809,15 +850,24 @@ function generateAIResponse(intent, message) {
 // ===================================
 function handleQuickAction(action) {
   const actionMessages = {
-    literature: "I'd like to search and analyze literature on materials",
-    design: "Help me design a new material with specific properties",
-    predict: "I want to predict material properties",
-    optimize: "I need to optimize material parameters"
+    literature: "📚 Literature Analysis",
+    design: "⚗️ Materials Design",
+    predict: "🔬 Property Prediction",
+    optimize: "⚙️ Parameter Optimization"
   };
-
+  
   const message = actionMessages[action];
-  elements.messageInput.value = message;
-  handleSendMessage();
+  
+  // Add text to input field instead of auto-sending
+  const currentText = elements.messageInput.value.trim();
+  if (currentText && !currentText.endsWith(' ')) {
+    elements.messageInput.value = currentText + ' ' + message;
+  } else {
+    elements.messageInput.value = message;
+  }
+  
+  // Focus the input
+  elements.messageInput.focus();
 }
 
 // ===================================
@@ -828,10 +878,12 @@ function showWelcomeMessage() {
   scrollToBottom();
 }
 
-// Enhanced Contact Form Handler for Web3Forms
+// ===================================
+// Contact Form Handler
+// ===================================
 async function handleContactSubmit(e) {
   e.preventDefault();
-
+  
   const form = elements.contactForm;
   const formData = new FormData(form);
   const submitBtn = form.querySelector('.submit-btn');
@@ -843,18 +895,18 @@ async function handleContactSubmit(e) {
   submitBtn.style.cursor = 'not-allowed';
   
   if (formStatus) {
-    formStatus.textContent = '⏳ Sending your message...';
+    formStatus.textContent = '📤 Sending your message...';
     formStatus.style.color = '#6F9EFF';
   }
-
+  
   try {
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       body: formData
     });
-
+    
     const result = await response.json();
-
+    
     if (result.success) {
       // Success feedback
       showToast('✅ Message sent successfully!', 'success');
@@ -868,7 +920,6 @@ async function handleContactSubmit(e) {
       setTimeout(() => {
         if (formStatus) formStatus.textContent = '';
       }, 5000);
-      
     } else {
       // Error from Web3Forms
       showToast('❌ ' + (result.message || 'Failed to send message'), 'error');
@@ -881,9 +932,9 @@ async function handleContactSubmit(e) {
   } catch (error) {
     // Network or other errors
     console.error('Submission failed:', error);
-    showToast('⚠️ Network error. Please try again.', 'error');
+    showToast('❌ Network error. Please try again.', 'error');
     if (formStatus) {
-      formStatus.textContent = '⚠️ Network error. Please check your connection and try again.';
+      formStatus.textContent = '❌ Network error. Please check your connection and try again.';
       formStatus.style.color = '#EF4444';
     }
   } finally {
@@ -893,7 +944,6 @@ async function handleContactSubmit(e) {
     submitBtn.style.cursor = 'pointer';
   }
 }
-
 
 // ===================================
 // UI Utilities
@@ -942,7 +992,6 @@ function initializeSmoothScroll() {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
       const target = document.querySelector(this.getAttribute('href'));
-      
       if (target) {
         target.scrollIntoView({
           behavior: 'smooth',
@@ -954,24 +1003,6 @@ function initializeSmoothScroll() {
 }
 
 // ===================================
-// Chatbot Minimize/Maximize
-// ===================================
-document.getElementById('minimizeBtn').addEventListener('click', function() {
-  const chatbot = document.querySelector('.chatbot-container');
-  const btn = this;
-  
-  if (chatbot.style.height === '60px' || chatbot.style.height === '') {
-    // Restore
-    chatbot.style.height = '600px';
-    btn.textContent = '−';
-  } else {
-    // Minimize
-    chatbot.style.height = '60px';
-    btn.textContent = '+';
-  }
-});
-
-// ===================================
 // Export for potential backend integration
 // ===================================
 window.AethorionAI = {
@@ -979,45 +1010,12 @@ window.AethorionAI = {
   addMessage,
   processUserMessage,
   showToast,
-  selectedElements: () => Array.from(state.selectedElements)
+  selectedElements: () => Array.from(state.selectedElements),
+  startNewChat,
+  saveChatSession
 };
 
-console.log('🚀 Aethorion AI Chatbot Interface Loaded');
-console.log('✨ Ready for backend integration');
-console.log('🧪 Periodic Table Feature Enabled');
-
-// ===================================
-// Scroll Animations
-// ===================================
-function initScrollAnimations() {
-  const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -100px 0px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-      }
-    });
-  }, observerOptions);
-
-  // Observe all sections with fade-in-section class
-  document.querySelectorAll('.fade-in-section').forEach(section => {
-    observer.observe(section);
-  });
-
-  // Observe individual animated elements
-  document.querySelectorAll('.slide-in-left, .slide-in-right, .slide-in-down, .slide-in-up').forEach(element => {
-    observer.observe(element);
-  });
-}
-
-// Initialize scroll animations when DOM is loaded
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initScrollAnimations);
-} else {
-  initScrollAnimations();
-}
-
+console.log('✅ Aethorion AI Chatbot Interface Loaded');
+console.log('✅ Ready for backend integration');
+console.log('✅ Periodic Table Feature Enabled');
+console.log('✅ Chat History Feature Enabled');

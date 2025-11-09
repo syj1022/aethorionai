@@ -3410,3 +3410,506 @@ small,
   border-radius: 0 !important;
   backdrop-filter: none !important;
 }
+
+/* ===================================
+   FIX: Remove text-shadow from chat messages only
+   Add this to your existing styles.css or include it separately
+   =================================== */
+
+/* Remove text outline/contour from chat message text */
+.message-text {
+  text-shadow: none !important;
+}
+
+/* Also remove text-shadow from chat input field */
+.message-input {
+  text-shadow: none !important;
+}
+
+.message-input::placeholder {
+  text-shadow: none !important;
+}
+
+/* Optional: Keep other chat elements visible but remove their text-shadow too */
+.message-text em,
+.message-text strong,
+.message-text p,
+.message-text span {
+  text-shadow: none !important;
+}
+
+/* Model Badge Styling */
+.model-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-right: 8px;
+    text-transform: uppercase;
+}
+
+.model-deepseek {
+    background-color: #4A90E2;
+    color: white;
+}
+
+.model-mattergen {
+    background-color: #7B68EE;
+    color: white;
+}
+
+.model-uma {
+    background-color: #FF6B6B;
+    color: white;
+}
+
+.model-demo {
+    background-color: #95a5a6;
+    color: white;
+}
+
+/* ===================================
+   ADDITIONAL CSS FOR COMPLETE FIXES
+   Append this to the end of styles.css
+   =================================== */
+
+/* ===================================
+   Status Dot (Green) - FIXED
+   =================================== */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--success);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ===================================
+   Header Actions (History & New Chat Buttons)
+   =================================== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.history-btn,
+.new-chat-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-btn:hover,
+.new-chat-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(111, 158, 255, 0.3);
+}
+
+.history-btn svg,
+.new-chat-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===================================
+   Chat History Modal
+   =================================== */
+.chat-history-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-history-modal.active {
+  display: flex;
+}
+
+.history-list {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.history-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(111, 158, 255, 0.2);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  transition: var(--transition-fast);
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(111, 158, 255, 0.2);
+}
+
+.history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.history-item-title {
+  font-weight: 600;
+  color: var(--white);
+  flex: 1;
+  line-height: 1.4;
+}
+
+.history-item-date {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+.history-item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.history-load-btn,
+.history-delete-btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.history-load-btn {
+  background: var(--gradient-primary);
+  color: var(--white);
+  box-shadow: 0 0 15px rgba(111, 158, 255, 0.3);
+}
+
+.history-load-btn:hover {
+  box-shadow: 0 0 25px rgba(111, 158, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.history-delete-btn {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.history-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+/* ===================================
+   Message Formatting Improvements
+   =================================== */
+.message-text {
+  line-height: 1.7;
+  word-wrap: break-word;
+}
+
+.message-text strong {
+  font-weight: 700;
+  color: var(--accent-light);
+}
+
+.message-text em {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.message-text br {
+  display: block;
+  content: "";
+  margin-top: 0.5rem;
+}
+
+/* ===================================
+   Typing Indicator Styling
+   =================================== */
+.typing-indicator {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  width: fit-content;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--accent);
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ===================================
+   Responsive Adjustments
+   =================================== */
+@media (max-width: 768px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .demo-request-btn-header span {
+    display: none;
+  }
+  
+  .history-item-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .history-item-date {
+    align-self: flex-start;
+  }
+}
+
+/* ===================================
+   Scrollbar Styling for History List
+   =================================== */
+.history-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(111, 158, 255, 0.5);
+  border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(111, 158, 255, 0.7);
+}
+
+
+/* ===================================
+   Periodic Table Grid Styling
+   =================================== */
+.periodic-table {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  gap: 4px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.element {
+  aspect-ratio: 1;
+  border: 1px solid rgba(111, 158, 255, 0.3);
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.element:not(.empty):hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(111, 158, 255, 0.5);
+}
+
+.element.selected {
+  background: rgba(111, 158, 255, 0.3);
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(111, 158, 255, 0.5);
+}
+
+.element.empty {
+  border: none;
+  cursor: default;
+}
+
+.element-number {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+.element-symbol {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.element-name {
+  font-size: 0.55rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.element-weight {
+  font-size: 0.5rem;
+  opacity: 0.6;
+}
+
+
+/* ===================================
+   Modal Styling Improvements
+   =================================== */
+.modal-content {
+  background: rgba(12, 14, 44, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(111, 158, 255, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(111, 158, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(111, 158, 255, 0.3);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(111, 158, 255, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.modal-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.modal-btn-primary {
+  background: var(--gradient-primary);
+  color: var(--white);
+  box-shadow: 0 0 20px rgba(111, 158, 255, 0.3);
+}
+
+.modal-btn-primary:hover {
+  box-shadow: 0 0 30px rgba(111, 158, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.modal-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: -1;
+}
+
