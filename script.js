@@ -1,6 +1,6 @@
-// ===================================
+// =================================== 
 // Periodic Table Data
-// ===================================
+// =================================== 
 const periodicTableData = [
   // Period 1
   { number: 1, symbol: 'H', name: 'Hydrogen', weight: '1.008', category: 'nonmetal', row: 1, col: 1 },
@@ -131,6 +131,39 @@ const periodicTableData = [
   { number: 103, symbol: 'Lr', name: 'Lawrencium', weight: '266', category: 'actinide', row: 9, col: 17 }
 ];
 
+// Store welcome message HTML for reuse
+const WELCOME_MESSAGE_HTML = `
+<div class="message ai-message" id="welcome-message">
+  <div class="message-avatar">
+    <img src="images/logo.png" alt="AI" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">
+  </div>
+  <div class="message-content">
+    <div class="message-text">
+       Welcome to Aethorion AI! I'm your innovation assistant.
+      <br><br>
+      I can help you with:
+      <br>
+      <div class="capability-tags">
+        <span class="tag clickable-tag" data-action="literature">📚 Literature Analysis</span>
+        <span class="tag clickable-tag" data-action="design">⚗️ Materials Design</span>
+        <span class="tag clickable-tag" data-action="predict">🔬 Property Prediction</span>
+        <span class="tag clickable-tag" data-action="optimize">⚙️ Parameter Optimization</span>
+      </div>
+      <br>
+      Try asking me something like:
+      <br>
+      <em>"Analyze research gaps in SrTiO perovskite catalysts"</em>
+      <br>
+      <em>"Design a stable material containing Sr, Ti, and O"</em>
+      <br>
+      <em>"Predict adsorption properties of CO on SrTiO at 500K"</em>
+      <br>
+      <em>"Help me optimize our operational parameters"</em>
+    </div>
+  </div>
+</div>
+`;
+
 // ===================================
 // Global State & Configuration
 // ===================================
@@ -180,7 +213,7 @@ const elements = {
 // ===================================
 // Initialization
 // ===================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   initializeEventListeners();
   initializeScrollEffects();
   initializeSmoothScroll();
@@ -188,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initializePeriodicTable();
   initializePeriodicHint();
   loadChatHistory();
-  showWelcomeMessage();
+  // Don't call showWelcomeMessage() here - it's already in HTML
 });
 
 // ===================================
@@ -197,20 +230,30 @@ document.addEventListener('DOMContentLoaded', () => {
 function saveChatSession() {
   if (state.conversationHistory.length === 0) return;
   
-  const session = {
+  var session = {
     id: Date.now(),
     timestamp: new Date().toISOString(),
-    messages: [...state.conversationHistory]
+    messages: state.conversationHistory.slice() // Use slice() for Safari compatibility
   };
   
   state.chatHistory.push(session);
-  localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+  
+  // Safari-safe localStorage
+  try {
+    localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+  } catch (e) {
+    console.error('localStorage not available:', e);
+  }
 }
 
 function loadChatHistory() {
-  const saved = localStorage.getItem('chatHistory');
-  if (saved) {
-    state.chatHistory = JSON.parse(saved);
+  try {
+    var saved = localStorage.getItem('chatHistory');
+    if (saved) {
+      state.chatHistory = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Error loading chat history:', e);
   }
 }
 
@@ -222,70 +265,103 @@ function displayChatHistory() {
     return;
   }
   
-  state.chatHistory.reverse().forEach(session => {
-    const date = new Date(session.timestamp);
-    const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-    const firstMessage = session.messages.find(m => m.role === 'user')?.content || 'New Chat';
-    const preview = firstMessage.substring(0, 50) + (firstMessage.length > 50 ? '...' : '');
+  var reversedHistory = state.chatHistory.slice().reverse(); // Safari-safe reverse
+  
+  reversedHistory.forEach(function(session) {
+    var date = new Date(session.timestamp);
+    var dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    var firstMessage = null;
     
-    const historyItem = document.createElement('div');
+    // Safari-safe find alternative
+    for (var i = 0; i < session.messages.length; i++) {
+      if (session.messages[i].role === 'user') {
+        firstMessage = session.messages[i].content;
+        break;
+      }
+    }
+    
+    var preview = firstMessage ? firstMessage.substring(0, 50) + (firstMessage.length > 50 ? '...' : '') : 'New Chat';
+    
+    var historyItem = document.createElement('div');
     historyItem.className = 'history-item';
-    historyItem.innerHTML = `
-      <div class="history-item-header">
-        <div class="history-item-title">${preview}</div>
-        <div class="history-item-date">${dateStr}</div>
-      </div>
-      <div class="history-item-actions">
-        <button class="history-load-btn" data-session-id="${session.id}">Load</button>
-        <button class="history-delete-btn" data-session-id="${session.id}">Delete</button>
-      </div>
-    `;
+    historyItem.innerHTML = '<div class="history-item-header">' +
+      '<div class="history-item-title">' + escapeHtml(preview) + '</div>' +
+      '<div class="history-item-date">' + dateStr + '</div>' +
+      '</div>' +
+      '<div class="history-item-actions">' +
+      '<button class="history-load-btn" data-session-id="' + session.id + '">Load</button>' +
+      '<button class="history-delete-btn" data-session-id="' + session.id + '">Delete</button>' +
+      '</div>';
     
     elements.historyList.appendChild(historyItem);
   });
   
-  state.chatHistory.reverse();
-  
   // Add event listeners
-  document.querySelectorAll('.history-load-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const sessionId = parseInt(e.target.dataset.sessionId);
+  var loadBtns = document.querySelectorAll('.history-load-btn');
+  for (var i = 0; i < loadBtns.length; i++) {
+    loadBtns[i].addEventListener('click', function(e) {
+      var sessionId = parseInt(e.target.getAttribute('data-session-id'));
       loadChatSession(sessionId);
       closeChatHistoryModal();
     });
-  });
+  }
   
-  document.querySelectorAll('.history-delete-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const sessionId = parseInt(e.target.dataset.sessionId);
+  var deleteBtns = document.querySelectorAll('.history-delete-btn');
+  for (var i = 0; i < deleteBtns.length; i++) {
+    deleteBtns[i].addEventListener('click', function(e) {
+      var sessionId = parseInt(e.target.getAttribute('data-session-id'));
       deleteChatSession(sessionId);
     });
-  });
+  }
+}
+
+// Safari-safe HTML escaping
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 function loadChatSession(sessionId) {
-  const session = state.chatHistory.find(s => s.id === sessionId);
+  var session = null;
+  for (var i = 0; i < state.chatHistory.length; i++) {
+    if (state.chatHistory[i].id === sessionId) {
+      session = state.chatHistory[i];
+      break;
+    }
+  }
+  
   if (!session) return;
   
-  // Clear current chat
+  // Clear current chat (but keep welcome message)
   clearChat(false);
   
   // Restore messages
-  state.conversationHistory = [...session.messages];
-  session.messages.forEach(msg => {
+  state.conversationHistory = session.messages.slice();
+  
+  for (var i = 0; i < session.messages.length; i++) {
+    var msg = session.messages[i];
     if (msg.role === 'user') {
       addMessage(msg.content, 'user');
     } else {
       addMessage(msg.content, 'ai');
     }
-  });
+  }
   
   showToast('💬 Chat session loaded');
 }
 
 function deleteChatSession(sessionId) {
-  state.chatHistory = state.chatHistory.filter(s => s.id !== sessionId);
-  localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+  state.chatHistory = state.chatHistory.filter(function(s) {
+    return s.id !== sessionId;
+  });
+  
+  try {
+    localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+  } catch (e) {
+    console.error('Error saving history:', e);
+  }
+  
   displayChatHistory();
   showToast('🗑️ Chat session deleted');
 }
@@ -293,7 +369,11 @@ function deleteChatSession(sessionId) {
 function clearAllHistory() {
   if (confirm('Are you sure you want to clear all chat history?')) {
     state.chatHistory = [];
-    localStorage.removeItem('chatHistory');
+    try {
+      localStorage.removeItem('chatHistory');
+    } catch (e) {
+      console.error('Error clearing history:', e);
+    }
     displayChatHistory();
     showToast('🗑️ All chat history cleared');
   }
@@ -303,19 +383,19 @@ function startNewChat() {
   if (state.conversationHistory.length > 0) {
     saveChatSession();
   }
-  clearChat(true);
+  clearChat(true); // Keep welcome message
   showToast('✨ New chat started');
 }
 
-function clearChat(showWelcome = true) {
+function clearChat(keepWelcome) {
   // Clear conversation history
   state.conversationHistory = [];
   
   // Clear chat display
   elements.chatMessages.innerHTML = '';
   
-  // Show welcome message if requested
-  if (showWelcome) {
+  // Always keep welcome message
+  if (keepWelcome !== false) { // Default to true
     showWelcomeMessage();
   }
 }
@@ -332,37 +412,52 @@ function closeChatHistoryModal() {
 }
 
 // ===================================
+// Welcome Message Function
+// ===================================
+function showWelcomeMessage() {
+  // Insert welcome message HTML
+  elements.chatMessages.innerHTML = WELCOME_MESSAGE_HTML;
+  scrollToBottom();
+}
+
+// Continuation of script_safari_fixed.js (Part 2)
+
+// ===================================
 // Periodic Table Initialization
 // ===================================
 function initializePeriodicTable() {
-  const table = elements.periodicTable;
+  var table = elements.periodicTable;
   
   // Create 9 rows x 18 columns grid (includes f-block rows 8-9)
-  const totalCells = 9 * 18;
-  const elementMap = new Map();
+  var totalCells = 9 * 18;
+  var elementMap = new Map();
   
   // Map elements to their grid positions
-  periodicTableData.forEach(el => {
-    const index = (el.row - 1) * 18 + (el.col - 1);
+  for (var i = 0; i < periodicTableData.length; i++) {
+    var el = periodicTableData[i];
+    var index = (el.row - 1) * 18 + (el.col - 1);
     elementMap.set(index, el);
-  });
+  }
   
   // Create all cells
-  for (let i = 0; i < totalCells; i++) {
-    const cell = document.createElement('div');
+  for (var i = 0; i < totalCells; i++) {
+    var cell = document.createElement('div');
     
     if (elementMap.has(i)) {
-      const el = elementMap.get(i);
-      cell.className = `element ${el.category}`;
-      cell.dataset.symbol = el.symbol;
-      cell.innerHTML = `
-        <div class="element-number">${el.number}</div>
-        <div class="element-symbol">${el.symbol}</div>
-        <div class="element-name">${el.name}</div>
-        <div class="element-weight">${el.weight}</div>
-      `;
+      var el = elementMap.get(i);
+      cell.className = 'element ' + el.category;
+      cell.setAttribute('data-symbol', el.symbol);
+      cell.innerHTML = '<div class="element-number">' + el.number + '</div>' +
+        '<div class="element-symbol">' + el.symbol + '</div>' +
+        '<div class="element-name">' + el.name + '</div>' +
+        '<div class="element-weight">' + el.weight + '</div>';
       
-      cell.addEventListener('click', () => toggleElement(el.symbol, cell));
+      // Safari-safe event listener
+      (function(symbol, cellElem) {
+        cellElem.addEventListener('click', function() {
+          toggleElement(symbol, cellElem);
+        });
+      })(el.symbol, cell);
     } else {
       cell.className = 'element empty';
     }
@@ -383,14 +478,15 @@ function toggleElement(symbol, cell) {
 }
 
 function updateSelectionCounter() {
-  elements.selectionCount.textContent = state.selectedElements.size;
+  elements.selectionCount.textContent = state.selectedElements.size.toString();
 }
 
 function clearAllSelections() {
   state.selectedElements.clear();
-  document.querySelectorAll('.element.selected').forEach(el => {
-    el.classList.remove('selected');
-  });
+  var selectedEls = document.querySelectorAll('.element.selected');
+  for (var i = 0; i < selectedEls.length; i++) {
+    selectedEls[i].classList.remove('selected');
+  }
   updateSelectionCounter();
 }
 
@@ -404,8 +500,8 @@ function applySelection() {
   closePeriodicTableModal();
   
   // Optionally add to message input
-  const elementsList = Array.from(state.selectedElements).join(', ');
-  const currentText = elements.messageInput.value;
+  var elementsList = Array.from(state.selectedElements).join(', ');
+  var currentText = elements.messageInput.value;
   if (currentText && !currentText.endsWith(' ')) {
     elements.messageInput.value += ' ';
   }
@@ -422,28 +518,31 @@ function updateSelectedElementsDisplay() {
   elements.selectedElementsDisplay.style.display = 'flex';
   elements.selectedElementsList.innerHTML = '';
   
-  state.selectedElements.forEach(symbol => {
-    const chip = document.createElement('div');
+  var elementsArray = Array.from(state.selectedElements);
+  for (var i = 0; i < elementsArray.length; i++) {
+    var symbol = elementsArray[i];
+    var chip = document.createElement('div');
     chip.className = 'element-chip';
-    chip.innerHTML = `
-      <span>${symbol}</span>
-      <span class="element-chip-remove">×</span>
-    `;
+    chip.innerHTML = '<span>' + symbol + '</span>' +
+      '<span class="element-chip-remove">×</span>';
     
-    chip.querySelector('.element-chip-remove').addEventListener('click', (e) => {
-      e.stopPropagation();
-      removeSelectedElement(symbol);
-    });
+    // Safari-safe closure
+    (function(sym) {
+      chip.querySelector('.element-chip-remove').addEventListener('click', function(e) {
+        e.stopPropagation();
+        removeSelectedElement(sym);
+      });
+    })(symbol);
     
     elements.selectedElementsList.appendChild(chip);
-  });
+  }
 }
 
 function removeSelectedElement(symbol) {
   state.selectedElements.delete(symbol);
   
   // Update modal if open
-  const elementCell = document.querySelector(`.element[data-symbol="${symbol}"]`);
+  var elementCell = document.querySelector('.element[data-symbol="' + symbol + '"]');
   if (elementCell) {
     elementCell.classList.remove('selected');
   }
@@ -467,19 +566,26 @@ function closePeriodicTableModal() {
 // ===================================
 function initializePeriodicHint() {
   // Show hint after 3 seconds if user hasn't opened periodic table yet
-  setTimeout(() => {
-    if (elements.periodicHint && !localStorage.getItem('periodicTableUsed')) {
-      elements.periodicHint.style.display = 'block';
-      
-      // Hide hint after 10 seconds
-      setTimeout(() => {
-        if (elements.periodicHint) {
-          elements.periodicHint.style.opacity = '0';
-          setTimeout(() => {
-            elements.periodicHint.style.display = 'none';
-          }, 300);
-        }
-      }, 10000);
+  setTimeout(function() {
+    try {
+      var used = localStorage.getItem('periodicTableUsed');
+      if (elements.periodicHint && !used) {
+        elements.periodicHint.style.display = 'block';
+        
+        // Hide hint after 10 seconds
+        setTimeout(function() {
+          if (elements.periodicHint) {
+            elements.periodicHint.style.opacity = '0';
+            setTimeout(function() {
+              if (elements.periodicHint) {
+                elements.periodicHint.style.display = 'none';
+              }
+            }, 300);
+          }
+        }, 10000);
+      }
+    } catch (e) {
+      console.error('localStorage error:', e);
     }
   }, 3000);
 }
@@ -487,7 +593,11 @@ function initializePeriodicHint() {
 function hidePeriodicHint() {
   if (elements.periodicHint) {
     elements.periodicHint.classList.add('hidden');
-    localStorage.setItem('periodicTableUsed', 'true');
+    try {
+      localStorage.setItem('periodicTableUsed', 'true');
+    } catch (e) {
+      console.error('localStorage error:', e);
+    }
   }
 }
 
@@ -495,45 +605,45 @@ function hidePeriodicHint() {
 // Particle System
 // ===================================
 function initializeParticles() {
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
+  var canvas = document.getElementById('particles');
+  if (!canvas) return;
+  
+  var ctx = canvas.getContext('2d');
   
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   
-  const particles = [];
-  const particleCount = 50;
+  var particles = [];
+  var particleCount = 50;
   
-  class Particle {
-    constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2 + 0.5;
-      this.speedX = Math.random() * 0.5 - 0.25;
-      this.speedY = Math.random() * 0.5 - 0.25;
-      this.opacity = Math.random() * 0.5 + 0.2;
-    }
-    
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      
-      if (this.x > canvas.width) this.x = 0;
-      if (this.x < 0) this.x = canvas.width;
-      if (this.y > canvas.height) this.y = 0;
-      if (this.y < 0) this.y = canvas.height;
-    }
-    
-    draw() {
-      ctx.fillStyle = `rgba(111, 158, 255, ${this.opacity})`;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
+  function Particle() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 0.5;
+    this.speedX = Math.random() * 0.5 - 0.25;
+    this.speedY = Math.random() * 0.5 - 0.25;
+    this.opacity = Math.random() * 0.5 + 0.2;
   }
   
+  Particle.prototype.update = function() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    
+    if (this.x > canvas.width) this.x = 0;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.y > canvas.height) this.y = 0;
+    if (this.y < 0) this.y = canvas.height;
+  };
+  
+  Particle.prototype.draw = function() {
+    ctx.fillStyle = 'rgba(111, 158, 255, ' + this.opacity + ')';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  };
+  
   // Create particles
-  for (let i = 0; i < particleCount; i++) {
+  for (var i = 0; i < particleCount; i++) {
     particles.push(new Particle());
   }
   
@@ -541,20 +651,20 @@ function initializeParticles() {
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    particles.forEach(particle => {
-      particle.update();
-      particle.draw();
-    });
+    for (var i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+    }
     
     // Connect nearby particles
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+    for (var i = 0; i < particles.length; i++) {
+      for (var j = i + 1; j < particles.length; j++) {
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
         
         if (distance < 120) {
-          ctx.strokeStyle = `rgba(111, 158, 255, ${0.15 * (1 - distance / 120)})`;
+          ctx.strokeStyle = 'rgba(111, 158, 255, ' + (0.15 * (1 - distance / 120)) + ')';
           ctx.lineWidth = 0.5;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -570,7 +680,7 @@ function initializeParticles() {
   animate();
   
   // Resize handler
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
@@ -582,7 +692,7 @@ function initializeParticles() {
 function initializeEventListeners() {
   // Send message events
   elements.sendBtn.addEventListener('click', handleSendMessage);
-  elements.messageInput.addEventListener('keypress', (e) => {
+  elements.messageInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -590,15 +700,15 @@ function initializeEventListeners() {
   });
   
   // Clickable capability tags in welcome message
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', function(e) {
     if (e.target.classList.contains('clickable-tag')) {
-      const action = e.target.dataset.action;
+      var action = e.target.getAttribute('data-action');
       handleQuickAction(action);
     }
   });
   
   // Periodic table modal
-  elements.periodicTableBtn.addEventListener('click', () => {
+  elements.periodicTableBtn.addEventListener('click', function() {
     hidePeriodicHint();
     openPeriodicTableModal();
   });
@@ -608,7 +718,7 @@ function initializeEventListeners() {
   elements.modalApply.addEventListener('click', applySelection);
   
   // Clear selection button
-  elements.clearSelectionBtn.addEventListener('click', () => {
+  elements.clearSelectionBtn.addEventListener('click', function() {
     clearAllSelections();
     updateSelectedElementsDisplay();
   });
@@ -622,14 +732,16 @@ function initializeEventListeners() {
   elements.closeHistoryBtn.addEventListener('click', closeChatHistoryModal);
   
   // Hide periodic hint when user starts typing
-  elements.messageInput.addEventListener('input', () => {
+  elements.messageInput.addEventListener('input', function() {
     if (elements.messageInput.value.length > 0) {
       hidePeriodicHint();
     }
   });
   
   // Contact form
-  elements.contactForm.addEventListener('submit', handleContactSubmit);
+  if (elements.contactForm) {
+    elements.contactForm.addEventListener('submit', handleContactSubmit);
+  }
   
   // Mobile menu toggle
   elements.menuToggle.addEventListener('click', toggleMobileMenu);
@@ -638,7 +750,7 @@ function initializeEventListeners() {
   elements.messageInput.addEventListener('input', autoResizeInput);
   
   // ESC key to close modals
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       if (elements.periodicTableModal.classList.contains('active')) {
         closePeriodicTableModal();
@@ -654,7 +766,7 @@ function initializeEventListeners() {
 // Chat Functions
 // ===================================
 function handleSendMessage() {
-  const message = elements.messageInput.value.trim();
+  var message = elements.messageInput.value.trim();
   if (!message || state.isTyping) return;
   
   // Clear input FIRST to prevent double display
@@ -677,11 +789,11 @@ function handleSendMessage() {
 }
 
 function addMessage(text, sender) {
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `message ${sender}-message`;
+  var messageDiv = document.createElement('div');
+  messageDiv.className = 'message ' + sender + '-message';
   
   // Create avatar
-  const avatarDiv = document.createElement('div');
+  var avatarDiv = document.createElement('div');
   avatarDiv.className = 'message-avatar';
   
   if (sender === 'ai') {
@@ -691,10 +803,10 @@ function addMessage(text, sender) {
   }
   
   // Create message content
-  const contentDiv = document.createElement('div');
+  var contentDiv = document.createElement('div');
   contentDiv.className = 'message-content';
   
-  const textDiv = document.createElement('div');
+  var textDiv = document.createElement('div');
   textDiv.className = 'message-text';
   
   // Format message if it's from AI
@@ -715,14 +827,17 @@ function addMessage(text, sender) {
 }
 
 function formatMessage(text) {
-  // Convert markdown-style formatting to HTML
-  let formatted = text
-    // Bold text: **text** -> <strong>text</strong>
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italic text: *text* -> <em>text</em>
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    // Line breaks
-    .replace(/\n/g, '<br>');
+  // Safari-safe regex replacements
+  var formatted = text;
+  
+  // Bold text: **text** -> <strong>text</strong>
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Italic text: *text* -> <em>text</em>
+  formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  
+  // Line breaks
+  formatted = formatted.replace(/\n/g, '<br>');
   
   return formatted;
 }
@@ -732,18 +847,18 @@ function scrollToBottom() {
 }
 
 function showTypingIndicator() {
-  const typingDiv = document.createElement('div');
+  var typingDiv = document.createElement('div');
   typingDiv.className = 'message ai-message';
   typingDiv.id = 'typing-indicator';
   
-  const avatarDiv = document.createElement('div');
+  var avatarDiv = document.createElement('div');
   avatarDiv.className = 'message-avatar';
   avatarDiv.innerHTML = '<img src="images/logo.png" alt="AI" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">';
   
-  const contentDiv = document.createElement('div');
+  var contentDiv = document.createElement('div');
   contentDiv.className = 'message-content';
   
-  const typingContent = document.createElement('div');
+  var typingContent = document.createElement('div');
   typingContent.className = 'typing-indicator';
   typingContent.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
   
@@ -758,7 +873,7 @@ function showTypingIndicator() {
 }
 
 function removeTypingIndicator() {
-  const indicator = document.getElementById('typing-indicator');
+  var indicator = document.getElementById('typing-indicator');
   if (indicator) {
     indicator.remove();
   }
@@ -767,39 +882,38 @@ function removeTypingIndicator() {
 // ===================================
 // Message Processing & AI Responses
 // ===================================
-async function processUserMessage(message) {
+function processUserMessage(message) {
   state.isTyping = true;
   
   // Show typing indicator
-  const typingIndicator = showTypingIndicator();
+  var typingIndicator = showTypingIndicator();
   
-  try {
-    // Determine action based on message content
-    const action = analyzeMessageIntent(message);
-    
-    // Call backend API
-    const response = await fetch('http://localhost:3000/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: message,
-        action: action, // Send action parameter to backend
-        conversationHistory: state.conversationHistory.slice(-5) // Last 5 messages for context
-      })
-    });
-    
+  // Determine action based on message content
+  var action = analyzeMessageIntent(message);
+  
+  // Call backend API
+  fetch('http://localhost:3000/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message: message,
+      action: action,
+      conversationHistory: state.conversationHistory.slice(-5)
+    })
+  })
+  .then(function(response) {
     if (!response.ok) {
-      throw new Error(`Backend error: ${response.status}`);
+      throw new Error('Backend error: ' + response.status);
     }
-    
-    const data = await response.json();
-    
+    return response.json();
+  })
+  .then(function(data) {
     // Remove typing indicator
     removeTypingIndicator();
     
-    // Add AI response (no model badge shown)
+    // Add AI response
     addMessage(data.response, 'ai');
     
     // Save to conversation history
@@ -810,10 +924,10 @@ async function processUserMessage(message) {
       timestamp: new Date().toISOString()
     });
     
-    // Log which model was used (for debugging)
-    console.log(`Query routed to: ${data.model}`);
-    
-  } catch (error) {
+    console.log('Query routed to: ' + data.model);
+    state.isTyping = false;
+  })
+  .catch(function(error) {
     console.error('Error:', error);
     
     // Remove typing indicator
@@ -824,21 +938,25 @@ async function processUserMessage(message) {
       'Sorry, I encountered an error. Please make sure the backend server is running on http://localhost:3000',
       'ai'
     );
-  }
-  
-  state.isTyping = false;
+    
+    state.isTyping = false;
+  });
 }
 
 function analyzeMessageIntent(message) {
-  const lower = message.toLowerCase();
+  var lower = message.toLowerCase();
   
-  if (lower.includes('literature') || lower.includes('research') || lower.includes('paper') || lower.includes('analyze')) {
+  if (lower.indexOf('literature') !== -1 || lower.indexOf('research') !== -1 || 
+      lower.indexOf('paper') !== -1 || lower.indexOf('analyze') !== -1) {
     return 'literature';
-  } else if (lower.includes('design') || lower.includes('generate') || lower.includes('create') || lower.includes('material')) {
+  } else if (lower.indexOf('design') !== -1 || lower.indexOf('generate') !== -1 || 
+             lower.indexOf('create') !== -1 || lower.indexOf('material') !== -1) {
     return 'design';
-  } else if (lower.includes('predict') || lower.includes('property') || lower.includes('surface') || lower.includes('calculate')) {
+  } else if (lower.indexOf('predict') !== -1 || lower.indexOf('property') !== -1 || 
+             lower.indexOf('surface') !== -1 || lower.indexOf('calculate') !== -1) {
     return 'predict';
-  } else if (lower.includes('optimize') || lower.includes('improve') || lower.includes('enhance') || lower.includes('tuning')) {
+  } else if (lower.indexOf('optimize') !== -1 || lower.indexOf('improve') !== -1 || 
+             lower.indexOf('enhance') !== -1 || lower.indexOf('tuning') !== -1) {
     return 'optimize';
   } else {
     return 'general';
@@ -849,18 +967,18 @@ function analyzeMessageIntent(message) {
 // Quick Actions
 // ===================================
 function handleQuickAction(action) {
-  const actionMessages = {
+  var actionMessages = {
     literature: "📚 Literature Analysis",
     design: "⚗️ Materials Design",
     predict: "🔬 Property Prediction",
     optimize: "⚙️ Parameter Optimization"
   };
   
-  const message = actionMessages[action];
+  var message = actionMessages[action] || '';
   
   // Add text to input field instead of auto-sending
-  const currentText = elements.messageInput.value.trim();
-  if (currentText && !currentText.endsWith(' ')) {
+  var currentText = elements.messageInput.value.trim();
+  if (currentText && currentText.charAt(currentText.length - 1) !== ' ') {
     elements.messageInput.value = currentText + ' ' + message;
   } else {
     elements.messageInput.value = message;
@@ -871,23 +989,15 @@ function handleQuickAction(action) {
 }
 
 // ===================================
-// Welcome Message
-// ===================================
-function showWelcomeMessage() {
-  // Welcome message is already in HTML, so we just need to scroll to it
-  scrollToBottom();
-}
-
-// ===================================
 // Contact Form Handler
 // ===================================
-async function handleContactSubmit(e) {
+function handleContactSubmit(e) {
   e.preventDefault();
   
-  const form = elements.contactForm;
-  const formData = new FormData(form);
-  const submitBtn = form.querySelector('.submit-btn');
-  const formStatus = document.getElementById('form-status');
+  var form = elements.contactForm;
+  var formData = new FormData(form);
+  var submitBtn = form.querySelector('.submit-btn');
+  var formStatus = document.getElementById('form-status');
   
   // Disable submit button and show loading state
   submitBtn.disabled = true;
@@ -899,16 +1009,15 @@ async function handleContactSubmit(e) {
     formStatus.style.color = '#6F9EFF';
   }
   
-  try {
-    const response = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      body: formData
-    });
-    
-    const result = await response.json();
-    
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    body: formData
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(result) {
     if (result.success) {
-      // Success feedback
       showToast('✅ Message sent successfully!', 'success');
       if (formStatus) {
         formStatus.textContent = '✅ Message sent! We\'ll get back to you soon.';
@@ -916,12 +1025,10 @@ async function handleContactSubmit(e) {
       }
       form.reset();
       
-      // Clear success message after 5 seconds
-      setTimeout(() => {
+      setTimeout(function() {
         if (formStatus) formStatus.textContent = '';
       }, 5000);
     } else {
-      // Error from Web3Forms
       showToast('❌ ' + (result.message || 'Failed to send message'), 'error');
       if (formStatus) {
         formStatus.textContent = '❌ ' + (result.message || 'Failed to send. Please try again.');
@@ -929,30 +1036,33 @@ async function handleContactSubmit(e) {
       }
       console.error('Web3Forms error:', result);
     }
-  } catch (error) {
-    // Network or other errors
+    
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
+  })
+  .catch(function(error) {
     console.error('Submission failed:', error);
     showToast('❌ Network error. Please try again.', 'error');
     if (formStatus) {
       formStatus.textContent = '❌ Network error. Please check your connection and try again.';
       formStatus.style.color = '#EF4444';
     }
-  } finally {
-    // Re-enable submit button
+    
     submitBtn.disabled = false;
     submitBtn.style.opacity = '1';
     submitBtn.style.cursor = 'pointer';
-  }
+  });
 }
 
 // ===================================
 // UI Utilities
 // ===================================
-function showToast(message, type = 'success') {
+function showToast(message, type) {
   elements.toastMessage.textContent = message;
   elements.toast.classList.add('show');
   
-  setTimeout(() => {
+  setTimeout(function() {
     elements.toast.classList.remove('show');
   }, 3000);
 }
@@ -963,20 +1073,23 @@ function autoResizeInput() {
 }
 
 function toggleMobileMenu() {
-  const nav = document.querySelector('.nav');
-  nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  var nav = document.querySelector('.nav');
+  if (nav.style.display === 'flex') {
+    nav.style.display = 'none';
+  } else {
+    nav.style.display = 'flex';
+  }
 }
 
 // ===================================
 // Scroll Effects
 // ===================================
 function initializeScrollEffects() {
-  let lastScroll = 0;
+  var lastScroll = 0;
   
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
+  window.addEventListener('scroll', function() {
+    var currentScroll = window.pageYOffset;
     
-    // Header background on scroll
     if (currentScroll > 50) {
       elements.header.classList.add('scrolled');
     } else {
@@ -988,10 +1101,12 @@ function initializeScrollEffects() {
 }
 
 function initializeSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+  var anchors = document.querySelectorAll('a[href^="#"]');
+  for (var i = 0; i < anchors.length; i++) {
+    anchors[i].addEventListener('click', function(e) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
+      var targetId = this.getAttribute('href');
+      var target = document.querySelector(targetId);
       if (target) {
         target.scrollIntoView({
           behavior: 'smooth',
@@ -999,23 +1114,26 @@ function initializeSmoothScroll() {
         });
       }
     });
-  });
+  }
 }
 
 // ===================================
 // Export for potential backend integration
 // ===================================
 window.AethorionAI = {
-  state,
-  addMessage,
-  processUserMessage,
-  showToast,
-  selectedElements: () => Array.from(state.selectedElements),
-  startNewChat,
-  saveChatSession
+  state: state,
+  addMessage: addMessage,
+  processUserMessage: processUserMessage,
+  showToast: showToast,
+  selectedElements: function() {
+    return Array.from(state.selectedElements);
+  },
+  startNewChat: startNewChat,
+  saveChatSession: saveChatSession
 };
 
 console.log('✅ Aethorion AI Chatbot Interface Loaded');
 console.log('✅ Ready for backend integration');
 console.log('✅ Periodic Table Feature Enabled');
 console.log('✅ Chat History Feature Enabled');
+console.log('✅ Safari Compatibility Enabled');
