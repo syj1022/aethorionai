@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Solution - Aethorion AI</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline id="bgVideo" preload="auto" poster="">
+      <source src="https://ia600907.us.archive.org/22/items/background_20250727/background.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+
+  <!-- Futuristic Grid Overlay -->
+  <div class="grid-overlay"></div>
+  
+  <!-- Particle System -->
+  <canvas id="particles"></canvas>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <img src="images/logo.png" alt="Aethorion AI" class="logo-img">
+        <span class="logo-text">Aethorion AI</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#features" class="nav-link">Features</a>
+        <a href="solution.html" class="nav-link">Solution</a>
+        <a href="team.html" class="nav-link">Team</a>
+        <a href="career.html" class="nav-link">Career</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Offer Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content" style="grid-template-columns: 1fr; max-width: 900px; text-align: center;">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Our Offerings</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="gradient-text">Unleash Intelligent Automation</span>
+        </h1>
+        <p class="hero-subtitle">
+          Explore opportunities to reimagine your workflow with our next-gen AI solutions.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  
+  <!-- Offer Blocks Section -->
+  <section class="offer-blocks-section">
+    <div class="offer-container">
+      
+      <!-- Offer Block 1 -->
+      <div class="offer-block fade-in-section slide-in-left">
+        <div class="offer-image-wrapper">
+          <img src="images/offer1.png" alt="AI-Powered Materials Platform" class="offer-image">
+          <div class="offer-image-overlay"></div>
+        </div>
+        <div class="offer-content">
+          <div class="offer-number">01</div>
+          <h2 class="offer-title">Zero-to-One Innovation Partner</h2>
+          <p class="offer-description">
+            Design first-of-its-kind material configurations and formulations. From concept to prototype, accelerate discovery
+            and design innovation through intelligent automation and predictive modeling. We are committed to helping you
+            create high-performance, cost-efficient, and scalable products.
+          </p>
+          <ul class="offer-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Automated literature analysis & knowledge extraction</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Inverse design for targeted material properties</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Rapid, atomistic-scale property prediction and simulation</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Real-time collaboration, analytics, and visualization</span>
+            </li>
+          </ul>
+          <a href="index.html#contact" class="offer-cta-btn">
+            <span>Get Started</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Offer Block 2 -->
+      <div class="offer-block offer-block-reverse fade-in-section slide-in-right">
+        <div class="offer-image-wrapper">
+          <img src="images/offer2.png" alt="Custom AI Solutions" class="offer-image">
+          <div class="offer-image-overlay"></div>
+        </div>
+        <div class="offer-content">
+          <div class="offer-number">02</div>
+          <h2 class="offer-title">Process Optimization Assistant</h2>
+          <p class="offer-description">
+            Unlock peak efficiency at every stage of your production workflow. By learning directly from your data and enhanced 
+            through atomistic insights, our AI help you uncover hidden inefficiencies, predict optimal conditions, and drive 
+            continuous improvement. We are committed to delivering faster cycles, higher throughput, and lower operational costs.
+          </p>
+          <ul class="offer-features">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Adaptive AI models for real-time process optimization</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Seamless integration with laboratory and production systems</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Continuous performance monitoring and feedback loops</span>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Expert guidance and ongoing technical support</span>
+            </li>
+          </ul>
+          <a href="index.html#contact" class="offer-cta-btn">
+            <span>Get Started</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="Aethorion AI" class="footer-logo-img">
+          <span class="footer-logo-text">Aethorion AI</span>
+        </div>
+        <p class="footer-description">
+          Redefining how the world designs and manufactures advanced materials.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-title">Product</h4>
+        <a href="index.html#features" class="footer-link">Features</a>
+        <a href="solution.html" class="footer-link">Solution</a>
+        <a href="career.html" class="footer-link">Careers</a>
+        <a href="team.html" class="footer-link">Team</a>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-title">Company</h4>
+        <a href="index.html#about" class="footer-link">About</a>
+        <a href="index.html#contact" class="footer-link">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Aethorion AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

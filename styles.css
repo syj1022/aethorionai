@@ -3095,3 +3095,318 @@ html {
     padding: 140px 1rem 60px;
   }
 }
+
+/* ===================================
+   TARGETED TEXT READABILITY FIX
+   Only improves white text readability
+   Keeps gradient titles AND video background unchanged
+   =================================== */
+
+/* Body text - paragraphs and descriptions */
+body {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Remove text shadow from gradient titles - keep them as is */
+h1, h2, h3, h4, h5, h6,
+.hero-title,
+.section-title,
+.gradient-text,
+.glitch {
+  text-shadow: none !important;
+}
+
+/* Hero subtitle - white text under main title */
+.hero-subtitle {
+  text-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.9),
+    0 4px 15px rgba(0, 0, 0, 0.7);
+  background: rgba(12, 14, 44, 0.35);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+/* Navigation links */
+.nav-link {
+  text-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.8),
+    0 0 15px rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+}
+
+/* Card descriptions - white text in cards */
+.feature-description,
+.news-description,
+.mission-desc,
+.about-description,
+.contact-description,
+.section-subtitle {
+  text-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.8),
+    0 4px 12px rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.98) !important;
+  line-height: 1.8;
+}
+
+/* Add dark backdrop to cards for better text contrast */
+.feature-card,
+.news-card,
+.mission-card-large {
+  background: rgba(12, 14, 44, 0.85) !important;
+  backdrop-filter: blur(15px);
+}
+
+/* About section text */
+.value-text p,
+.mission-description {
+  text-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.8),
+    0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Chatbot messages - white text in chat */
+.message-text {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  background: rgba(12, 14, 44, 0.92) !important;
+  color: rgba(255, 255, 255, 0.98);
+  line-height: 1.7;
+}
+
+.chatbot-messages {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Feature pills white text */
+.feature-pill,
+.tag {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+  background: rgba(111, 158, 255, 0.35) !important;
+  border: 2px solid rgba(111, 158, 255, 0.6);
+  font-weight: 600;
+}
+
+/* Form inputs and placeholders */
+.form-input,
+.message-input {
+  background: rgba(12, 14, 44, 0.85) !important;
+  border: 2px solid rgba(111, 158, 255, 0.4);
+  color: rgba(255, 255, 255, 0.98);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+}
+
+.form-input::placeholder,
+.message-input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.form-input:focus,
+.message-input:focus {
+  background: rgba(12, 14, 44, 0.95) !important;
+  border-color: var(--accent);
+}
+
+/* Contact info white text */
+.contact-item {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  background: rgba(12, 14, 44, 0.45);
+  padding: 1rem;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.contact-item span,
+.contact-item a {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Footer text */
+.footer {
+  background: rgba(12, 14, 44, 0.96) !important;
+}
+
+.footer-description,
+.footer-link {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Button text */
+button,
+.btn,
+.submit-btn,
+.send-btn,
+.news-btn {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+/* News card content */
+.news-content p,
+.news-date {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Collaborator section text */
+.logo-carousel {
+  background: rgba(12, 14, 44, 0.65);
+  padding: 3rem 0;
+  backdrop-filter: blur(12px);
+}
+
+/* Career and team pages */
+.career-card,
+.team-member-card {
+  background: rgba(12, 14, 44, 0.88) !important;
+  backdrop-filter: blur(15px);
+}
+
+.career-description,
+.team-member-description {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Solution page content */
+.solution-card {
+  background: rgba(12, 14, 44, 0.88) !important;
+  backdrop-filter: blur(15px);
+}
+
+.solution-description {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Periodic table element names */
+.element .name,
+.element .weight {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Status text in chatbot */
+.chatbot-status span,
+.status-dot + span {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  font-weight: 600;
+}
+
+/* DO NOT change video overlay - keep original brightness */
+/* Video overlay is controlled by your existing styles.css */
+
+/* Additional overlay ONLY for sections with lots of text - more subtle */
+.hero-section::before,
+.features-section::before,
+.about-section::before,
+.contact-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(12, 14, 44, 0.15); /* Very subtle overlay - reduced from 0.25 */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure content is above overlay */
+.hero-content,
+.features-grid,
+.about-content,
+.contact-content,
+.section-header {
+  position: relative;
+  z-index: 1;
+}
+
+/* Paragraph text in all sections */
+p {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* List items */
+li {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Strong/bold text */
+strong, b {
+  font-weight: 700;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Emphasized text */
+em, i {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Link text (non-button links) */
+a:not(.btn):not(.nav-link):not(.news-btn) {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+a:not(.btn):not(.nav-link):not(.news-btn):hover {
+  text-shadow: 
+    0 2px 6px rgba(111, 158, 255, 0.8),
+    0 0 12px rgba(111, 158, 255, 0.5);
+}
+
+/* Mobile menu enhancements */
+@media (max-width: 768px) {
+  .nav {
+    background: rgba(12, 14, 44, 0.98) !important;
+    backdrop-filter: blur(20px);
+  }
+  
+  .nav-link {
+    padding: 0.75rem 1.5rem;
+    background: rgba(111, 158, 255, 0.12);
+    margin: 0.25rem 0;
+    border-radius: 8px;
+  }
+  
+  /* Ensure all mobile text is readable */
+  body {
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Table text (if any) */
+table td,
+table th {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Quote text */
+blockquote {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  background: rgba(12, 14, 44, 0.4);
+  padding: 1rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+}
+
+/* Code text */
+code {
+  background: rgba(12, 14, 44, 0.6);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Small text */
+small,
+.small-text {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.hero-subtitle {
+  text-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.95),
+    0 4px 20px rgba(0, 0, 0, 0.8),
+    0 6px 30px rgba(0, 0, 0, 0.6);
+  background: none !important; /* ← Removed background box */
+  padding: 0 !important;
+  border-radius: 0 !important;
+  backdrop-filter: none !important;
+}
