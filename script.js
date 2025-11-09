@@ -935,7 +935,7 @@ function processUserMessage(message) {
     
     // Show error message
     addMessage(
-      'Sorry, I encountered an error. Please make sure the backend server is running on http://localhost:3000',
+      'Sorry, something went wrong. Please try again in a different browser (we recommend Google Chrome).',
       'ai'
     );
     
