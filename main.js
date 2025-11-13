@@ -723,7 +723,7 @@ window.fileUploadManager = {
 
     formData.append("file", file);
 
-    const res = await fetch(`https://aethorionai.com${endpoint}`, {
+    const res = await fetch(`https://api.aethorionai.com${endpoint}`, {
       method: "POST",
       body: formData
     });
