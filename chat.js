@@ -6,7 +6,7 @@
 //  - Backend health check
 // ============================================================================
 
-const API_BASE_URL = 'https://aethorionai.com';
+const API_BASE_URL = 'https://api.aethorionai.com';
 
 // ============================================================================
 // Chat Module
