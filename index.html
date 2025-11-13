@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div id="fileDropZone" class="file-drop-zone">
+    <span>Drop files here to upload</span>
+  </div>
   <!-- Video Background -->
   <div class="video-background">
     <video autoplay muted loop playsinline id="bgVideo">
@@ -136,9 +139,9 @@
             </div>
             <div class="message-content">
               <div class="message-text">
-                 Welcome to Aethorion AI! I'm your innovation assistant.
+                 👋 Hello! Welcome to Aethorion AI! Your personal innovation partner is here and ready to create magic with you. Let’s build something extraordinary together!
                 <br><br>
-                I can help you with:
+                To get started, I can help you with:
                 <br>
                 <div class="capability-tags">
                   <span class="tag clickable-tag" data-action="literature">📚 Literature Analysis</span>
@@ -146,22 +149,13 @@
                   <span class="tag clickable-tag" data-action="predict">🔬 Property Prediction</span>
                   <span class="tag clickable-tag" data-action="optimize">⚙️ Parameter Optimization</span>
                 </div>
-                <br>
-                Try asking me something like:
-                <br>
-                <em>"Analyze research gaps in SrTiO₃ perovskite catalysts"</em>
-                <br>
-                <em>"Design a stable material containing Sr, Ti, and O"</em>
-                <br>
-                <em>"Predict adsorption properties of CO on SrTiO₃ at 500K"</em>
-                <br>
-                <em>"Help me optimize our operational parameters"</em>
               </div>
             </div>
           </div>
         </div>
+        
+        <div id="uploadedFilesPanel" style="display:none;"></div>
 
-        <!-- Input Area -->
         <div class="chatbot-input">
           <button class="attachment-btn periodic-table-btn" id="periodicTableBtn" title="Select elements from periodic table">
             🧪
@@ -169,13 +163,9 @@
               <span>👆 Try me!</span>
             </div>
           </button>
-          <input 
-            type="text" 
-            class="message-input" 
-            id="messageInput" 
-            placeholder="Ask me anything about materials innovation..."
-            autocomplete="off"
-          />
+          <button id="fileUploadBtn" class="attachment-btn" title="Upload PDF, CIF, or Image">📎</button>
+          <input type="file" id="fileUploadInput" style="display:none;" />
+          <input type="text" class="message-input" id="messageInput"  placeholder="Ask me anything about materials innovation..." autocomplete="off" />
           <button class="send-btn" id="sendBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -199,7 +189,7 @@
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Select Elements</h3>
+        <h3>Select Elements in Your Design System</h3>
         <button class="modal-close" id="modalClose">×</button>
       </div>
       <div class="modal-body">
@@ -543,6 +533,8 @@
     </div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js"></script>
+  <script src="main.js"></script>
+  <script src="lit.js"></script>
+  <script src="chat.js"></script>
 </body>
 </html>
